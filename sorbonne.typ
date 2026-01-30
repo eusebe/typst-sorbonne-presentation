@@ -123,7 +123,7 @@
           dir: ttb,
           v(15%), 
           align(center, stack(
-            spacing: 1.5em,
+            spacing: 1.2em,
             text(size: 6em, weight: "bold", str(section-num)),
             if section-head != none {
               text(size: 2.2em, weight: "bold", smallcaps(section-head.body))
@@ -165,6 +165,7 @@
   text-size: 20pt,
   show-header-numbering: true,
   numbering-format: "1.",
+  auto-title: true,
   body
 ) = {
   config-state.update((
@@ -172,13 +173,14 @@
     affiliation: affiliation,
     show-header-numbering: show-header-numbering,
     numbering-format: numbering-format,
+    auto-title: auto-title,
     text-font: text-font,
     text-size: text-size,
   ))
   
   nav.navigator-config.update(c => {
     c.mapping = (section: 1, subsection: 2)
-    c.auto-title = true
+    c.auto-title = auto-title
     c.show-heading-numbering = show-header-numbering
     c.numbering-format = numbering-format
     c
