@@ -4,7 +4,8 @@
   title: [Ma Présentation Sorbonne],
   subtitle: [Template basé sur presentate],
   author: [David Hajage],
-  affiliation: [Sorbonne Université, Faculté de Santé],
+  affiliation: [Sorbonne Université],
+  faculty: "univ",
 )
 
 #slide(title: "Introduction")[

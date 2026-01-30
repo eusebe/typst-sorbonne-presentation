@@ -5,6 +5,7 @@
   subtitle: [Test de l'option mapping à 3 niveaux],
   author: [David Hajage],
   affiliation: [Sorbonne Université],
+  faculty: "lettres",
   mapping: (part: 1, section: 2, subsection: 3),
   show-outline: true,
   numbering-format: "1.a",

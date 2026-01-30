@@ -5,11 +5,9 @@
 // --- Configuration et Couleurs ---
 #let sorbonne-red = rgb("#AC182E")
 #let sorbonne-blue = rgb("#1D2769")
+#let sorbonne-lightblue = rgb("#52B5E5")
+#let sorbonne-yellow = rgb("#FFB700")
 #let sorbonne-text = rgb("#263068")
-
-// Assets
-#let logo-univ-white = "assets/logo/sorbonne-univ-white.png"
-#let logo-sante-color = "assets/logo/sorbonne-sante.png"
 
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
@@ -34,8 +32,6 @@
     separator: text(fill: gray.lighten(50%), "  /  "),
     clickable: false,
     show-numbering: conf.show-header-numbering,
-    // On ne passe pas numbering-format ici : navigator utilisera h.numbering 
-    // qui est déjà formaté par notre règle "set heading" plus bas.
     text-styles: (
       level-1: (active: (weight: "bold", fill: sorbonne-text)),
       level-2: (active: (weight: "regular", fill: gray.darken(20%))),
@@ -58,7 +54,7 @@
         columns: (4.5em, 1fr),
         column-gutter: 1.5em,
         align: horizon,
-        image(logo-sante-color, width: 4.5em),
+        image(config.logo-color, width: 4.5em),
         if resolved-title != none {
           text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(resolved-title))
         }
@@ -95,13 +91,13 @@
 // --- Transitions ---
 
 #let sorbonne-transition(h, roadmap) = {
-  empty-slide(fill: sorbonne-red, {
-    set text(fill: white, font: "Fira Sans") 
-    place(top + left, pad(top: 2em, left: 2em, image(logo-univ-white, width: 5em)))
-    place(hide(h)) 
-    
-    context {
-      let conf = config-state.get()
+  context {
+    let conf = config-state.get()
+    empty-slide(fill: conf.primary-color, {
+      set text(fill: white, font: "Fira Sans") 
+      place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
+      place(hide(h)) 
+      
       let mapping = conf.mapping
       let active = nav.get-active-headings(h.location())
       
@@ -143,8 +139,8 @@
           ))
         ))
       }
-    }
-  })
+    })
+  }
 }
 
 // --- API ---
@@ -168,6 +164,7 @@
   aspect-ratio: "16-9",
   text-font: "Fira Sans",
   text-size: 20pt,
+  faculty: "sante",
   show-header-numbering: true,
   numbering-format: "1.1",
   part-numbering-format: "I",
@@ -178,6 +175,17 @@
   outline-depth: 2,
   body
 ) = {
+  let (primary-color, logo-white, logo-color) = if faculty == "sciences" {
+    (sorbonne-lightblue, "assets/logo/sorbonne-sciences-white.png", "assets/logo/sorbonne-sciences.png")
+  } else if faculty == "lettres" {
+    (sorbonne-yellow, "assets/logo/sorbonne-lettres-white.png", "assets/logo/sorbonne-lettres.png")
+  } else if faculty == "univ" or faculty == none {
+    (sorbonne-blue, "assets/logo/sorbonne-univ-white.png", "assets/logo/sorbonne-univ.png")
+  } else {
+    // Default is sante
+    (sorbonne-red, "assets/logo/sorbonne-sante-white.png", "assets/logo/sorbonne-sante.png")
+  }
+
   config-state.update(c => (
     author: author,
     affiliation: affiliation,
@@ -185,13 +193,15 @@
     numbering-format: numbering-format,
     part-numbering-format: part-numbering-format,
     mapping: mapping,
+    primary-color: primary-color,
+    logo-white: logo-white,
+    logo-color: logo-color,
   ))
   
   nav.navigator-config.update(c => {
     c.mapping = mapping
     c.auto-title = true
     c.show-heading-numbering = show-header-numbering
-    // On laisse numbering-format à auto pour que navigator utilise h.numbering
     c
   })
 
@@ -218,9 +228,9 @@
   })
 
   // Page de Titre
-  empty-slide(fill: sorbonne-red, {
+  empty-slide(fill: primary-color, {
     set text(fill: white)
-    place(bottom + right, pad(bottom: 2em, right: 2em, image(logo-univ-white, width: 6em)))
+    place(bottom + right, pad(bottom: 2em, right: 2em, image(logo-white, width: 6em)))
     align(horizon, pad(x: 3em, y: 2em, stack(
       spacing: 1.2em,
       text(size: 2.5em, weight: "bold", smallcaps(title)),
