@@ -8,6 +8,7 @@
   // date: [30 janvier 2026], // Date de la présentation (par défaut : date du jour)
   // aspect-ratio: "16-9", // Format des diapositives ("16-9" ou "4-3")
   // show-header-numbering: true, // Afficher ou non la numérotation des titres (global)
+  // numbering-format: "1.", // Style de numérotation (ex: "1.", "1.1", "I.a")
   // text-font: "Fira Sans", // Police de caractères de base
   // text-size: 20pt, // Taille de police de base
 )

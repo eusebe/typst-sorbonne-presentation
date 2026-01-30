@@ -27,6 +27,7 @@
     separator: text(fill: gray.lighten(50%), "  /  "),
     clickable: false,
     show-numbering: conf.show-header-numbering,
+    numbering-format: conf.numbering-format,
     text-styles: (
       level-1: (active: (weight: "bold", fill: sorbonne-text)),
       level-2: (active: (weight: "regular", fill: gray))
@@ -134,6 +135,7 @@
                 level-2-mode: "current-parent",
                 target-location: h.location(),
                 show-numbering: conf.show-header-numbering,
+                numbering-format: conf.numbering-format,
                 marker: none,
                 text-styles: (
                   level-2: (
@@ -162,12 +164,14 @@
   text-font: "Fira Sans",
   text-size: 20pt,
   show-header-numbering: true,
+  numbering-format: "1.",
   body
 ) = {
   config-state.update((
     author: author,
     affiliation: affiliation,
     show-header-numbering: show-header-numbering,
+    numbering-format: numbering-format,
     text-font: text-font,
     text-size: text-size,
   ))
@@ -176,6 +180,7 @@
     c.mapping = (section: 1, subsection: 2)
     c.auto-title = true
     c.show-heading-numbering = show-header-numbering
+    c.numbering-format = numbering-format
     c
   })
 
@@ -186,7 +191,7 @@
   // Format papier global
   set page(paper: "presentation-" + aspect-ratio)
   
-  set heading(numbering: (..nums) => if show-header-numbering { numbering("1.", ..nums) })
+  set heading(numbering: (..nums) => if show-header-numbering { numbering(numbering-format, ..nums) })
 
   // Page de Titre
   p.slide(
