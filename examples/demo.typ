@@ -7,7 +7,9 @@
   affiliation: [Sorbonne Université, Faculté de Santé], // Affiliation ou laboratoire
   // date: [30 janvier 2026], // Date de la présentation (par défaut : date du jour)
   // aspect-ratio: "16-9", // Format des diapositives ("16-9" ou "4-3")
-  show-header-numbering: false, // Afficher ou non la numérotation des titres (global)
+  // show-header-numbering: true, // Afficher ou non la numérotation des titres (global)
+  // text-font: "Fira Sans", // Police de caractères de base
+  // text-size: 20pt, // Taille de police de base
 )
 
 = Introduction

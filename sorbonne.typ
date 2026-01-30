@@ -51,7 +51,7 @@
 #let footer-comp() = context {
   let conf = config-state.get()
   if conf == none { return none }
-  set text(size: 0.65em, fill: gray, font: "Fira Sans")
+  set text(size: 0.65em, fill: gray, font: conf.text-font)
   line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
   v(0.5em)
   grid(
@@ -77,16 +77,19 @@
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   if "title" in named { let _ = named.remove("title") }
   
-  // Le preamble est la clé : il configure la page sans créer de saut de page
   let preamble = it => {
-    let resolved-title = nav.resolve-slide-title(manual-title)
-    set page(
-      margin: (top: 4.5em, bottom: 3.5em, x: 2.5em),
-      header: pad(x: 2em, top: 1.2em, header-comp(resolved-title)),
-      footer: pad(x: 2em, bottom: 1.2em, footer-comp()),
-      fill: white,
-    )
-    it
+    context {
+      let conf = config-state.get()
+      let resolved-title = nav.resolve-slide-title(manual-title)
+      set page(
+        margin: (top: 4.5em, bottom: 3.5em, x: 2.5em),
+        header: pad(x: 2em, top: 1.2em, header-comp(resolved-title)),
+        footer: pad(x: 2em, bottom: 1.2em, footer-comp()),
+        fill: white,
+      )
+      set text(font: conf.text-font, size: conf.text-size, fill: sorbonne-text)
+      it
+    }
   }
   
   p.slide(..named, preamble: preamble, {
@@ -105,12 +108,12 @@
       it
     },
     {
-      set text(fill: white, font: "Fira Sans", size: 20pt) 
-      place(top + left, pad(top: 2em, left: 2em, image(logo-univ-white, width: 5em)))
-      place(hide(h)) 
-      
       context {
         let conf = config-state.get()
+        set text(fill: white, font: conf.text-font, size: conf.text-size) 
+        place(top + left, pad(top: 2em, left: 2em, image(logo-univ-white, width: 5em)))
+        place(hide(h)) 
+        
         let section-num = counter(heading).at(h.location()).at(0)
         let active = nav.get-active-headings(h.location())
         let section-head = if h.level == 1 { h } else { active.h1 }
@@ -156,6 +159,8 @@
   affiliation: none,
   date: datetime.today().display(),
   aspect-ratio: "16-9",
+  text-font: "Fira Sans",
+  text-size: 20pt,
   show-header-numbering: true,
   body
 ) = {
@@ -163,6 +168,8 @@
     author: author,
     affiliation: affiliation,
     show-header-numbering: show-header-numbering,
+    text-font: text-font,
+    text-size: text-size,
   ))
   
   nav.navigator-config.update(c => {
@@ -173,7 +180,7 @@
   })
 
   // Style global par défaut
-  set text(font: "Fira Sans", size: 20pt, fill: sorbonne-text)
+  set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   
   // Format papier global
