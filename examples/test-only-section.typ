@@ -1,4 +1,4 @@
 #import "../lib.typ": *
-#show: template.with(title: [Test Only Section], mapping: (section: 1))
+#show: template.with(show-outline: true, title: [Test Only Section], mapping: (section: 1))
 = Section Unique
 #slide[Test]

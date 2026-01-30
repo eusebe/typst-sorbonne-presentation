@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#show: template.with(show-outline: true, 
   title: [Ma Présentation Sorbonne],
   subtitle: [Template basé sur presentate],
   author: [David Hajage],

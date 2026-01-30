@@ -34,6 +34,8 @@
     separator: text(fill: gray.lighten(50%), "  /  "),
     clickable: false,
     show-numbering: conf.show-header-numbering,
+    // On ne passe pas numbering-format ici : navigator utilisera h.numbering 
+    // qui est déjà formaté par notre règle "set heading" plus bas.
     text-styles: (
       level-1: (active: (weight: "bold", fill: sorbonne-text)),
       level-2: (active: (weight: "regular", fill: gray.darken(20%))),
@@ -110,7 +112,7 @@
         align(center + horizon, stack(
           spacing: 1.5em,
           if conf.show-header-numbering {
-            text(size: 6em, weight: "bold", numbering("I", counter(heading).at(h.location()).at(0)))
+            text(size: 6em, weight: "bold", numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0)))
           },
           text(size: 3em, weight: "bold", upper(h.body))
         ))
@@ -124,14 +126,17 @@
         let section-lvl = mapping.at("section", default: 1)
         let section-head = active.at("h" + str(section-lvl), default: h)
         let count = counter(heading).at(section-head.location())
-        let section-num = if mapping.keys().contains("part") { count.at(1, default: count.at(0)) } else { count.at(0) }
+        let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
+        let nums = count.slice(start-idx)
         
         pad(x: 2em, stack(
           dir: ttb,
           v(15%),
           align(center, stack(
             spacing: 0.8em, 
-            text(size: 6em, weight: "bold", str(section-num)),
+            if conf.show-header-numbering {
+              text(size: 6em, weight: "bold", numbering(conf.numbering-format, ..nums))
+            },
             text(size: 2.2em, weight: "bold", smallcaps(section-head.body)),
             v(1.2em),
             block(width: 60%, align(left, roadmap))
@@ -164,14 +169,21 @@
   text-font: "Fira Sans",
   text-size: 20pt,
   show-header-numbering: true,
+  numbering-format: "1.1",
+  part-numbering-format: "I",
   mapping: (section: 1, subsection: 2),
   transitions: (:),
+  show-outline: false,
+  outline-title: [Sommaire],
+  outline-depth: 2,
   body
 ) = {
   config-state.update(c => (
     author: author,
     affiliation: affiliation,
     show-header-numbering: show-header-numbering,
+    numbering-format: numbering-format,
+    part-numbering-format: part-numbering-format,
     mapping: mapping,
   ))
   
@@ -179,6 +191,7 @@
     c.mapping = mapping
     c.auto-title = true
     c.show-heading-numbering = show-header-numbering
+    // On laisse numbering-format à auto pour que navigator utilise h.numbering
     c
   })
 
@@ -191,17 +204,20 @@
     let n = nums.pos()
     let role = none
     for (r, lvl) in mapping { if lvl == n.len() { role = r; break } }
-    if role == "part" { numbering("I", ..n) }
-    else if role == "section" { 
+    
+    if role == "part" { 
+      numbering(part-numbering-format, ..n) 
+    } else if role == "section" or role == "subsection" {
       let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
-      if n.len() > start-idx { numbering("1.", ..n.slice(start-idx)) }
-    }
-    else if role == "subsection" {
-      let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
-      if n.len() > start-idx { numbering("1.1", ..n.slice(start-idx)) }
+      if n.len() > start-idx { 
+        numbering(numbering-format, ..n.slice(start-idx)) 
+      }
+    } else {
+      none
     }
   })
 
+  // Page de Titre
   empty-slide(fill: sorbonne-red, {
     set text(fill: white)
     place(bottom + right, pad(bottom: 2em, right: 2em, image(logo-univ-white, width: 6em)))
@@ -216,19 +232,26 @@
     )))
   })
 
+  // Sommaire automatique
+  if show-outline {
+    slide(title: outline-title, {
+      outline(title: none, depth: outline-depth, indent: 2em)
+    })
+  }
+
   show heading: h => {
-    if not mapping.values().contains(h.level) { return h }
+    if h.level > 3 { return h }
     nav.render-transition(
       h,
       mapping: mapping,
       slide-func: (fill: none, roadmap) => sorbonne-transition(h, roadmap),
-      top-padding: 0pt, // On utilise la nouvelle option
+      top-padding: 0pt,
       transitions: (
         parts: (visibility: (part: "none", section: "none", subsection: "none")),
         sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
         subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
         style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
-        marker: none, // Suppression des puces
+        marker: none,
       ) + transitions,
       show-heading-numbering: show-header-numbering
     )

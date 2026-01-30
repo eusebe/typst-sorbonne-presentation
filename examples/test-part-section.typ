@@ -1,10 +1,12 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#show: template.with(show-outline: true, 
   title: [Test Mapping Part/Section],
   subtitle: [Niveau 1 = Part, Niveau 2 = Section],
   author: [David Hajage],
-  mapping: (part: 1, section: 2)
+  mapping: (part: 1, section: 2),
+  numbering-format: "a.1",
+  part-numbering-format: "I",
 )
 
 = Première Partie (Romain)
