@@ -125,13 +125,22 @@
 // --- Boîtes et Blocs ---
 
 #let _base-box(title: none, body, color: black, fill-mode: "outline") = {
-  let fill-body = if fill-mode == "fill" { color.lighten(90%) } else { none }
+  let (fill-body, stroke-box) = if fill-mode == "fill" {
+    (color.lighten(90%), 0.5pt + color)
+  } else if fill-mode == "full" {
+    (color.lighten(80%), 0.5pt + color)
+  } else if fill-mode == "transparent" {
+    (none, none)
+  } else {
+    // outline
+    (none, 0.5pt + color)
+  }
   
   block(
     width: 100%,
     radius: 4pt,
     clip: true,
-    stroke: 0.5pt + color,
+    stroke: stroke-box,
     stack(
       spacing: 0pt,
       if title != none {

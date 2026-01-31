@@ -1,32 +1,60 @@
 #import "../lib.typ": *
 
 #show: template.with(
-  title: [Test Boîtes Améliorées],
+  title: [Test Composants de Boîtes],
+  subtitle: [Démonstration des variantes et modes],
   author: [David Hajage],
   faculty: "lettres",
 )
 
-= Boîtes avec mode Fill
-#slide[
-  #highlight-box(title: "Important", fill-mode: "fill")[
-    Le corps de cette boîte doit être teinté en bleu clair sans espace blanc avec le titre.
+= Boîtes Institutionnelles
+#slide(title: "Styles par Défaut")[
+  #highlight-box(title: "Highlight (Bleu Sorbonne)")[
+    Utilisé pour les concepts clés et les résumés.
   ]
   
-  #v(0.5em)
+  #v(1fr)
   
-  #alert-box(title: "Warning", fill-mode: "fill")[
-    Le corps doit être teinté en rouge clair.
+  #alert-box(title: "Alert (Rouge Sorbonne)")[
+    Utilisé pour les avertissements et informations critiques.
   ]
   
-  #v(0.5em)
+  #v(1fr)
   
-  #example-box(title: "Example", fill-mode: "fill")[
-    Le corps doit être teinté en vert clair.
+  #example-box(title: "Example (Vert Académique)")[
+    Utilisé pour illustrer des démonstrations ou des cas concrets.
   ]
 ]
 
-#slide(title: "Blocs Thématiques")[
-  #themed-block(title: "Thème Lettres (Fill)", fill-mode: "fill")[
-    Ce bloc doit être ocre/jaune sans espace blanc.
+= Variantes de Remplissage
+#slide(title: "Modes Fill et Full")[
+  #highlight-box(title: "Mode Fill (Teinté)", fill-mode: "fill")[
+    Un fond très clair (90% blanc) pour une distinction subtile.
+  ]
+  
+  #v(2em)
+  
+  #highlight-box(title: "Mode Full (Marqué)", fill-mode: "full")[
+    Un fond plus coloré (80% blanc) pour un impact visuel plus fort.
+  ]
+]
+
+#slide(title: "Mode Transparent")[
+  #example-box(title: "Mode Transparent", fill-mode: "transparent")[
+    Aucune bordure, aucun fond sur le corps. Seul l'en-tête est coloré. 
+    Idéal pour intégrer du contenu très dense ou des images.
+  ]
+]
+
+= Blocs Thématiques
+#slide(title: "Adaptation à la Faculté")[
+  #themed-block(title: "Bloc Lettres (Outline)")[
+    S'adapte automatiquement à la couleur jaune/ocre de la faculté.
+  ]
+  
+  #v(2em)
+  
+  #themed-block(title: "Bloc Lettres (Fill)", fill-mode: "fill")[
+    Version remplie avec la tonalité de la faculté.
   ]
 ]
