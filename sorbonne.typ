@@ -164,6 +164,11 @@
   })
 }
 
+#let alert(body) = context {
+  let conf = config-state.get()
+  text(fill: conf.primary-color, weight: "bold", body)
+}
+
 #let template(
   title: none,
   author: none,
