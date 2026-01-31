@@ -11,8 +11,14 @@
 
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
+#let last-main-page = state("last-main-page", none)
 
 // --- Composants ---
+
+#let appendix() = context {
+  let current = counter(page).get().at(0)
+  last-main-page.update(current)
+}
 
 #let breadcrumb() = context {
   let conf = config-state.get()
@@ -75,7 +81,8 @@
         breadcrumb(),
         context {
           let current = counter(page).display()
-          let total = counter(page).final().at(0)
+          let total = last-main-page.get()
+          if total == none { total = counter(page).final().at(0) }
           [#current / #total]
         }
       )
