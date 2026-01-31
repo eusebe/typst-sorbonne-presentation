@@ -1,5 +1,5 @@
 #import "@preview/presentate:0.2.3" as p
-#import "@preview/presentate:0.2.3": pdfpc
+#import p.store: states
 // On importe la version locale modifiée de navigator
 #import "../typst-navigator/lib.typ" as nav
 
@@ -81,10 +81,13 @@
         config.author,
         breadcrumb(),
         context {
-          let current = here().page()
+          let current-page = counter(page).get().at(0)
+          let subslide = states.get().at(0).subslide
+          let current = if subslide > 1 { current-page - 1 } else { current-page }
+          
           let appendix-marker = query(<sorbonne-appendix-marker>)
           let total = if appendix-marker.len() > 0 {
-            appendix-marker.first().location().page() - 1
+            counter(page).at(appendix-marker.first().location()).at(0) - 1
           } else {
             counter(page).final().at(0)
           }
@@ -112,10 +115,6 @@
 #let muted(body) = text(fill: gray, body)
 
 #let subtle(body) = text(fill: gray.lighten(40%), body)
-
-#let speaker-note(body) = {
-  pdfpc.speaker-note(body)
-}
 
 #let two-col(left, right, columns: (1fr, 1fr), gutter: 2em) = {
   grid(
