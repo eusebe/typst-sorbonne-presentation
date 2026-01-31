@@ -56,7 +56,7 @@
   grid(
     columns: 100%,
     rows: (auto, 1fr, auto),
-    block(width: 100%, inset: (x: 2em, top: 1.2em, bottom: 0.5em), {
+    block(width: 100%, inset: (x: 2em, top: 0.8em, bottom: 0.2em), {
       grid(
         columns: (4.5em, 1fr),
         column-gutter: 1.5em,
@@ -67,11 +67,11 @@
         }
       )
     }),
-    block(width: 100%, height: 100%, inset: (x: 2.5em, y: 1em), {
+    block(width: 100%, height: 100%, inset: (x: 2.5em, y: 0.5em), {
       metadata((t: "ContentSlide"))
       body
     }),
-    block(width: 100%, inset: (x: 2.5em, bottom: 1.2em, top: 0.5em), {
+    block(width: 100%, inset: (x: 2.5em, bottom: 0.8em, top: 0.2em), {
       set text(size: 0.65em, fill: gray.darken(20%))
       line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
       v(0.5em)
@@ -207,8 +207,10 @@
     else if position == "bottom-left" { bottom + left }
     else { bottom + right }
   
-  // Marges nulles pour être au maximum dans les coins de la zone de contenu
-  let margin-pad = (top: 0pt, bottom: 0pt, left: 0pt, right: 0pt)
+  // On pousse la boite légèrement dans les marges latérales
+  // 1em permet d'être excentré sans être collé au bord (qui est à 2.5em de la zone de texte)
+  let dx = if "right" in position { 1em } else { -1em }
+  let dy = if "top" in position { -0.3em } else { 0.3em }
 
   let content = if display-label != none {
     display-label
@@ -218,13 +220,13 @@
     cite(..labels)
   }
 
-  place(align-pos, pad(..margin-pad, block(
+  place(align-pos, dx: dx, dy: dy, block(
     fill: conf.primary-color.lighten(95%),
     stroke: 0.5pt + conf.primary-color,
     radius: 3pt,
-    inset: 0.4em, // Plus resserré
-    text(size: 0.65em, fill: conf.primary-color, content) // Plus petit
-  )))
+    inset: 0.4em, 
+    text(size: 0.65em, fill: conf.primary-color, content)
+  ))
 }
 
 // --- Boîtes et Blocs ---
