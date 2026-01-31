@@ -290,6 +290,32 @@
   })
 }
 
+#let ending-slide(
+  title: [Thanks for watching!],
+  subtitle: [Questions?],
+  contact: ("email@example.com", "github.com/username")
+) = context {
+  let conf = config-state.get()
+  empty-slide(fill: conf.primary-color, {
+    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
+    set text(fill: white)
+    align(center + horizon, stack(
+      spacing: 1.5em,
+      text(size: 2.5em, weight: "bold", title),
+      if subtitle != none { text(size: 1.5em, style: "italic", subtitle) },
+      if contact != none and contact != () {
+        v(1em)
+        set text(size: 1em, weight: "regular")
+        if type(contact) == array {
+          contact.join([ #h(2em) ])
+        } else {
+          contact
+        }
+      }
+    ))
+  })
+}
+
 // --- Boîtes et Blocs ---
 
 #let _base-box(title: none, body, color: black, fill-mode: "outline") = {
@@ -478,6 +504,8 @@
   show-outline: false,
   outline-title: [Sommaire],
   outline-depth: 2,
+  outline-columns: 1,
+  auto-title: true,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -518,7 +546,7 @@
   
   nav.navigator-config.update(c => {
     c.mapping = mapping
-    c.auto-title = true
+    c.auto-title = auto-title
     c.show-heading-numbering = show-header-numbering
     c
   })
@@ -594,7 +622,11 @@
   // Sommaire automatique
   if show-outline {
     slide(title: outline-title, {
-      outline(title: none, depth: outline-depth, indent: 2em)
+      if outline-columns > 1 {
+        columns(outline-columns, outline(title: none, depth: outline-depth, indent: 2em))
+      } else {
+        outline(title: none, depth: outline-depth, indent: 2em)
+      }
     })
   }
 
