@@ -1,2 +1,2 @@
-#import "sorbonne.typ": template, slide, focus-slide, alert, appendix, sorbonne-red, sorbonne-text
+#import "sorbonne.typ": template, slide, focus-slide, alert, appendix, speaker-note, sorbonne-red, sorbonne-text
 #import "@preview/presentate:0.2.3": pause, uncover, only, fragments, step-item

@@ -1,4 +1,5 @@
 #import "@preview/presentate:0.2.3" as p
+#import "@preview/presentate:0.2.3": pdfpc
 // On importe la version locale modifiée de navigator
 #import "../typst-navigator/lib.typ" as nav
 
@@ -174,6 +175,10 @@
 #let alert(body) = context {
   let conf = config-state.get()
   text(fill: conf.primary-color, weight: "bold", body)
+}
+
+#let speaker-note(body) = {
+  pdfpc.speaker-note(body)
 }
 
 #let template(
