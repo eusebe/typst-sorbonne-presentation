@@ -61,7 +61,7 @@
         columns: (4.5em, 1fr),
         column-gutter: 1.5em,
         align: horizon,
-        image(config.logo-color, width: 4.5em),
+        image(config.logo-slide, width: 4.5em),
         if resolved-title != none {
           text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(resolved-title))
         }
@@ -98,7 +98,7 @@
 #let focus-slide(body) = context {
   let conf = config-state.get()
   empty-slide(fill: conf.primary-color, {
-    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
+    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white, size: 2.5em, weight: "bold")
     align(center + horizon, body)
   })
@@ -143,7 +143,7 @@
 
     empty-slide(fill: conf.primary-color, {
       set text(fill: white, font: "Fira Sans") 
-      place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
+      place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
       place(hide(h)) 
       
       let mapping = conf.mapping
@@ -227,6 +227,11 @@
   text-font: "Fira Sans",
   text-size: 20pt,
   faculty: "sante",
+  // Surcharges optionnelles
+  primary-color: none,
+  alert-color: none,
+  logo-slide: none,
+  logo-transition: none,
   show-header-numbering: true,
   numbering-format: "1.1",
   part-numbering-format: "I",
@@ -240,7 +245,8 @@
   outline-depth: 2,
   body
 ) = {
-  let (primary-color, alert-color, logo-white, logo-color) = if faculty == "sciences" {
+  // 1. Détermination des valeurs par défaut basées sur faculty
+  let (def-primary, def-alert, def-logo-transition, def-logo-slide) = if faculty == "sciences" {
     (sorbonne-lightblue, sorbonne-lightblue.darken(40%), "assets/logo/sorbonne-sciences-white.png", "assets/logo/sorbonne-sciences.png")
   } else if faculty == "lettres" {
     (sorbonne-yellow, sorbonne-yellow.darken(45%), "assets/logo/sorbonne-lettres-white.png", "assets/logo/sorbonne-lettres.png")
@@ -250,6 +256,12 @@
     // Default is sante
     (sorbonne-red, sorbonne-red.darken(15%), "assets/logo/sorbonne-sante-white.png", "assets/logo/sorbonne-sante.png")
   }
+
+  // 2. Application des surcharges si fournies
+  let final-primary = if primary-color != none { primary-color } else { def-primary }
+  let final-alert = if alert-color != none { alert-color } else { def-alert }
+  let final-logo-transition = if logo-transition != none { logo-transition } else { def-logo-transition }
+  let final-logo-slide = if logo-slide != none { logo-slide } else { def-logo-slide }
 
   config-state.update(c => (
     author: author,
@@ -261,10 +273,10 @@
     annex-main-title: annex-main-title,
     annex-numbering-format: annex-numbering-format,
     mapping: mapping,
-    primary-color: primary-color,
-    alert-color: alert-color,
-    logo-white: logo-white,
-    logo-color: logo-color,
+    primary-color: final-primary,
+    alert-color: final-alert,
+    logo-transition: final-logo-transition,
+    logo-slide: final-logo-slide,
     text-font: text-font,
     text-size: text-size,
   ))
@@ -315,9 +327,9 @@
   })
 
   // Page de Titre
-  empty-slide(fill: primary-color, {
+  empty-slide(fill: final-primary, {
     set text(fill: white)
-    place(bottom + right, pad(bottom: 2em, right: 2em, image(logo-white, width: 6em)))
+    place(bottom + right, pad(bottom: 2em, right: 2em, image(final-logo-transition, width: 6em)))
     align(horizon, pad(x: 3em, y: 2em, stack(
       spacing: 1.2em,
       text(size: 2.5em, weight: "bold", smallcaps(title)),
