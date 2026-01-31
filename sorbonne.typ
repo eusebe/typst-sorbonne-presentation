@@ -67,7 +67,7 @@
         }
       )
     }),
-    block(width: 100%, inset: (x: 2.5em, y: 1em), {
+    block(width: 100%, height: 100%, inset: (x: 2.5em, y: 1em), {
       metadata((t: "ContentSlide"))
       body
     }),
@@ -109,6 +109,10 @@
   text(fill: conf.alert-color, weight: "bold", body)
 }
 
+#let muted(body) = text(fill: gray, body)
+
+#let subtle(body) = text(fill: gray.lighten(40%), body)
+
 #let speaker-note(body) = {
   pdfpc.speaker-note(body)
 }
@@ -120,6 +124,80 @@
     left-body,
     right-body
   )
+}
+
+// --- API ---
+
+#let slide(..args) = {
+  let pos = args.pos()
+  let named = args.named()
+  let manual-title = named.at("title", default: none)
+  let body = if pos.len() > 0 { pos.at(0) } else { none }
+  let clean-named = named
+  if "title" in clean-named { let _ = clean-named.remove("title") }
+  p.slide(..clean-named, apply-layout(title: manual-title, body))
+}
+
+#let figure-slide(fig, title: none, caption: none, ..args) = {
+  slide(title: title, ..args, {
+    set align(center + horizon)
+    figure(fig, caption: caption)
+  })
+}
+
+#let figure-slide-split(fig-left, fig-right, title: none, caption-left: none, caption-right: none, ..args) = {
+  slide(title: title, ..args, {
+    set align(center + horizon)
+    grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      figure(fig-left, caption: caption-left),
+      figure(fig-right, caption: caption-right)
+    )
+  })
+}
+
+#let acknowledgement-slide(
+  title: "Acknowledgements",
+  subtitle: none,
+  people: (),
+  institutions: (),
+  extra: none,
+  ..args
+) = {
+  slide(title: title, ..args, {
+    set align(center + horizon)
+    stack(
+      dir: ttb,
+      spacing: 1.5em,
+      
+      if subtitle != none {
+        text(size: 1.1em, style: "italic", subtitle)
+      },
+
+      if people.len() > 0 {
+        align(center, grid(
+          columns: (auto, auto),
+          column-gutter: 2em,
+          row-gutter: 1em,
+          ..people.map(p => (
+            align(right, text(weight: "bold", p.name)),
+            align(left, p.role)
+          )).flatten()
+        ))
+      },
+      
+      if institutions.len() > 0 {
+        v(0.5em)
+        align(center, institutions.join([ #h(2em) ]))
+      },
+
+      if extra != none {
+        v(1em)
+        extra
+      }
+    )
+  })
 }
 
 // --- Boîtes et Blocs ---
@@ -282,17 +360,7 @@
   }
 }
 
-// --- API ---
-
-#let slide(..args) = {
-  let pos = args.pos()
-  let named = args.named()
-  let manual-title = named.at("title", default: none)
-  let body = if pos.len() > 0 { pos.at(0) } else { none }
-  let clean-named = named
-  if "title" in clean-named { let _ = clean-named.remove("title") }
-  p.slide(..clean-named, apply-layout(title: manual-title, body))
-}
+// --- Template ---
 
 #let template(
   title: none,
