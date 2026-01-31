@@ -173,6 +173,26 @@
   _base-box(title: title, body, color: rgb("#2E7D32"), fill-mode: fill-mode)
 }
 
+#let algorithm-box(title: "Algorithm", fill-mode: "outline", body) = {
+  let algorithm-body = {
+    set text(font: ("Fira Code", "DejaVu Sans Mono"), size: 0.9em)
+    // On formate les listes numérotées comme des lignes de code
+    show enum: it => {
+      grid(
+        columns: (1.5em, 1fr),
+        column-gutter: 0.8em,
+        row-gutter: 0.5em,
+        ..it.children.enumerate().map(((i, child)) => (
+          align(right, text(fill: gray, str(i + 1) + ":")),
+          child.body
+        )).flatten()
+      )
+    }
+    body
+  }
+  _base-box(title: title, algorithm-body, color: rgb("#455A64"), fill-mode: fill-mode)
+}
+
 #let themed-block(title: none, fill-mode: "outline", body) = context {
   let conf = config-state.get()
   let color = conf.primary-color

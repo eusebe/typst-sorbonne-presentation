@@ -1,2 +1,2 @@
-#import "sorbonne.typ": template, slide, focus-slide, alert, appendix, speaker-note, side-by-side, highlight-box, alert-box, example-box, themed-block, sorbonne-red, sorbonne-blue, sorbonne-lightblue, sorbonne-yellow, sorbonne-text
+#import "sorbonne.typ": template, slide, focus-slide, alert, appendix, speaker-note, side-by-side, highlight-box, alert-box, example-box, algorithm-box, themed-block, sorbonne-red, sorbonne-blue, sorbonne-lightblue, sorbonne-yellow, sorbonne-text
 #import "@preview/presentate:0.2.3": pause, uncover, only, fragments, step-item

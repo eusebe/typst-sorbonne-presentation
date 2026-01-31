@@ -46,6 +46,17 @@
   ]
 ]
 
+#slide(title: "Algorithm Box")[
+  #algorithm-box(title: "Algorithm 1: Automatic Numbering")[
+    *Input:* Data $X$ \
+    *Output:* Result $Y$ 
+    + Process data
+    + Apply transformation
+    + Validate results
+    + Return $Y$
+  ]
+]
+
 = Blocs Thématiques
 #slide(title: "Adaptation à la Faculté")[
   #themed-block(title: "Bloc Lettres (Outline)")[
