@@ -155,6 +155,15 @@
   p.slide(..clean-named, apply-layout(title: manual-title, body))
 }
 
+#let focus-slide(body) = context {
+  let conf = config-state.get()
+  empty-slide(fill: conf.primary-color, {
+    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
+    set text(fill: white, size: 1.5em, weight: "bold")
+    align(center + horizon, body)
+  })
+}
+
 #let template(
   title: none,
   author: none,
