@@ -50,7 +50,7 @@
   let config = config-state.get()
   let resolved-title = if title != none { title } else { nav.resolve-slide-title(none) }
 
-  set text(font: "Fira Sans", size: 18pt, fill: sorbonne-text)
+  set text(font: config.text-font, size: config.text-size, fill: sorbonne-text)
   
   grid(
     columns: 100%,
@@ -217,6 +217,8 @@
     primary-color: primary-color,
     logo-white: logo-white,
     logo-color: logo-color,
+    text-font: text-font,
+    text-size: text-size,
   ))
   
   nav.navigator-config.update(c => {
