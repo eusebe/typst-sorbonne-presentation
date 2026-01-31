@@ -200,6 +200,33 @@
   })
 }
 
+#let cite-box(bib-key, display-label: none, position: "bottom-right") = context {
+  let conf = config-state.get()
+  
+  let align-pos = if position == "top-right" { top + right }
+    else if position == "bottom-left" { bottom + left }
+    else { bottom + right }
+  
+  // Marges nulles pour être au maximum dans les coins de la zone de contenu
+  let margin-pad = (top: 0pt, bottom: 0pt, left: 0pt, right: 0pt)
+
+  let content = if display-label != none {
+    display-label
+  } else {
+    let keys = if type(bib-key) == array { bib-key } else { (bib-key,) }
+    let labels = keys.map(k => if type(k) == str { label(k) } else { k })
+    cite(..labels)
+  }
+
+  place(align-pos, pad(..margin-pad, block(
+    fill: conf.primary-color.lighten(95%),
+    stroke: 0.5pt + conf.primary-color,
+    radius: 3pt,
+    inset: 0.4em, // Plus resserré
+    text(size: 0.65em, fill: conf.primary-color, content) // Plus petit
+  )))
+}
+
 // --- Boîtes et Blocs ---
 
 #let _base-box(title: none, body, color: black, fill-mode: "outline") = {
@@ -436,6 +463,21 @@
   set page(paper: "presentation-" + aspect-ratio, margin: 0pt, header: none, footer: none)
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
+  
+  // Définit le style de bibliographie en auteur-date (APA) par défaut
+  set bibliography(style: "apa")
+
+  // Style des citations
+  show cite: it => context {
+    let conf = config-state.get()
+    box(
+      inset: (x: 2pt),
+      outset: (y: 2pt),
+      radius: 2pt,
+      fill: conf.primary-color.lighten(90%),
+      text(fill: conf.primary-color, it)
+    )
+  }
   
   set heading(numbering: (..nums) => context {
     if not show-header-numbering { return none }

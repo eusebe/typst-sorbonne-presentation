@@ -1,0 +1,50 @@
+#import "../lib.typ": *
+
+#show: template.with(
+  title: [Test Citations],
+  author: [David Hajage],
+  // On teste avec la faculté "univ" (bleu) par défaut, 
+  // mais cela marchera avec "sante" (rouge), etc.
+  faculty: "univ" 
+)
+
+= État de l'art
+
+#slide[
+  Les travaux récents ont montré des améliorations significatives dans le rendu des documents @smith2023.
+  
+  Cependant, une approche purement artistique reste pertinente pour capter l'auditoire @doe2024.
+  
+  #v(2em)
+  _Note : La couleur de l'encadré suit la couleur principale du thème (ici Bleu Sorbonne)._
+]
+
+= Test Cite Box
+
+#slide[
+  Cette slide montre l'utilisation de `cite-box` en bas à droite (par défaut).
+  
+  #lorem(20)
+  
+  #cite-box("smith2023")
+]
+
+#slide[
+  Cette slide montre `cite-box` en haut à droite avec un label personnalisé.
+  
+  #lorem(20)
+  
+  #cite-box(("smith2023", "doe2024"), display-label: "Smith 2023; Doe 2024", position: "top-right")
+]
+
+#slide[
+  Cette slide montre `cite-box` en bas à gauche.
+  
+  #cite-box("doe2024", position: "bottom-left")
+]
+
+= Bibliographie
+
+#slide[
+  #bibliography("refs.bib", title: none)
+]
