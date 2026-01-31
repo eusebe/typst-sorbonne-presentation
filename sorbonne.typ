@@ -253,10 +253,26 @@
         text(size: 1.2em, style: "italic", fill: gray, subtitle)
       },
       
-      // Equation principale
-      block(
-        inset: 1em,
-        text(size: 2em, weight: "bold", equation)
+      // Bloc Equation + Signature
+      stack(
+        dir: ttb,
+        spacing: 0.8em,
+        block(
+          text(size: 2.5em, weight: "bold", equation)
+        ),
+        if citation != none {
+          let key = if type(citation) == dictionary { citation.at("bib-key", default: none) } else { citation }
+          let lbl = if type(citation) == dictionary { citation.at("label", default: none) } else { none }
+          let keys = if type(key) == array { key } else if key != none { (key,) } else { () }
+          let labels = keys.map(k => if type(k) == str { label(k) } else { k })
+          
+          if labels.len() > 0 { place(hide(cite(..labels))) }
+          
+          let cite-content = if lbl != none { lbl } else { cite(..labels) }
+          
+          // Style "Signature" : à droite, en gris, avec tiret
+          align(right, pad(right: 15%, text(fill: gray.darken(20%), size: 0.9em, [--- #cite-content])))
+        }
       ),
       
       // Boîte de définitions
@@ -277,16 +293,6 @@
         }
       }
     )
-
-    // Citation optionnelle utilisant cite-box
-    if citation != none {
-      let key = if type(citation) == dictionary { citation.at("bib-key", default: none) } else { citation }
-      let lbl = if type(citation) == dictionary { citation.at("label", default: none) } else { none }
-      
-      if key != none or lbl != none {
-        cite-box(key, display-label: lbl, position: "bottom-right")
-      }
-    }
   })
 }
 
