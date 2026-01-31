@@ -17,7 +17,6 @@
 
 #let empty-slide(fill: none, body) = {
   set page(margin: 0pt, fill: fill, header: none, footer: none)
-  // On active logical-slide pour que le compteur de page physique suive
   p.slide(logical-slide: true, block(width: 100%, height: 100%, body))
 }
 
@@ -99,7 +98,7 @@
   let conf = config-state.get()
   empty-slide(fill: conf.primary-color, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
-    set text(fill: white, size: 1.5em, weight: "bold")
+    set text(fill: white, size: 2.5em, weight: "bold")
     align(center + horizon, body)
   })
 }
@@ -123,12 +122,11 @@
 }
 
 #let appendix() = {
-  // Reset heading counter so first appendix is I
   counter(heading).update(0)
   [#metadata(none) <sorbonne-appendix-marker>]
   context {
     let conf = config-state.get()
-    focus-slide(upper(conf.annex-title))
+    focus-slide(upper(conf.annex-main-title))
   }
 }
 
@@ -137,8 +135,6 @@
 #let sorbonne-transition(h, roadmap) = {
   context {
     let conf = config-state.get()
-    
-    // Detect if we are in appendix for this heading
     let appendix-marker = query(<sorbonne-appendix-marker>)
     let is-annex = if appendix-marker.len() > 0 {
       appendix-marker.first().location().page() < h.location().page() or (appendix-marker.first().location().page() == h.location().page() and appendix-marker.first().location().position().y < h.location().position().y)
@@ -155,11 +151,16 @@
       let role = none
       for (r, lvl) in mapping { if lvl == h.level { role = r; break } }
       
-      if role == "part" {
+      if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
         align(center + horizon, stack(
           spacing: 1.5em,
           if conf.show-header-numbering {
-            text(size: 6em, weight: "bold", numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0)))
+            let num = if is-annex {
+              conf.annex-title + " " + numbering(conf.annex-numbering-format, counter(heading).at(h.location()).at(0))
+            } else {
+              numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
+            }
+            text(size: if is-annex { 4em } else { 6em }, weight: "bold", num)
           },
           text(size: 3em, weight: "bold", upper(h.body))
         ))
@@ -187,9 +188,13 @@
               } else {
                 numbering(conf.numbering-format, ..nums)
               }
-              text(size: if is-annex { 4em } else { 6em }, weight: "bold", fmt-num)
+              if is-annex {
+                text(size: 3.5em, weight: "bold", fmt-num + " " + smallcaps(section-head.body))
+              } else {
+                text(size: 6em, weight: "bold", fmt-num)
+              }
             },
-            text(size: 2.2em, weight: "bold", smallcaps(section-head.body)),
+            if not is-annex { text(size: 2.2em, weight: "bold", smallcaps(section-head.body)) },
             v(1.2em),
             block(width: 60%, align(left, roadmap))
           ))
@@ -225,6 +230,7 @@
   numbering-format: "1.1",
   part-numbering-format: "I",
   annex-title: [Annexe],
+  annex-main-title: [Annexes],
   annex-numbering-format: "I",
   mapping: (section: 1, subsection: 2),
   transitions: (:),
@@ -251,6 +257,7 @@
     numbering-format: numbering-format,
     part-numbering-format: part-numbering-format,
     annex-title: annex-title,
+    annex-main-title: annex-main-title,
     annex-numbering-format: annex-numbering-format,
     mapping: mapping,
     primary-color: primary-color,
@@ -282,7 +289,12 @@
     } else { false }
 
     if is-annex {
-      return annex-title + " " + numbering(annex-numbering-format, ..n)
+      let formats = (annex-numbering-format, "A", "1")
+      let parts = ()
+      for i in range(n.len()) {
+        parts.push(numbering(formats.at(i, default: "1"), n.at(i)))
+      }
+      return annex-title + " " + parts.join("")
     }
 
     let role = none
@@ -322,8 +334,21 @@
     })
   }
 
-  show heading: h => {
+  show heading: h => context {
     if h.level > 3 { return h }
+    
+    // Check if we are in appendix for this heading
+    let appendix-marker = query(<sorbonne-appendix-marker>)
+    let is-annex = if appendix-marker.len() > 0 {
+      appendix-marker.first().location().page() < h.location().page() or (appendix-marker.first().location().page() == h.location().page() and appendix-marker.first().location().position().y < h.location().position().y)
+    } else { false }
+
+    // En annexe, on ne fait des transitions que pour le niveau le plus haut mappé
+    let top-level = calc.min(..mapping.values())
+    if is-annex and h.level > top-level {
+      return place(hide(h))
+    }
+
     nav.render-transition(
       h,
       mapping: mapping,
