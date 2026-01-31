@@ -6,14 +6,32 @@ A professional, structured, and modern presentation theme for **Sorbonne Univers
 
 ## Overview
 
-The **Sorbonne Presentation Theme** is designed to provide academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
-
-![Title Slide](assets/docs/title-slide.png)
+The **Sorbonne Presentation Theme** provides academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
 
 - **Faculty Presets**: Built-in colors and logos for Health, Science, Humanities, and University-wide presentations.
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
 - **Dynamic Content**: Seamless integration of `pause`, `uncover`, and `only` for step-by-step reveals.
-- **Scientific Ready**: Specialized slides for equations (with "signature" citations), figures, and algorithms.
+- **Scientific Ready**: Specialized slides for equations, figures, and algorithms.
+
+### 🎨 Faculty Presets
+Switch visual identities instantly using the `faculty` parameter:
+
+| Univ | Sante | Sciences | Lettres |
+|:---:|:---:|:---:|:---:|
+| ![Univ](assets/docs/faculty-univ.png) | ![Sante](assets/docs/faculty-sante.png) | ![Sciences](assets/docs/faculty-sciences.png) | ![Lettres](assets/docs/faculty-lettres.png) |
+
+- `univ`: Sorbonne Blue (University-wide)
+- `sante`: Sorbonne Red (Faculty of Health)
+- `sciences`: Sorbonne Light Blue (Faculty of Science & Engineering)
+- `lettres`: Sorbonne Yellow/Ocre (Faculty of Humanities)
+
+## Documentation
+
+For a comprehensive visual tour of all components and features, please refer to the pre-compiled PDF documentation:
+
+- 📄 **[Main Demo Guide](examples/demo.pdf)**: All components, boxes, and slide types.
+- 🗺️ **[2-Levels Mapping Guide](examples/demo-mapping-2levels.pdf)**: Using Section/Subsection hierarchy.
+- 🗺️ **[3-Levels Mapping Guide](examples/demo-mapping-3levels.pdf)**: Using Part/Section/Subsection hierarchy.
 
 ## Quick Start
 
@@ -22,7 +40,6 @@ The **Sorbonne Presentation Theme** is designed to provide academic and institut
 
 #show: template.with(
   title: [Scientific Discovery],
-  subtitle: [New Insights in Physics],
   author: [John Doe],
   faculty: "sciences",
   show-outline: true,
@@ -39,72 +56,64 @@ The **Sorbonne Presentation Theme** is designed to provide academic and institut
 #ending-slide()
 ```
 
-## Features
+## Configuration Reference
 
-### 🎨 Faculty Presets
-Switch visual identities instantly using the `faculty` parameter:
-
-| Univ | Sante | Sciences | Lettres |
-|:---:|:---:|:---:|:---:|
-| ![Univ](assets/docs/faculty-univ.png) | ![Sante](assets/docs/faculty-sante.png) | ![Sciences](assets/docs/faculty-sciences.png) | ![Lettres](assets/docs/faculty-lettres.png) |
-
-- `univ`: Sorbonne Blue (University-wide)
-- `sante`: Sorbonne Red (Faculty of Health)
-- `sciences`: Sorbonne Light Blue (Faculty of Science & Engineering)
-- `lettres`: Sorbonne Yellow/Ocre (Faculty of Humanities)
-
-### 🗺️ Hierarchy Mapping
-Control your document structure with the `mapping` dictionary. It links heading levels to logical roles:
-- `(section: 1)`: Standard setup.
-- `(part: 1, section: 2, subsection: 3)`: Complex hierarchy.
-Transition slides and breadcrumbs automatically adapt to these roles.
-
-### ✨ Special Slide Types
-- **Focus Slide**: For impactful messages on a solid background.
-- **Figure Slide**: Centered figures with automatic captions.
-- **Equation Slide**: Large equations with a "signature" style citation and variable definitions.
-
-![Equation Slide](assets/docs/equation.png)
-
-- **Acknowledgement Slide**: To thank contributors and institutions.
-- **Ending Slide**: A professional closing slide with contact info.
-
-## Configuration
+### The `template` function
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `title` | content | `none` | Main presentation title |
+| `subtitle` | content | `none` | Optional subtitle |
 | `author` | content | `none` | Presenter's name |
+| `affiliation` | content | `none` | Department or Laboratory |
+| `date` | content | `datetime...` | Custom date display |
 | `faculty` | string | `"sante"` | Preset: `"sante"`, `"sciences"`, `"lettres"`, `"univ"` |
-| `mapping` | dict | `(section: 1, subsection: 2)` | Logical role mapping for headings |
+| `primary-color` | color | `none` | Manual override for theme color |
+| `alert-color` | color | `none` | Manual override for alert text color |
+| `logo-slide` | string | `none` | Path to custom logo for content slides |
+| `logo-transition` | string | `none` | Path to custom logo for transition slides |
+| `text-font` | string | `"Fira Sans"` | Main font family |
+| `text-size` | length | `20pt` | Base text size |
+| `aspect-ratio` | string | `"16-9"` | `"16-9"` or `"4-3"` |
 | `show-outline` | bool | `false` | Toggle summary slide |
-| `outline-columns` | int | `1` | Number of columns for the summary |
-| `auto-title` | bool | `true` | Use current section as slide title if none provided |
+| `outline-title` | content | `[Sommaire]` | Title of the summary slide |
+| `outline-depth` | int | `2` | Levels shown in summary |
+| `outline-columns` | int | `1` | Number of columns for summary |
+| `mapping` | dict | `(sec: 1, sub: 2)` | Logic mapping for headings |
+| `auto-title` | bool | `true` | Use section name as slide title if none provided |
+| `show-header-numbering` | bool | `true` | Toggle all heading numbers |
 | `numbering-format` | string | `"1.1"` | Format for sections and subsections |
-| `aspect-ratio` | string | `"16-9"` | Slide aspect ratio (`"16-9"` or `"4-3"`) |
+| `part-numbering-format` | string | `"I"` | Format for parts |
+| `annex-title` | content | `[Annexe]` | Prefix for single appendix |
+| `annex-main-title` | content | `[Annexes]` | Focus slide text for appendix start |
+| `annex-numbering-format` | string | `"I"` | Numbering style for appendices |
 
 ## Component Reference
 
-### Text Styles
-- `#alert[Important]`: Accent-colored bold text.
-- `#muted[Secondary]`: Discreet gray text.
-- `#subtle[Tertiary]`: Very light gray text.
+### Slide Types
+- `#slide(title: none, body)`: Standard content slide.
+- `#focus-slide(body)`: Highlight slide on solid theme background.
+- `#figure-slide(fig, caption: none, ..)`: Centered figure slide.
+- `#equation-slide(equation, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
+- `#acknowledgement-slide(people: (), institutions: (), ..)`: Thank-you slide.
+- `#ending-slide(contact: ())`: Closing slide with contact information.
 
-### Layout
-- `#two-col(left, right, columns: (1fr, 1fr))`: Equal or custom width columns.
-- `#three-col(left, center, right)`: Three balanced columns.
+### Text Helpers
+- `#alert[text]`: Highlighted bold text.
+- `#muted[text]`: Gray secondary text.
+- `#subtle[text]`: Light gray tertiary text.
 
-### Boxes
-- `#highlight-box(title: "Key", body)`: Blue university-styled box.
-- `#alert-box(title: "Warning", body)`: Red cautionary box.
-- `#example-box(title: "Example", body)`: Green academic example box.
-- `#algorithm-box(title: "Algorithm", body)`: Monospace box for code logic.
-- `#themed-block(title: "Adaptive", body)`: Box matching the faculty color.
+### Layout & Boxes
+- `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
+- `#three-col(left, center, right, ..)`: Three column layout.
+- `#highlight-box(title, body, fill-mode: "outline")`: Styled informational box.
+  - `fill-mode`: `"outline"`, `"fill"`, `"full"`, or `"transparent"`.
+- `#algorithm-box(title, body)`: Monospace box for algorithmic logic.
 
 ## Credits
 
 - **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://github.com/eusebe/typst-navigator).
-- **Inspiration**: Some layout features and component designs were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme. A special thanks to its author for the high-quality design inspiration.
+- **Inspiration**: Layout features and component designs were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme. A special thanks to its author for the high-quality design inspiration.
 
 ## License
 
