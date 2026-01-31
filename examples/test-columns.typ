@@ -11,7 +11,7 @@
   
   #v(1em)
   
-  #side-by-side(
+  #two-col(
     [
       *Colonne de gauche*
       - Premier point

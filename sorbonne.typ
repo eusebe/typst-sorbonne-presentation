@@ -117,12 +117,22 @@
   pdfpc.speaker-note(body)
 }
 
-#let side-by-side(left-body, right-body, columns: (1fr, 1fr), gutter: 2em) = {
+#let two-col(left, right, columns: (1fr, 1fr), gutter: 2em) = {
   grid(
     columns: columns,
     column-gutter: gutter,
-    left-body,
-    right-body
+    left,
+    right
+  )
+}
+
+#let three-col(left, center, right, columns: (1fr, 1fr, 1fr), gutter: 2em) = {
+  grid(
+    columns: columns,
+    column-gutter: gutter,
+    left,
+    center,
+    right
   )
 }
 

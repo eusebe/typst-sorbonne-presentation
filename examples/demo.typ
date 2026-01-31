@@ -8,7 +8,7 @@
   affiliation: [Sorbonne University],
   faculty: "univ",
   show-outline: true,
-  outline-columns: 1,
+  outline-columns: 2,
   mapping: (section: 1),
 )
 
@@ -32,20 +32,27 @@
   - *Subtle*: For #subtle[tertiary] information.
 ]
 
-#slide(title: "Columns (side-by-side)")[
-  Create columns effortlessly using `#side-by-side()`.
+#slide(title: "Multi-column Layouts")[
+  The template provides dedicated functions for balanced layouts:
   
-  #v(1em)
-  
-  #side-by-side(
-    [
-      *Left Column*
-      #lorem(20)
-    ],
-    [
-      *Right Column*
-      #lorem(20)
-    ]
+  - `two-col(left, right, ..)` and `three-col(left, center, right, ..)`
+  - *Parameters*:
+    - `columns`: Array of widths (e.g., `(1fr, 2fr)`). Defaults to equal widths.
+    - `gutter`: Spacing between columns (default: `2em`).
+
+  #v(0.5em)
+  #two-col(
+    [*Two-col*: Default equal width. #lorem(5)],
+    [#lorem(10)]
+  )
+  #v(0.5em)
+  #two-col(
+    [*Custom width*: Using `columns: (1fr, 2fr)`.], [#lorem(10)],
+    columns: (1fr, 2fr)
+  )
+  #v(0.5em)
+  #three-col(
+    [*Three-col*], [Equal width], [distribution]
   )
 ]
 
@@ -126,7 +133,7 @@
 // ==========================================
 
 #slide(title: "Appendix & Hierarchy Control")[
-  #side-by-side(
+  #two-col(
     [
       *Using Appendices*
       - Call `#appendix()` to start.
@@ -146,7 +153,7 @@
 
 #slide(title: "Theme Configuration Reference (1/2)")[
   #set text(size: 0.72em)
-  #side-by-side(
+  #two-col(
     [
       *Identification & Date*
       - `title`, `subtitle`, `author`, `affiliation`.
