@@ -12,6 +12,7 @@
 
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
+#let last-main-page = state("last-main-page", none)
 
 // --- Composants ---
 
@@ -105,7 +106,7 @@
 
 #let alert(body) = context {
   let conf = config-state.get()
-  text(fill: conf.primary-color, weight: "bold", body)
+  text(fill: conf.alert-color, weight: "bold", body)
 }
 
 #let speaker-note(body) = {
@@ -239,15 +240,15 @@
   outline-depth: 2,
   body
 ) = {
-  let (primary-color, logo-white, logo-color) = if faculty == "sciences" {
-    (sorbonne-lightblue, "assets/logo/sorbonne-sciences-white.png", "assets/logo/sorbonne-sciences.png")
+  let (primary-color, alert-color, logo-white, logo-color) = if faculty == "sciences" {
+    (sorbonne-lightblue, sorbonne-lightblue.darken(40%), "assets/logo/sorbonne-sciences-white.png", "assets/logo/sorbonne-sciences.png")
   } else if faculty == "lettres" {
-    (sorbonne-yellow, "assets/logo/sorbonne-lettres-white.png", "assets/logo/sorbonne-lettres.png")
+    (sorbonne-yellow, sorbonne-yellow.darken(45%), "assets/logo/sorbonne-lettres-white.png", "assets/logo/sorbonne-lettres.png")
   } else if faculty == "univ" or faculty == none {
-    (sorbonne-blue, "assets/logo/sorbonne-univ-white.png", "assets/logo/sorbonne-univ.png")
+    (sorbonne-blue, sorbonne-blue.darken(20%), "assets/logo/sorbonne-univ-white.png", "assets/logo/sorbonne-univ.png")
   } else {
     // Default is sante
-    (sorbonne-red, "assets/logo/sorbonne-sante-white.png", "assets/logo/sorbonne-sante.png")
+    (sorbonne-red, sorbonne-red.darken(15%), "assets/logo/sorbonne-sante-white.png", "assets/logo/sorbonne-sante.png")
   }
 
   config-state.update(c => (
@@ -261,6 +262,7 @@
     annex-numbering-format: annex-numbering-format,
     mapping: mapping,
     primary-color: primary-color,
+    alert-color: alert-color,
     logo-white: logo-white,
     logo-color: logo-color,
     text-font: text-font,
