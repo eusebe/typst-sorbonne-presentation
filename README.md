@@ -106,9 +106,12 @@ For a comprehensive visual tour of all components and features, please refer to 
 ### Layout & Boxes
 - `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
 - `#three-col(left, center, right, ..)`: Three column layout.
-- `#highlight-box(title, body, fill-mode: "outline")`: Styled informational box.
-  - `fill-mode`: `"outline"`, `"fill"`, `"full"`, or `"transparent"`.
-- `#algorithm-box(title, body)`: Monospace box for algorithmic logic.
+- **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`, or `"transparent"`).
+  - `#highlight-box(title, body)`: Blue university-styled box for key points.
+  - `#alert-box(title, body)`: Red cautionary box for warnings.
+  - `#example-box(title, body)`: Green academic box for examples.
+  - `#algorithm-box(title, body)`: Monospace box for algorithmic logic.
+  - `#themed-block(title, body)`: Box automatically matching the faculty color.
 
 ## Credits
 
