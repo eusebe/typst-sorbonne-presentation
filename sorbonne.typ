@@ -181,6 +181,15 @@
   pdfpc.speaker-note(body)
 }
 
+#let side-by-side(left-body, right-body, columns: (1fr, 1fr), gutter: 2em) = {
+  grid(
+    columns: columns,
+    column-gutter: gutter,
+    left-body,
+    right-body
+  )
+}
+
 #let template(
   title: none,
   author: none,
