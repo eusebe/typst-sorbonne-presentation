@@ -122,6 +122,54 @@
   )
 }
 
+// --- Boîtes et Blocs ---
+
+#let _base-box(title: none, body, color: black, fill-mode: "outline") = {
+  let fill-body = if fill-mode == "fill" { color.lighten(90%) } else { none }
+  
+  block(
+    width: 100%,
+    radius: 4pt,
+    clip: true,
+    stroke: 0.5pt + color,
+    stack(
+      spacing: 0pt,
+      if title != none {
+        block(
+          width: 100%,
+          fill: color,
+          inset: 0.6em,
+          text(fill: white, weight: "bold", title)
+        )
+      },
+      block(
+        width: 100%,
+        fill: fill-body,
+        inset: 0.8em,
+        body
+      )
+    )
+  )
+}
+
+#let highlight-box(title: "Key Point", fill-mode: "outline", body) = {
+  _base-box(title: title, body, color: sorbonne-blue, fill-mode: fill-mode)
+}
+
+#let alert-box(title: "Warning", fill-mode: "outline", body) = {
+  _base-box(title: title, body, color: sorbonne-red, fill-mode: fill-mode)
+}
+
+#let example-box(title: "Example", fill-mode: "outline", body) = {
+  _base-box(title: title, body, color: rgb("#2E7D32"), fill-mode: fill-mode)
+}
+
+#let themed-block(title: none, fill-mode: "outline", body) = context {
+  let conf = config-state.get()
+  let color = conf.primary-color
+  _base-box(title: title, body, color: color, fill-mode: fill-mode)
+}
+
 #let appendix() = {
   counter(heading).update(0)
   [#metadata(none) <sorbonne-appendix-marker>]
