@@ -207,26 +207,87 @@
     else if position == "bottom-left" { bottom + left }
     else { bottom + right }
   
-  // On pousse la boite légèrement dans les marges latérales
-  // 1em permet d'être excentré sans être collé au bord (qui est à 2.5em de la zone de texte)
   let dx = if "right" in position { 1em } else { -1em }
   let dy = if "top" in position { -0.3em } else { 0.3em }
 
+  let keys = if type(bib-key) == array { bib-key } else if bib-key != none { (bib-key,) } else { () }
+  let labels = keys.map(k => if type(k) == str { label(k) } else { k })
+
   let content = if display-label != none {
+    // On "cite" de manière invisible pour forcer l'inclusion en bibliographie
+    if labels.len() > 0 { place(hide(cite(..labels))) }
     display-label
-  } else {
-    let keys = if type(bib-key) == array { bib-key } else { (bib-key,) }
-    let labels = keys.map(k => if type(k) == str { label(k) } else { k })
+  } else if labels.len() > 0 {
     cite(..labels)
+  } else {
+    none
   }
 
-  place(align-pos, dx: dx, dy: dy, block(
-    fill: conf.primary-color.lighten(95%),
-    stroke: 0.5pt + conf.primary-color,
-    radius: 3pt,
-    inset: 0.4em, 
-    text(size: 0.65em, fill: conf.primary-color, content)
-  ))
+  if content != none {
+    place(align-pos, dx: dx, dy: dy, block(
+      fill: conf.primary-color.lighten(95%),
+      stroke: 0.5pt + conf.primary-color,
+      radius: 3pt,
+      inset: 0.4em, 
+      text(size: 0.65em, fill: conf.primary-color, content)
+    ))
+  }
+}
+
+#let equation-slide(
+  equation,
+  title: "Equation",
+  subtitle: none,
+  definitions: none,
+  citation: none,
+  ..args
+) = {
+  slide(title: title, ..args, {
+    set align(center + horizon)
+    
+    stack(
+      dir: ttb,
+      spacing: 2em,
+      
+      if subtitle != none {
+        text(size: 1.2em, style: "italic", fill: gray, subtitle)
+      },
+      
+      // Equation principale
+      block(
+        inset: 1em,
+        text(size: 2em, weight: "bold", equation)
+      ),
+      
+      // Boîte de définitions
+      if definitions != none {
+        context {
+          let conf = config-state.get()
+          block(
+            width: 85%,
+            fill: conf.primary-color.lighten(95%),
+            stroke: (left: 3pt + conf.primary-color), // Bordure gauche élégante
+            inset: 1.5em,
+            radius: (right: 4pt),
+            align(left, {
+              set par(leading: 0.8em)
+              definitions
+            })
+          )
+        }
+      }
+    )
+
+    // Citation optionnelle utilisant cite-box
+    if citation != none {
+      let key = if type(citation) == dictionary { citation.at("bib-key", default: none) } else { citation }
+      let lbl = if type(citation) == dictionary { citation.at("label", default: none) } else { none }
+      
+      if key != none or lbl != none {
+        cite-box(key, display-label: lbl, position: "bottom-right")
+      }
+    }
+  })
 }
 
 // --- Boîtes et Blocs ---
