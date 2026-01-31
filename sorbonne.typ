@@ -39,9 +39,9 @@
     clickable: false,
     show-numbering: conf.show-header-numbering,
     text-styles: (
-      level-1: (active: (weight: "bold", fill: sorbonne-text)),
-      level-2: (active: (weight: "regular", fill: gray.darken(20%))),
-      level-3: (active: (weight: "regular", fill: gray.darken(20%)))
+      level-1: (active: (weight: "bold", fill: conf.primary-color)),
+      level-2: (active: (weight: "regular", fill: conf.primary-color)),
+      level-3: (active: (weight: "regular", fill: conf.primary-color))
     )
   )
 }
