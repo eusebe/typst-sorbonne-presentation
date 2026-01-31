@@ -12,13 +12,13 @@
 
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
-#let last-main-page = state("last-main-page", none)
 
 // --- Composants ---
 
-#let appendix() = context {
-  let current = counter(page).get().at(0)
-  last-main-page.update(current)
+#let empty-slide(fill: none, body) = {
+  set page(margin: 0pt, fill: fill, header: none, footer: none)
+  // On active logical-slide pour que le compteur de page physique suive
+  p.slide(logical-slide: true, block(width: 100%, height: 100%, body))
 }
 
 #let breadcrumb() = context {
@@ -81,9 +81,13 @@
         config.author,
         breadcrumb(),
         context {
-          let current = counter(page).display()
-          let total = last-main-page.get()
-          if total == none { total = counter(page).final().at(0) }
+          let current = here().page()
+          let appendix-marker = query(<sorbonne-appendix-marker>)
+          let total = if appendix-marker.len() > 0 {
+            appendix-marker.first().location().page() - 1
+          } else {
+            counter(page).final().at(0)
+          }
           [#current / #total]
         }
       )
@@ -91,9 +95,41 @@
   )
 }
 
-#let empty-slide(fill: none, body) = {
-  set page(margin: 0pt, fill: fill, header: none, footer: none)
-  p.slide(logical-slide: false, block(width: 100%, height: 100%, body))
+#let focus-slide(body) = context {
+  let conf = config-state.get()
+  empty-slide(fill: conf.primary-color, {
+    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
+    set text(fill: white, size: 1.5em, weight: "bold")
+    align(center + horizon, body)
+  })
+}
+
+#let alert(body) = context {
+  let conf = config-state.get()
+  text(fill: conf.primary-color, weight: "bold", body)
+}
+
+#let speaker-note(body) = {
+  pdfpc.speaker-note(body)
+}
+
+#let side-by-side(left-body, right-body, columns: (1fr, 1fr), gutter: 2em) = {
+  grid(
+    columns: columns,
+    column-gutter: gutter,
+    left-body,
+    right-body
+  )
+}
+
+#let appendix() = {
+  // Reset heading counter so first appendix is I
+  counter(heading).update(0)
+  [#metadata(none) <sorbonne-appendix-marker>]
+  context {
+    let conf = config-state.get()
+    focus-slide(upper(conf.annex-title))
+  }
 }
 
 // --- Transitions ---
@@ -101,6 +137,13 @@
 #let sorbonne-transition(h, roadmap) = {
   context {
     let conf = config-state.get()
+    
+    // Detect if we are in appendix for this heading
+    let appendix-marker = query(<sorbonne-appendix-marker>)
+    let is-annex = if appendix-marker.len() > 0 {
+      appendix-marker.first().location().page() < h.location().page() or (appendix-marker.first().location().page() == h.location().page() and appendix-marker.first().location().position().y < h.location().position().y)
+    } else { false }
+
     empty-slide(fill: conf.primary-color, {
       set text(fill: white, font: "Fira Sans") 
       place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
@@ -139,7 +182,12 @@
           align(center, stack(
             spacing: 0.8em, 
             if conf.show-header-numbering {
-              text(size: 6em, weight: "bold", numbering(conf.numbering-format, ..nums))
+              let fmt-num = if is-annex {
+                conf.annex-title + " " + numbering(conf.annex-numbering-format, ..nums)
+              } else {
+                numbering(conf.numbering-format, ..nums)
+              }
+              text(size: if is-annex { 4em } else { 6em }, weight: "bold", fmt-num)
             },
             text(size: 2.2em, weight: "bold", smallcaps(section-head.body)),
             v(1.2em),
@@ -163,33 +211,6 @@
   p.slide(..clean-named, apply-layout(title: manual-title, body))
 }
 
-#let focus-slide(body) = context {
-  let conf = config-state.get()
-  empty-slide(fill: conf.primary-color, {
-    place(top + left, pad(top: 2em, left: 2em, image(conf.logo-white, width: 5em)))
-    set text(fill: white, size: 1.5em, weight: "bold")
-    align(center + horizon, body)
-  })
-}
-
-#let alert(body) = context {
-  let conf = config-state.get()
-  text(fill: conf.primary-color, weight: "bold", body)
-}
-
-#let speaker-note(body) = {
-  pdfpc.speaker-note(body)
-}
-
-#let side-by-side(left-body, right-body, columns: (1fr, 1fr), gutter: 2em) = {
-  grid(
-    columns: columns,
-    column-gutter: gutter,
-    left-body,
-    right-body
-  )
-}
-
 #let template(
   title: none,
   author: none,
@@ -203,6 +224,8 @@
   show-header-numbering: true,
   numbering-format: "1.1",
   part-numbering-format: "I",
+  annex-title: [Annexe],
+  annex-numbering-format: "I",
   mapping: (section: 1, subsection: 2),
   transitions: (:),
   show-outline: false,
@@ -227,6 +250,8 @@
     show-header-numbering: show-header-numbering,
     numbering-format: numbering-format,
     part-numbering-format: part-numbering-format,
+    annex-title: annex-title,
+    annex-numbering-format: annex-numbering-format,
     mapping: mapping,
     primary-color: primary-color,
     logo-white: logo-white,
@@ -246,9 +271,20 @@
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   
-  set heading(numbering: (..nums) => {
+  set heading(numbering: (..nums) => context {
     if not show-header-numbering { return none }
     let n = nums.pos()
+    
+    // Check if we are in appendix
+    let appendix-marker = query(<sorbonne-appendix-marker>)
+    let is-annex = if appendix-marker.len() > 0 {
+      appendix-marker.first().location().page() < here().page() or (appendix-marker.first().location().page() == here().page() and appendix-marker.first().location().position().y < here().position().y)
+    } else { false }
+
+    if is-annex {
+      return annex-title + " " + numbering(annex-numbering-format, ..n)
+    }
+
     let role = none
     for (r, lvl) in mapping { if lvl == n.len() { role = r; break } }
     
