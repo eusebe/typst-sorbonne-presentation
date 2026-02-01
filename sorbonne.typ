@@ -447,6 +447,7 @@
   annex-main-title: [Annexes],
   annex-numbering-format: "I",
   mapping: (section: 1, subsection: 2),
+  bib-style: "apa",
   transitions: (:),
   show-outline: false,
   outline-title: [Sommaire],
@@ -502,8 +503,8 @@
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   
-  // Définit le style de bibliographie en auteur-date (APA) par défaut
-  set bibliography(style: "apa")
+  // Définit le style de bibliographie
+  set bibliography(style: bib-style)
 
   // Style des citations
   show cite: it => context {

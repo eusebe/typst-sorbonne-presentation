@@ -87,6 +87,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `annex-title` | content | `[Annexe]` | Prefix for single appendix |
 | `annex-main-title` | content | `[Annexes]` | Focus slide text for appendix start |
 | `annex-numbering-format` | string | `"I"` | Numbering style for appendices |
+| `bib-style` | string | `"apa"` | Bibliography and citation style |
 
 ## Component Reference
 
@@ -112,7 +113,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 ![Text Helpers](assets/docs/helper-text.png)
 
 ### Citations & References
-- Corner and inline citations.
+- Inline and corner citations.
   `#cite-box("smith2023", position: "bottom-right")`
   ![Citations](assets/docs/component-citation.png)
 
