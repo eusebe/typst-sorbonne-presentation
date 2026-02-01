@@ -1,6 +1,8 @@
 #import "../lib.typ": *
 #import "@preview/physica:0.9.6": *
 
+#set bibliography(style: "apa")
+
 // PPI et dimensions gérées par la CLI
 #let comp = sys.inputs.at("component", default: "slide")
 
@@ -96,11 +98,10 @@
   ]
 } else if comp == "citations" {
   show: template.with()
-  set bibliography(style: "apa")
   slide(title: "Citations Style", subtitle: "Standard and custom corner references")[
-    Inline citations like @smith2023 are highlighted automatically.
+    Inline citations like @smith2023 are automatically highlighted.
     
-    You can also use custom labels in corner boxes:
+    You can also use corner boxes with custom labels:
     #cite-box("doe2024", display-label: "Jane Doe (2024)", position: "bottom-right")
   ]
 }

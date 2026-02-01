@@ -113,6 +113,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 
 ### Citations & References
 - Corner and inline citations.
+  `#cite-box("smith2023", position: "bottom-right")`
   ![Citations](assets/docs/component-citation.png)
 
 ### Layout & Boxes
