@@ -92,21 +92,32 @@ For a comprehensive visual tour of all components and features, please refer to 
 
 ### Slide Types
 - `#slide(title: none, body)`: Standard content slide.
+  ![Slide](assets/docs/component-slide.png)
 - `#focus-slide(body)`: Highlight slide on solid theme background.
+  ![Focus Slide](assets/docs/component-focus-slide.png)
 - `#figure-slide(fig, caption: none, ..)`: Centered figure slide.
+  ![Figure Slide](assets/docs/component-figure-slide.png)
 - `#equation-slide(equation, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
+  ![Equation Slide](assets/docs/component-equation-slide.png)
 - `#acknowledgement-slide(people: (), institutions: (), ..)`: Thank-you slide.
+  ![Acknowledgement Slide](assets/docs/component-acknowledgement-slide.png)
 - `#ending-slide(contact: ())`: Closing slide with contact information.
+  ![Ending Slide](assets/docs/component-ending-slide.png)
 
 ### Text Helpers
 - `#alert[text]`: Highlighted bold text.
 - `#muted[text]`: Gray secondary text.
 - `#subtle[text]`: Light gray tertiary text.
 
+![Text Helpers](assets/docs/helper-text.png)
+
 ### Layout & Boxes
 - `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
+  ![Layout 2-col](assets/docs/layout-2col.png)
 - `#three-col(left, center, right, ..)`: Three column layout.
+  ![Layout 3-col](assets/docs/layout-3col.png)
 - **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`, or `"transparent"`).
+  ![Boxes](assets/docs/component-boxes.png)
   - `#highlight-box(title, body)`: Blue university-styled box for key points.
   - `#alert-box(title, body)`: Red cautionary box for warnings.
   - `#example-box(title, body)`: Green academic box for examples.
