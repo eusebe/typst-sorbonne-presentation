@@ -93,6 +93,8 @@
   
   #cite-box("smith2023", position: "bottom-right")
   #cite-box("doe2024", display-label: "Jane Doe (2024)", position: "top-right")
+
+  _Note: The citation style can be customized via the `bib-style` parameter (default: "apa")._
 ]
 
 #slide(title: "Bibliography Slide")[
@@ -194,6 +196,7 @@
   - `mapping`: Dict of roles (part/section/subsection) vs levels.
   - `auto-title`: Boolean. If true, slides without a title use the section name.
   - `transitions`: Dictionary for `navigator` roadmap customization.
+  - `bib-style`: Bibliography style (default: `"apa"`).
   - `annex-title`: Prefix for single appendix (e.g., `"Appendix"`).
   - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
