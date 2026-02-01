@@ -21,21 +21,22 @@
   ]
 } else if comp == "focus-slide" {
   show: template.with()
-  focus-slide[
-    "The important thing is not to stop questioning. Curiosity has its own reason for existing."
-  ]
+  focus-slide([Impactful Messages], subtitle: "A dedicated layout for key quotes")
 } else if comp == "figure-slide" {
   show: template.with()
   figure-slide(
     rect(width: 40%, height: 30%, fill: sorbonne-lightblue, stroke: 1pt + sorbonne-blue),
-    title: "Figure Slide",
+    title: "Data Visualization",
+    subtitle: "Including figures and charts",
     caption: [A centered figure with caption]
   )
 } else if comp == "equation-slide" {
   show: template.with()
+  // On place la biblio à la fin pour éviter le décalage (voir fin de fichier)
   equation-slide(
     $ i hbar pdv(Psi, t) = - hbar^2 / (2m) laplacian(Psi) + V Psi $,
-    title: [Equation Slide],
+    title: [Scientific Formulas],
+    subtitle: [The foundation of modern physics],
     definitions: [
       / $Psi$: Wavefunction
       / $V$: Potential energy
@@ -45,23 +46,28 @@
 } else if comp == "acknowledgement-slide" {
   show: template.with()
   acknowledgement-slide(
-    subtitle: [Acknowledgements:],
+    title: "Acknowledgements",
+    subtitle: [Special thanks to our contributors],
     people: ((name: "Prof. Smith", role: "Supervisor"),),
     institutions: ("Sorbonne University", "CNRS"),
   )
 } else if comp == "ending-slide" {
   show: template.with()
-  ending-slide(contact: ("contact@example.com", "github.com/user"))
+  ending-slide(
+    title: [Thank you for your attention!],
+    subtitle: [Any questions?],
+    contact: ("contact@example.com", "github.com/user")
+  )
 } else if comp == "helper-text" {
   show: template.with()
-  slide(title: "Text Helpers")[
+  slide(title: "Text Helpers", subtitle: "Hierarchy of information")[
     - #alert[Alert]: for critical information.
     - #muted[Muted]: for secondary information.
     - #subtle[Subtle]: for tertiary information.
   ]
 } else if comp == "layout-2col" {
   show: template.with()
-  slide(title: "Layout: Two Columns")[
+  slide(title: "Layout: Two Columns", subtitle: "Balanced content distribution")[
     #two-col(
       [#lorem(10)],
       [#lorem(10)]
@@ -69,7 +75,7 @@
   ]
 } else if comp == "layout-3col" {
   show: template.with()
-  slide(title: "Layout: Three Columns")[
+  slide(title: "Layout: Three Columns", subtitle: "Complex side-by-side components")[
     #three-col(
       [Col A],
       [Col B],
@@ -78,7 +84,7 @@
   ]
 } else if comp == "boxes" {
   show: template.with()
-  slide(title: "Boxes & Blocks")[
+  slide(title: "Boxes & Blocks", subtitle: "Highlighting key information")[
     #highlight-box(title: "Highlight")[Key points using theme color.]
     #v(0.5em)
     #alert-box(title: "Alert", fill-mode: "fill")[Warnings and critical info.]
