@@ -8,7 +8,6 @@
   affiliation: [Sorbonne University],
   faculty: "univ",
   show-outline: true,
-  outline-columns: 2,
   mapping: (section: 1),
 )
 

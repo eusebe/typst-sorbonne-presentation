@@ -224,10 +224,12 @@
 
   let content = if display-label != none {
     // On "cite" de manière invisible pour forcer l'inclusion en bibliographie
-    if labels.len() > 0 { place(hide(cite(..labels))) }
+    if labels.len() > 0 { 
+      place(hide(labels.map(l => cite(l)).join())) 
+    }
     display-label
   } else if labels.len() > 0 {
-    cite(..labels)
+    labels.map(l => cite(l)).join(", ")
   } else {
     none
   }
@@ -275,9 +277,9 @@
           let keys = if type(key) == array { key } else if key != none { (key,) } else { () }
           let labels = keys.map(k => if type(k) == str { label(k) } else { k })
           
-          if labels.len() > 0 { place(hide(cite(..labels))) }
+          if labels.len() > 0 { place(hide(labels.map(l => cite(l)).join())) }
           
-          let cite-content = if lbl != none { lbl } else { cite(..labels) }
+          let cite-content = if lbl != none { lbl } else { labels.map(l => cite(l)).join(", ") }
           
           // Style "Signature" : à droite, en gris, avec tiret
           align(right, pad(right: 15%, text(fill: gray.darken(20%), size: 0.9em, [--- #cite-content])))
@@ -414,80 +416,6 @@
   context {
     let conf = config-state.get()
     focus-slide(upper(conf.annex-main-title))
-  }
-}
-
-// --- Transitions ---
-
-#let sorbonne-transition(h, roadmap) = {
-  context {
-    let conf = config-state.get()
-    let appendix-marker = query(<sorbonne-appendix-marker>)
-    let is-annex = if appendix-marker.len() > 0 {
-      appendix-marker.first().location().page() < h.location().page() or (appendix-marker.first().location().page() == h.location().page() and appendix-marker.first().location().position().y < h.location().position().y)
-    } else { false }
-
-    empty-slide(fill: conf.primary-color, {
-      set text(fill: white, font: "Fira Sans") 
-      place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
-      place(hide(h)) 
-      
-      let mapping = conf.mapping
-      let active = nav.get-active-headings(h.location())
-      
-      let role = none
-      for (r, lvl) in mapping { if lvl == h.level { role = r; break } }
-      
-      if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
-        align(center + horizon, stack(
-          spacing: 1.5em,
-          if conf.show-header-numbering {
-            let num = if is-annex {
-              conf.annex-title + " " + numbering(conf.annex-numbering-format, counter(heading).at(h.location()).at(0))
-            } else {
-              numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
-            }
-            text(size: if is-annex { 4em } else { 6em }, weight: "bold", num)
-          },
-          text(size: 3em, weight: "bold", upper(h.body))
-        ))
-      } else {
-        let part-lvl = mapping.at("part", default: none)
-        let active-part = if part-lvl != none { active.at("h" + str(part-lvl), default: none) } else { none }
-        if active-part != none {
-          place(top + right, pad(top: 2.5em, right: 3em, text(size: 0.8em, fill: white.transparentize(30%), weight: "bold", upper(active-part.body))))
-        }
-        
-        let section-lvl = mapping.at("section", default: 1)
-        let section-head = active.at("h" + str(section-lvl), default: h)
-        let count = counter(heading).at(section-head.location())
-        let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
-        let nums = count.slice(start-idx)
-        
-        pad(x: 2em, stack(
-          dir: ttb,
-          v(15%),
-          align(center, stack(
-            spacing: 0.8em, 
-            if conf.show-header-numbering {
-              let fmt-num = if is-annex {
-                conf.annex-title + " " + numbering(conf.annex-numbering-format, ..nums)
-              } else {
-                numbering(conf.numbering-format, ..nums)
-              }
-              if is-annex {
-                text(size: 3.5em, weight: "bold", fmt-num + " " + smallcaps(section-head.body))
-              } else {
-                text(size: 6em, weight: "bold", fmt-num)
-              }
-            },
-            if not is-annex { text(size: 2.2em, weight: "bold", smallcaps(section-head.body)) },
-            v(1.2em),
-            block(width: 60%, align(left, roadmap))
-          ))
-        ))
-      }
-    })
   }
 }
 
@@ -648,6 +576,8 @@
   show heading: h => context {
     if h.level > 3 { return h }
     
+    let conf = config-state.get()
+    
     // Check if we are in appendix for this heading
     let appendix-marker = query(<sorbonne-appendix-marker>)
     let is-annex = if appendix-marker.len() > 0 {
@@ -663,8 +593,9 @@
     nav.render-transition(
       h,
       mapping: mapping,
-      slide-func: (fill: none, roadmap) => sorbonne-transition(h, roadmap),
+      slide-func: empty-slide,
       top-padding: 0pt,
+      theme-colors: (primary: conf.primary-color),
       transitions: (
         parts: (visibility: (part: "none", section: "none", subsection: "none")),
         sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
@@ -672,7 +603,69 @@
         style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
         marker: none,
       ) + transitions,
-      show-heading-numbering: show-header-numbering
+      show-heading-numbering: show-header-numbering,
+      content-wrapper: (roadmap, h, active) => {
+        set text(fill: white, font: "Fira Sans") 
+        place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
+        
+        let role = none
+        for (r, lvl) in mapping { if lvl == h.level { role = r; break } }
+        
+        // --- CASE 1: PART TRANSITION (Centered Title, No Roadmap) ---
+        if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
+           align(center + horizon, stack(
+            spacing: 1.5em,
+            if conf.show-header-numbering {
+              let num = if is-annex {
+                conf.annex-title + " " + numbering(conf.annex-numbering-format, counter(heading).at(h.location()).at(0))
+              } else {
+                numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
+              }
+              text(size: if is-annex { 4em } else { 6em }, weight: "bold", num)
+            },
+            text(size: 3em, weight: "bold", upper(h.body))
+          ))
+        
+        // --- CASE 2: SECTION TRANSITION (Split Layout with Roadmap) ---
+        } else {
+          // 2.1. Active Part display (Top Right)
+          let part-lvl = mapping.at("part", default: none)
+          let active-part = if part-lvl != none { active.at("h" + str(part-lvl), default: none) } else { none }
+          if active-part != none {
+            place(top + right, pad(top: 2.5em, right: 3em, text(size: 0.8em, fill: white.transparentize(30%), weight: "bold", upper(active-part.body))))
+          }
+          
+          // 2.2. Main Content
+          let section-lvl = mapping.at("section", default: 1)
+          let section-head = active.at("h" + str(section-lvl), default: h)
+          let count = counter(heading).at(section-head.location())
+          let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
+          let nums = count.slice(start-idx)
+          
+          pad(x: 2em, stack(
+            dir: ttb,
+            v(15%),
+            align(center, stack(
+              spacing: 0.8em, 
+              if conf.show-header-numbering {
+                let fmt-num = if is-annex {
+                  conf.annex-title + " " + numbering(conf.annex-numbering-format, ..nums)
+                } else {
+                  numbering(conf.numbering-format, ..nums)
+                }
+                if is-annex {
+                  text(size: 3.5em, weight: "bold", fmt-num + " " + smallcaps(section-head.body))
+                } else {
+                  text(size: 6em, weight: "bold", fmt-num)
+                }
+              },
+              if not is-annex { text(size: 2.2em, weight: "bold", smallcaps(section-head.body)) },
+              v(1.2em),
+              block(width: 60%, align(left, roadmap))
+            ))
+          ))
+        }
+      }
     )
   }
   
