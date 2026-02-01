@@ -94,6 +94,15 @@
       + Compute results
     ]
   ]
+} else if comp == "citations" {
+  show: template.with()
+  set bibliography(style: "apa")
+  slide(title: "Citations Style", subtitle: "Standard and custom corner references")[
+    Inline citations like @smith2023 are highlighted automatically.
+    
+    You can also use custom labels in corner boxes:
+    #cite-box("doe2024", display-label: "Jane Doe (2024)", position: "bottom-right")
+  ]
 }
 
 // On place la bibliographie à la fin, elle ne sera pas dans les pages extraites (1 ou 2)

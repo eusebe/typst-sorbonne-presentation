@@ -111,6 +111,10 @@ For a comprehensive visual tour of all components and features, please refer to 
 
 ![Text Helpers](assets/docs/helper-text.png)
 
+### Citations & References
+- Corner and inline citations.
+  ![Citations](assets/docs/component-citation.png)
+
 ### Layout & Boxes
 - `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
   ![Layout 2-col](assets/docs/layout-2col.png)

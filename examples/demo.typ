@@ -116,7 +116,7 @@
 )
 
 #acknowledgement-slide(
-  subtitle: [My sincere thanks to:],
+  subtitle: [Special thanks to my supervisor:],
   people: ((name: "Prof. Smith", role: "Supervisor"),),
   institutions: ("Sorbonne University",),
 )

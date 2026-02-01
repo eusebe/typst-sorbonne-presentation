@@ -11,8 +11,8 @@ echo "🎨 Generating assets for Sorbonne theme documentation (Smart Page Select
 mkdir -p "$OUTPUT_DIR"
 
 # Liste des composants et fichiers
-COMPS=("faculty-univ" "faculty-sante" "faculty-sciences" "faculty-lettres" "slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "boxes")
-FILES=("faculty-univ.png" "faculty-sante.png" "faculty-sciences.png" "faculty-lettres.png" "component-slide.png" "component-focus-slide.png" "component-figure-slide.png" "component-equation-slide.png" "component-acknowledgement-slide.png" "component-ending-slide.png" "helper-text.png" "layout-2col.png" "layout-3col.png" "component-boxes.png")
+COMPS=("faculty-univ" "faculty-sante" "faculty-sciences" "faculty-lettres" "slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "boxes" "citations")
+FILES=("faculty-univ.png" "faculty-sante.png" "faculty-sciences.png" "faculty-lettres.png" "component-slide.png" "component-focus-slide.png" "component-figure-slide.png" "component-equation-slide.png" "component-acknowledgement-slide.png" "component-ending-slide.png" "helper-text.png" "layout-2col.png" "layout-3col.png" "component-boxes.png" "component-citation.png")
 
 for i in "${!COMPS[@]}"; do
     COMP="${COMPS[$i]}"
