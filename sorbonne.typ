@@ -47,7 +47,7 @@
   )
 }
 
-#let apply-layout(title: none, body) = context {
+#let apply-layout(title: none, subtitle: none, body) = context {
   let config = config-state.get()
   let resolved-title = if title != none { title } else { nav.resolve-slide-title(none) }
 
@@ -63,7 +63,12 @@
         align: horizon,
         image(config.logo-slide, width: 4.5em),
         if resolved-title != none {
-          text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(resolved-title))
+          stack(dir: ttb, spacing: 0.3em,
+            text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(resolved-title)),
+            if subtitle != none {
+              text(size: 0.85em, style: "italic", fill: sorbonne-text.lighten(20%), subtitle)
+            }
+          )
         }
       )
     }),
@@ -98,12 +103,17 @@
   )
 }
 
-#let focus-slide(body) = context {
+#let focus-slide(body, subtitle: none) = context {
   let conf = config-state.get()
   empty-slide(fill: conf.primary-color, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
-    set text(fill: white, size: 2.5em, weight: "bold")
-    align(center + horizon, body)
+    set text(fill: white, weight: "bold")
+    align(center + horizon, stack(dir: ttb, spacing: 1em,
+      text(size: 2.5em, body),
+      if subtitle != none {
+        text(size: 1.5em, weight: "regular", style: "italic", fill: white.transparentize(20%), subtitle)
+      }
+    ))
   })
 }
 
@@ -141,21 +151,23 @@
   let pos = args.pos()
   let named = args.named()
   let manual-title = named.at("title", default: none)
+  let subtitle = named.at("subtitle", default: none)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   let clean-named = named
   if "title" in clean-named { let _ = clean-named.remove("title") }
-  p.slide(..clean-named, apply-layout(title: manual-title, body))
+  if "subtitle" in clean-named { let _ = clean-named.remove("subtitle") }
+  p.slide(..clean-named, apply-layout(title: manual-title, subtitle: subtitle, body))
 }
 
-#let figure-slide(fig, title: none, caption: none, ..args) = {
-  slide(title: title, ..args, {
+#let figure-slide(fig, title: none, subtitle: none, caption: none, ..args) = {
+  slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     figure(fig, caption: caption)
   })
 }
 
-#let figure-slide-split(fig-left, fig-right, title: none, caption-left: none, caption-right: none, ..args) = {
-  slide(title: title, ..args, {
+#let figure-slide-split(fig-left, fig-right, title: none, subtitle: none, caption-left: none, caption-right: none, ..args) = {
+  slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     grid(
       columns: (1fr, 1fr),
@@ -174,16 +186,12 @@
   extra: none,
   ..args
 ) = {
-  slide(title: title, ..args, {
+  slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     stack(
       dir: ttb,
       spacing: 1.5em,
       
-      if subtitle != none {
-        text(size: 1.1em, style: "italic", subtitle)
-      },
-
       if people.len() > 0 {
         align(center, grid(
           columns: (auto, auto),
@@ -253,16 +261,12 @@
   citation: none,
   ..args
 ) = {
-  slide(title: title, ..args, {
+  slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     
     stack(
       dir: ttb,
       spacing: 2em,
-      
-      if subtitle != none {
-        text(size: 1.2em, style: "italic", fill: gray, subtitle)
-      },
       
       // Bloc Equation + Signature
       stack(
@@ -319,7 +323,7 @@
     align(center + horizon, stack(
       spacing: 1.5em,
       text(size: 2.5em, weight: "bold", title),
-      if subtitle != none { text(size: 1.5em, style: "italic", subtitle) },
+      if subtitle != none { text(size: 1.5em, style: "italic", fill: white.transparentize(20%), subtitle) },
       if contact != none and contact != () {
         v(1em)
         set text(size: 1em, weight: "regular")

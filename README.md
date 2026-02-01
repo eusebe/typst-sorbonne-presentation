@@ -91,17 +91,17 @@ For a comprehensive visual tour of all components and features, please refer to 
 ## Component Reference
 
 ### Slide Types
-- `#slide(title: none, body)`: Standard content slide.
+- `#slide(title: none, subtitle: none, body)`: Standard content slide.
   ![Slide](assets/docs/component-slide.png)
-- `#focus-slide(body)`: Highlight slide on solid theme background.
+- `#focus-slide(body, subtitle: none)`: Highlight slide on solid theme background.
   ![Focus Slide](assets/docs/component-focus-slide.png)
-- `#figure-slide(fig, caption: none, ..)`: Centered figure slide.
+- `#figure-slide(fig, title: none, subtitle: none, caption: none, ..)`: Centered figure slide.
   ![Figure Slide](assets/docs/component-figure-slide.png)
-- `#equation-slide(equation, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
+- `#equation-slide(equation, title: none, subtitle: none, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
   ![Equation Slide](assets/docs/component-equation-slide.png)
-- `#acknowledgement-slide(people: (), institutions: (), ..)`: Thank-you slide.
+- `#acknowledgement-slide(title: none, subtitle: none, people: (), institutions: (), ..)`: Thank-you slide.
   ![Acknowledgement Slide](assets/docs/component-acknowledgement-slide.png)
-- `#ending-slide(contact: ())`: Closing slide with contact information.
+- `#ending-slide(title: none, subtitle: none, contact: ())`: Closing slide with contact information.
   ![Ending Slide](assets/docs/component-ending-slide.png)
 
 ### Text Helpers

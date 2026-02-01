@@ -14,7 +14,7 @@
   template(faculty: "lettres", title: [Faculty: Lettres], author: [John Doe], date: none)[]
 } else if comp == "slide" {
   show: template.with(title: [Standard Slide], author: [John Doe])
-  slide(title: "Normal Slide Usage")[
+  slide(title: "Normal Slide Usage", subtitle: "With an optional subtitle")[
     - Support for bullet points
     - Automatic layout management
     - Clean and academic style

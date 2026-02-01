@@ -55,6 +55,12 @@
   )
 ]
 
+#slide(subtitle: "Demonstrating auto-title with manual subtitle")[
+  This slide has no manual `title` parameter. 
+  
+  Because `auto-title` is `true` (default), it automatically uses the name of the current section ("Basic Components & Layout") as the title, while displaying the provided `subtitle` below it.
+]
+
 // ==========================================
 = Boxes & Blocks
 // ==========================================
