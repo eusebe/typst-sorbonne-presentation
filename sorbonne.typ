@@ -41,7 +41,7 @@
 }
 
 #let empty-slide(fill: none, body) = {
-  set page(margin: 0pt, fill: fill, header: none, footer: none)
+  set page(margin: 0pt, fill: fill, header: none, footer: none, foreground: none)
   [
     #logical-slide-counter.step()
     #p.slide(logical-slide: true, {
@@ -223,10 +223,11 @@
   let manual-title = named.at("title", default: none)
   let subtitle = named.at("subtitle", default: none)
   let allow-frame-breaks = named.at("allow-frame-breaks", default: false)
+  let background = named.at("background", default: none)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   
   let clean-named = named
-  for key in ("title", "subtitle", "allow-frame-breaks") {
+  for key in ("title", "subtitle", "allow-frame-breaks", "background") {
     if key in clean-named { 
       let _ = clean-named.remove(key)
     }
@@ -235,6 +236,9 @@
   [
     #logical-slide-counter.step()
     #p.slide(..clean-named, {
+      if background != none {
+        place(top + left, dx: 0pt, dy: -4.5em, block(width: 100%, height: 100% + 4.5em + 3.0em, background))
+      }
       [#metadata((title: manual-title, subtitle: subtitle, allow-frame-breaks: allow-frame-breaks)) <sorbonne-slide-start>]
       apply-layout(breakable: allow-frame-breaks, body)
     })
@@ -586,11 +590,18 @@
   set page(
     paper: "presentation-" + aspect-ratio, 
     margin: (top: 4.5em, bottom: 3.0em, x: 0pt), 
-    header: sorbonne-header(), 
-    footer: sorbonne-footer(),
+    header: none, 
+    footer: none,
     foreground: context {
       let conf = config-state.get()
-      if conf != none and conf.progress-bar != "none" {
+      if conf == none { return none }
+      
+      // Header & Footer
+      place(top + left, sorbonne-header())
+      place(bottom + left, sorbonne-footer())
+
+      // Progress bar
+      if conf.progress-bar != "none" {
         let line = progress-bar-line()
         if conf.progress-bar == "top" {
           place(top + left, line)

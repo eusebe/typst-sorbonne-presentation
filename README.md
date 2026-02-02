@@ -93,8 +93,9 @@ For a comprehensive visual tour of all components and features, please refer to 
 ## Component Reference
 
 ### Slide Types
-- `#slide(title: none, subtitle: none, allow-frame-breaks: false, body)`: Standard content slide.
+- `#slide(title: none, subtitle: none, allow-frame-breaks: false, background: none, body)`: Standard content slide.
   - `allow-frame-breaks`: If `true`, allows content to overflow onto multiple slides. A "(suite)" suffix is automatically appended to the title from the second page. *Note: This feature is incompatible with dynamic animations like `#pause`.*
+  - `background`: Optional content (e.g., an image) to display behind the slide content.
   ![Slide](assets/docs/component-slide.png)
 - `#focus-slide(body, subtitle: none)`: Highlight slide on solid theme background.
   ![Focus Slide](assets/docs/component-focus-slide.png)

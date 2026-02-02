@@ -74,6 +74,18 @@
   Because `auto-title` is `true` (default), it automatically uses the name of the current section ("Basic Components & Layout") as the title, while displaying the provided `subtitle` below it.
 ]
 
+#slide(
+  title: "Slide with Background",
+  background: block(width: 100%, height: 100%, {
+    place(center + horizon, image("../assets/logo/sorbonne-univ.png", width: 40%))
+    place(top + left, rect(fill: white.transparentize(50%), width: 100%, height: 100%))
+  })
+)[
+  You can add a background to any slide using the `background` parameter.
+  
+  In this example, we use the university logo with a semi-transparent white overlay to ensure content readability.
+]
+
 // ==========================================
 = Boxes & Blocks
 // ==========================================
