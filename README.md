@@ -125,6 +125,8 @@ For a comprehensive visual tour of all components and features, please refer to 
   ![Layout 2-col](assets/docs/layout-2col.png)
 - `#three-col(left, center, right, ..)`: Three column layout.
   ![Layout 3-col](assets/docs/layout-3col.png)
+- `#grid-2x2(tl, tr, bl, br, ..)`: Four-quadrant grid layout.
+  ![Layout Grid-2x2](assets/docs/layout-grid2x2.png)
 - **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`, or `"transparent"`).
   ![Boxes](assets/docs/component-boxes.png)
   - `#highlight-box(title, body)`: Blue university-styled box for key points.

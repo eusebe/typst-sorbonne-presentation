@@ -17,7 +17,7 @@
   title: "Image de fond",
   background: block(width: 100%, height: 100%, {
     align(center + horizon, image("../assets/logo/sorbonne-univ.png", width: 60%))
-    place(top + left, rect(fill: white.transparentize(80%), width: 100%, height: 100%))
+    place(top + left, rect(fill: white.transparentize(50%), width: 100%, height: 100%))
   })
 )[
   Cette slide utilise une image de fond simulant de l'opacité via un overlay blanc semi-transparent.

@@ -84,6 +84,18 @@
       [Col C]
     )
   ]
+} else if comp == "layout-grid2x2" {
+  show: template.with()
+  slide(title: "Layout: 2x2 Grid", subtitle: "Balanced four-quadrant distribution")[
+    #align(center + horizon, grid-2x2(
+      rect(width: 4em, height: 4em, fill: sorbonne-blue),
+      rect(width: 4em, height: 4em, fill: sorbonne-red),
+      rect(width: 4em, height: 4em, fill: sorbonne-lightblue),
+      rect(width: 4em, height: 4em, fill: sorbonne-yellow),
+      columns: (auto, auto),
+      gutter: 1em,
+    ))
+  ]
 } else if comp == "boxes" {
   show: template.with()
   slide(title: "Boxes & Blocks", subtitle: "Highlighting key information")[

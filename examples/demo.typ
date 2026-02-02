@@ -53,6 +53,11 @@
   #three-col(
     [*Three-col*], [Equal width], [distribution]
   )
+  #v(0.5em)
+  #grid-2x2(
+    [*Grid-2x2*], [Top Right],
+    [Bottom Left], [Bottom Right]
+  )
 ]
 
 #slide(title: "Automatic Page Breaks", allow-frame-breaks: true)[
