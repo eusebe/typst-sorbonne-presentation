@@ -88,6 +88,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `annex-main-title` | content | `[Annexes]` | Focus slide text for appendix start |
 | `annex-numbering-format` | string | `"I"` | Numbering style for appendices |
 | `bib-style` | string | `"apa"` | Bibliography and citation style |
+| `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
 
 ## Component Reference
 

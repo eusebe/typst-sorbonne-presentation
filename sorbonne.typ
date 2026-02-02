@@ -17,6 +17,29 @@
 
 // --- Composants ---
 
+#let progress-bar-line() = context {
+  let conf = config-state.get()
+  if conf == none or conf.progress-bar == "none" { return none }
+  
+  let current = logical-slide-counter.get().at(0)
+  let appendix-marker = query(<sorbonne-appendix-marker>)
+  let total = if appendix-marker.len() > 0 {
+    logical-slide-counter.at(appendix-marker.first().location()).at(0) - 1
+  } else {
+    logical-slide-counter.final().at(0)
+  }
+  
+  if total == 0 { return none }
+  
+  let is-annex = if appendix-marker.len() > 0 {
+    appendix-marker.first().location().page() <= here().page()
+  } else { false }
+
+  let ratio = if is-annex { 1.0 } else { calc.min(1.0, current / total) }
+  
+  block(width: 100% * ratio, height: 2pt, fill: conf.primary-color)
+}
+
 #let empty-slide(fill: none, body) = {
   set page(margin: 0pt, fill: fill, header: none, footer: none)
   [
@@ -513,6 +536,7 @@
   outline-depth: 2,
   outline-columns: 1,
   auto-title: true,
+  progress-bar: "none", // "none", "top", "bottom"
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -549,6 +573,7 @@
     logo-slide: final-logo-slide,
     text-font: text-font,
     text-size: text-size,
+    progress-bar: progress-bar,
   ))
   
   nav.navigator-config.update(c => {
@@ -558,7 +583,23 @@
     c
   })
 
-  set page(paper: "presentation-" + aspect-ratio, margin: (top: 4.5em, bottom: 3.0em, x: 0pt), header: sorbonne-header(), footer: sorbonne-footer())
+  set page(
+    paper: "presentation-" + aspect-ratio, 
+    margin: (top: 4.5em, bottom: 3.0em, x: 0pt), 
+    header: sorbonne-header(), 
+    footer: sorbonne-footer(),
+    foreground: context {
+      let conf = config-state.get()
+      if conf != none and conf.progress-bar != "none" {
+        let line = progress-bar-line()
+        if conf.progress-bar == "top" {
+          place(top + left, line)
+        } else if conf.progress-bar == "bottom" {
+          place(bottom + left, line)
+        }
+      }
+    }
+  )
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   

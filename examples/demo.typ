@@ -250,6 +250,7 @@
   - `annex-title`: Prefix for single appendix (e.g., `"Appendix"`).
   - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
+  - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
 ]
 
 #ending-slide()

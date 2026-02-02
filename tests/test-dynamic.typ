@@ -3,6 +3,7 @@
 #show: template.with(
   title: [Dynamic Features Test],
   author: [David Hajage],
+  progress-bar: "bottom"
 )
 
 = Standard Pause
