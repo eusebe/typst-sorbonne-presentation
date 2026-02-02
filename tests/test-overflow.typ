@@ -60,4 +60,58 @@
 
   ]
 
+#slide(title: "Two-Col Overflow: No Frame Breaks", allow-frame-breaks: false)[
+  #two-col(
+    [
+      *Left Column*
+      #lorem(150)
+    ],
+    [
+      *Right Column*
+      #lorem(150)
+        ]
+      )
+    ]
+    
+    #slide(title: "Unbalanced Two-Col Overflow", allow-frame-breaks: true)[
+      #two-col(
+        [
+          *Short Column* \
+          This column fits easily on one slide.
+        ],
+        [
+          *Long Column* \
+          #lorem(250)
+        ]
+      )
+    ]
+    
+    
+
+#slide(title: "Two-Col Overflow: With Frame Breaks", allow-frame-breaks: true)[
+  #two-col(
+    [
+      *Left Column*
+      #lorem(150)
+    ],
+    [
+      *Right Column*
+      #lorem(150)
+    ]
+  )
+]
+
+#slide(title: "Long Left Column Overflow", allow-frame-breaks: true)[
+  #two-col(
+    [
+      *Long Column* \
+      #lorem(250)
+    ],
+    [
+      *Short Column* \
+      This column fits easily on one slide.
+    ]
+  )
+]
+
   
