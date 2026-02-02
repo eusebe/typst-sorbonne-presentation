@@ -215,6 +215,19 @@
   )
 }
 
+#let grid-2x2(tl, tr, bl, br, columns: (1fr, 1fr), rows: (auto, auto), gutter: 2em) = {
+  grid(
+    columns: columns,
+    rows: rows,
+    column-gutter: gutter,
+    row-gutter: gutter,
+    tl,
+    tr,
+    bl,
+    br
+  )
+}
+
 // --- API ---
 
 #let slide(..args) = {
