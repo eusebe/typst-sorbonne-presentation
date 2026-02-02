@@ -55,6 +55,19 @@
   )
 ]
 
+#slide(title: "Automatic Page Breaks", allow-frame-breaks: true)[
+  When a slide contains too much content (like a long list or a bibliography), you can use `allow-frame-breaks: true`.
+  
+  - Content flows naturally to the next physical slide.
+  - Headers and footers are automatically repeated.
+  - A "(suite)" suffix is added to the title from the 2nd page.
+  
+  *Long List Example:*
+  #for i in range(1, 16) [
+    + Item number #i
+  ]
+]
+
 #slide(subtitle: "Demonstrating auto-title with manual subtitle")[
   This slide has no manual `title` parameter. 
   
@@ -133,7 +146,44 @@
   citation: (bib-key: "einstein1905", label: "Quantum Origins")
 )
 
-#ending-slide()
+// ==========================================
+= Dynamic Features
+// ==========================================
+
+#slide(title: "Sequential Reveal with pause")[
+  The `presentate` package allows for step-by-step reveals:
+  
+  - Point 1: Always visible.
+  #show: pause
+  - Point 2: Appears after a click.
+  #show: pause
+  - Point 3: Final point.
+
+]
+
+#slide(title: "Precise Control: only and uncover")[
+  You can control exactly which subslide an element appears on:
+  
+  #two-col(
+    [
+      #uncover(2, 3, 4)[Visible from step 2.] \
+      #uncover(3, 4)[Visible only at step 3.]
+    ],
+    [
+      #only(1)[Step 1 content.]
+      #only(2)[Step 2 content.]
+      #only(3, 4)[Step 3 content.]
+    ]
+  )
+  
+  #uncover(4)[
+    #v(1em)
+    #alert-box(title: "Important Limitation")[
+      Dynamic animations are *incompatible* with the `allow-frame-breaks: true` option.
+    ]
+  ]
+
+]
 
 // ==========================================
 = Template Configuration
@@ -201,3 +251,5 @@
   - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
 ]
+
+#ending-slide()
