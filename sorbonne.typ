@@ -602,23 +602,28 @@
   )
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
+
+  // Listes à puces et énumérations thématiques
+  set list(marker: ([•], [‣], [–]).map(m => text(fill: final-primary, m)))
+  set enum(numbering: (n) => text(fill: final-primary, weight: "bold", str(n) + "."))
   
   // Définit le style de bibliographie
   set bibliography(style: bib-style)
 
-  // Style des citations
-  show cite: it => context {
-    let conf = config-state.get()
-    box(
-      inset: (x: 2pt),
-      outset: (y: 2pt),
-      radius: 2pt,
-      fill: conf.primary-color.lighten(90%),
-      text(fill: conf.primary-color, it)
-    )
-  }
-  
-  set heading(numbering: (..nums) => context {
+    // Style des citations
+    show cite: it => context {
+      let conf = config-state.get()
+      box(
+        inset: (x: 2pt),
+        outset: (y: 2pt),
+        radius: 2pt,
+        fill: conf.primary-color.lighten(90%),
+              text(fill: conf.primary-color, it)
+            )
+          }
+        
+          set heading(numbering: (..nums) => context {
+        
     if not show-header-numbering { return none }
     let n = nums.pos()
     
