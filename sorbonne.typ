@@ -13,12 +13,19 @@
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
 #let last-main-page = state("last-main-page", none)
+#let logical-slide-counter = counter("sorbonne-logical-slide")
 
 // --- Composants ---
 
 #let empty-slide(fill: none, body) = {
   set page(margin: 0pt, fill: fill, header: none, footer: none)
-  p.slide(logical-slide: true, block(width: 100%, height: 100%, body))
+  [
+    #logical-slide-counter.step()
+    #p.slide(logical-slide: true, {
+      [#metadata((title: none, subtitle: none, allow-frame-breaks: false)) <sorbonne-slide-start>]
+      body
+    })
+  ]
 }
 
 #let breadcrumb() = context {
@@ -47,6 +54,50 @@
   )
 }
 
+#let sorbonne-header() = context {
+  let conf = config-state.get()
+  if conf == none { return none }
+  
+  let markers = query(<sorbonne-slide-start>)
+  if markers.len() == 0 { return none }
+  
+  // On cherche le marqueur qui s'applique à cette page.
+  // C'est soit un marqueur sur cette page, soit le dernier marqueur avant.
+  let current-page = here().page()
+  let marker = markers.filter(m => m.location().page() <= current-page).last()
+  let h = marker.value
+  
+  // On n'affiche (suite) que si allow-frame-breaks est activé ET qu'on est sur une page physique suivante
+  let allow-breaks = if type(h) == dictionary { h.at("allow-frame-breaks", default: false) } else { false }
+  let is-continuation = current-page > marker.location().page() and allow-breaks
+  
+  let resolved-title = if type(h) == dictionary and h.title != none { h.title } else { nav.resolve-slide-title(none) }
+  if resolved-title == none and h.subtitle == none { return none }
+
+  let title-display = if is-continuation and resolved-title != none {
+    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), " (suite)")
+  } else {
+    resolved-title
+  }
+
+  block(width: 100%, inset: (x: 2em, top: 0.8em, bottom: 0.2em), {
+    grid(
+      columns: (4.5em, 1fr),
+      column-gutter: 1.5em,
+      align: horizon,
+      image(conf.logo-slide, width: 4.5em),
+      stack(dir: ttb, spacing: 0.3em,
+        if resolved-title != none {
+          text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(title-display))
+        },
+        if h.subtitle != none {
+          text(size: 0.85em, style: "italic", fill: sorbonne-text.lighten(20%), h.subtitle)
+        }
+      )
+    )
+  })
+}
+
 #let sorbonne-footer() = context {
   let conf = config-state.get()
   if conf == none { return none }
@@ -61,15 +112,13 @@
       conf.author,
       breadcrumb(),
       context {
-        let current-page = counter(page).get().at(0)
-        let subslide = states.get().at(0).subslide
-        let current = if subslide > 1 { current-page - 1 } else { current-page }
+        let current = logical-slide-counter.get().at(0)
         
         let appendix-marker = query(<sorbonne-appendix-marker>)
         let total = if appendix-marker.len() > 0 {
-          counter(page).at(appendix-marker.first().location()).at(0) - 1
+          logical-slide-counter.at(appendix-marker.first().location()).at(0) - 1
         } else {
-          counter(page).final().at(0)
+          logical-slide-counter.final().at(0)
         }
         [#current / #total]
       }
@@ -77,36 +126,28 @@
   })
 }
 
-#let apply-layout(title: none, subtitle: none, body) = context {
+#let apply-layout(breakable: true, body) = context {
   let config = config-state.get()
-  let resolved-title = if title != none { title } else { nav.resolve-slide-title(none) }
-
   set text(font: config.text-font, size: config.text-size, fill: sorbonne-text)
   
-  grid(
-    columns: 100%,
-    rows: (auto, 1fr),
-    block(width: 100%, inset: (x: 2em, top: 0.8em, bottom: 0.2em), {
-      grid(
-        columns: (4.5em, 1fr),
-        column-gutter: 1.5em,
-        align: horizon,
-        image(config.logo-slide, width: 4.5em),
-        if resolved-title != none {
-          stack(dir: ttb, spacing: 0.3em,
-            text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(resolved-title)),
-            if subtitle != none {
-              text(size: 0.85em, style: "italic", fill: sorbonne-text.lighten(20%), subtitle)
-            }
-          )
-        }
-      )
-    }),
-    block(width: 100%, height: 100%, inset: (x: 2.5em, y: 0.5em), {
+  if not breakable {
+    // Le grid 1fr occupe tout l'espace disponible, permettant le centrage vertical (horizon)
+    // tout en s'ajustant si des notes de bas de page sont présentes.
+    grid(
+      columns: 100%,
+      rows: 1fr,
+      inset: (x: 2.5em, top: 0.5em, bottom: 0pt),
+      {
+        metadata((t: "ContentSlide"))
+        body
+      }
+    )
+  } else {
+    block(width: 100%, breakable: true, inset: (x: 2.5em, top: 0.5em, bottom: 0pt), {
       metadata((t: "ContentSlide"))
       body
     })
-  )
+  }
 }
 
 #let focus-slide(body, subtitle: none) = context {
@@ -158,11 +199,23 @@
   let named = args.named()
   let manual-title = named.at("title", default: none)
   let subtitle = named.at("subtitle", default: none)
+  let allow-frame-breaks = named.at("allow-frame-breaks", default: false)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
+  
   let clean-named = named
-  if "title" in clean-named { let _ = clean-named.remove("title") }
-  if "subtitle" in clean-named { let _ = clean-named.remove("subtitle") }
-  p.slide(..clean-named, apply-layout(title: manual-title, subtitle: subtitle, body))
+  for key in ("title", "subtitle", "allow-frame-breaks") {
+    if key in clean-named { 
+      let _ = clean-named.remove(key)
+    }
+  }
+  
+  [
+    #logical-slide-counter.step()
+    #p.slide(..clean-named, {
+      [#metadata((title: manual-title, subtitle: subtitle, allow-frame-breaks: allow-frame-breaks)) <sorbonne-slide-start>]
+      apply-layout(breakable: allow-frame-breaks, body)
+    })
+  ]
 }
 
 #let figure-slide(fig, title: none, subtitle: none, caption: none, ..args) = {
@@ -505,7 +558,7 @@
     c
   })
 
-  set page(paper: "presentation-" + aspect-ratio, margin: (bottom: 3.5em, top: 0pt, x: 0pt), header: none, footer: sorbonne-footer())
+  set page(paper: "presentation-" + aspect-ratio, margin: (top: 4.5em, bottom: 3.0em, x: 0pt), header: sorbonne-header(), footer: sorbonne-footer())
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   
