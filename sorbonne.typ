@@ -47,6 +47,36 @@
   )
 }
 
+#let sorbonne-footer() = context {
+  let conf = config-state.get()
+  if conf == none { return none }
+  
+  block(width: 100%, inset: (x: 2.5em, bottom: 0.8em, top: 0.2em), {
+    set text(size: 0.65em, fill: gray.darken(20%))
+    line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
+    v(0.5em)
+    grid(
+      columns: (1fr, 2fr, 1fr),
+      align: (left, center, right),
+      conf.author,
+      breadcrumb(),
+      context {
+        let current-page = counter(page).get().at(0)
+        let subslide = states.get().at(0).subslide
+        let current = if subslide > 1 { current-page - 1 } else { current-page }
+        
+        let appendix-marker = query(<sorbonne-appendix-marker>)
+        let total = if appendix-marker.len() > 0 {
+          counter(page).at(appendix-marker.first().location()).at(0) - 1
+        } else {
+          counter(page).final().at(0)
+        }
+        [#current / #total]
+      }
+    )
+  })
+}
+
 #let apply-layout(title: none, subtitle: none, body) = context {
   let config = config-state.get()
   let resolved-title = if title != none { title } else { nav.resolve-slide-title(none) }
@@ -55,7 +85,7 @@
   
   grid(
     columns: 100%,
-    rows: (auto, 1fr, auto),
+    rows: (auto, 1fr),
     block(width: 100%, inset: (x: 2em, top: 0.8em, bottom: 0.2em), {
       grid(
         columns: (4.5em, 1fr),
@@ -75,30 +105,6 @@
     block(width: 100%, height: 100%, inset: (x: 2.5em, y: 0.5em), {
       metadata((t: "ContentSlide"))
       body
-    }),
-    block(width: 100%, inset: (x: 2.5em, bottom: 0.8em, top: 0.2em), {
-      set text(size: 0.65em, fill: gray.darken(20%))
-      line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
-      v(0.5em)
-      grid(
-        columns: (1fr, 2fr, 1fr),
-        align: (left, center, right),
-        config.author,
-        breadcrumb(),
-        context {
-          let current-page = counter(page).get().at(0)
-          let subslide = states.get().at(0).subslide
-          let current = if subslide > 1 { current-page - 1 } else { current-page }
-          
-          let appendix-marker = query(<sorbonne-appendix-marker>)
-          let total = if appendix-marker.len() > 0 {
-            counter(page).at(appendix-marker.first().location()).at(0) - 1
-          } else {
-            counter(page).final().at(0)
-          }
-          [#current / #total]
-        }
-      )
     })
   )
 }
@@ -499,7 +505,7 @@
     c
   })
 
-  set page(paper: "presentation-" + aspect-ratio, margin: 0pt, header: none, footer: none)
+  set page(paper: "presentation-" + aspect-ratio, margin: (bottom: 3.5em, top: 0pt, x: 0pt), header: none, footer: sorbonne-footer())
   set text(font: text-font, size: text-size, fill: sorbonne-text)
   show math.equation: set text(font: "Fira Math")
   
