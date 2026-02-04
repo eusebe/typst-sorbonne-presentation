@@ -341,7 +341,7 @@
   })
 }
 
-#let cite-box(bib-key, display-label: none, position: "bottom-right") = context {
+#let cite-box(bib-key, display-label: none, position: "bottom-right", form: "normal") = context {
   let conf = config-state.get()
   
   let align-pos = if position == "top-right" { top + right }
@@ -357,11 +357,11 @@
   let content = if display-label != none {
     // On "cite" de manière invisible pour forcer l'inclusion en bibliographie
     if labels.len() > 0 { 
-      place(hide(labels.map(l => cite(l)).join())) 
+      place(hide(labels.map(l => cite(l, form: form)).join())) 
     }
     display-label
   } else if labels.len() > 0 {
-    labels.map(l => cite(l)).join(", ")
+    labels.map(l => cite(l, form: form)).join(", ")
   } else {
     none
   }

@@ -17,6 +17,8 @@
   
   #v(2em)
   _Note : La couleur de l'encadré suit la couleur principale du thème (ici Bleu Sorbonne)._
+
+  Autre essai utilisant `#cite(..., form: "prose")` : #cite(<smith2023>, form: "prose")
 ]
 
 = Test Cite Box
@@ -41,6 +43,12 @@
   Cette slide montre `cite-box` en bas à gauche.
   
   #cite-box("doe2024", position: "bottom-left")
+]
+
+#slide(title: "Cite Box avec paramètre 'form'")[
+  On peut désormais utiliser le paramètre `form` (ex: `"prose"`) :
+  
+  #cite-box("smith2023", form: "prose", position: "bottom-right")
 ]
 
 = Bibliographie
