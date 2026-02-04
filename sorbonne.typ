@@ -522,6 +522,8 @@
   }
 }
 
+#let framebreak() = colbreak(weak: true)
+
 // --- Template ---
 
 #let template(

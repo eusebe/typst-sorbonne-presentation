@@ -73,6 +73,18 @@
   ]
 ]
 
+#slide(title: "Manual Frame Breaks", allow-frame-breaks: true)[
+  You can also force a break manually using `#framebreak()`.
+  
+  - This is the first part of the slide.
+  - Useful for logically separating long content.
+  
+  #framebreak()
+  
+  - This is the second part, after a manual break.
+  - The title is automatically suffixed with "(cont.)".
+]
+
 #slide(subtitle: "Demonstrating auto-title with manual subtitle")[
   This slide has no manual `title` parameter. 
   
