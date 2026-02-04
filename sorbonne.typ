@@ -132,8 +132,13 @@
     grid(
       columns: (1fr, 2fr, 1fr),
       align: (left, center, right),
-      conf.author,
-      breadcrumb(),
+      conf.short-author,
+      stack(dir: ttb, spacing: 0.5em,
+        breadcrumb(),
+        if conf.short-title != none {
+          text(size: 0.8em, fill: gray.lighten(30%), conf.short-title)
+        }
+      ),
       context {
         let current = logical-slide-counter.get().at(0)
         
@@ -529,6 +534,8 @@
 #let template(
   title: none,
   author: none,
+  short-title: none,
+  short-author: none,
   affiliation: none,
   subtitle: none,
   date: datetime.today().display(),
@@ -578,7 +585,10 @@
   let final-logo-slide = if logo-slide != none { logo-slide } else { def-logo-slide }
 
   config-state.update(c => (
+    title: title,
     author: author,
+    short-title: if short-title != none { short-title } else { title },
+    short-author: if short-author != none { short-author } else { author },
     affiliation: affiliation,
     show-header-numbering: show-header-numbering,
     numbering-format: numbering-format,

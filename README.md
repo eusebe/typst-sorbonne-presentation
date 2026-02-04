@@ -63,8 +63,10 @@ For a comprehensive visual tour of all components and features, please refer to 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `title` | content | `none` | Main presentation title |
+| `short-title` | content | `none` | Short version of title for footer |
 | `subtitle` | content | `none` | Optional subtitle |
 | `author` | content | `none` | Presenter's name |
+| `short-author` | content | `none` | Short version of author for footer |
 | `affiliation` | content | `none` | Department or Laboratory |
 | `date` | content | `datetime...` | Custom date display |
 | `faculty` | string | `"sante"` | Preset: `"sante"`, `"sciences"`, `"lettres"`, `"univ"` |

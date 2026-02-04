@@ -242,7 +242,8 @@
   #two-col(
     [
       *Identification & Date*
-      - `title`, `subtitle`, `author`, `affiliation`.
+      - `title`, `short-title`, `subtitle`.
+      - `author`, `short-author`, `affiliation`.
       - `date`: Defaults to today.
       
       *Visual Identity*
