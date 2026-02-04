@@ -130,7 +130,7 @@
     line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
     v(0.5em)
     grid(
-      columns: (1.5fr, 2fr, 0.5fr),
+      columns: (1fr, 1fr, 1fr),
       align: (left, center, right),
       text(size: 0.9em, weight: "regular", {
         conf.short-author
