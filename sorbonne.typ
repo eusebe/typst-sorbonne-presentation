@@ -130,15 +130,13 @@
     line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
     v(0.5em)
     grid(
-      columns: (1fr, 2fr, 1fr),
+      columns: (1.5fr, 2fr, 0.5fr),
       align: (left, center, right),
-      conf.short-author,
-      stack(dir: ttb, spacing: 0.5em,
-        breadcrumb(),
-        if conf.short-title != none {
-          text(size: 0.8em, fill: gray.lighten(30%), conf.short-title)
-        }
-      ),
+      text(size: 0.9em, weight: "regular", {
+        conf.short-author
+        if conf.short-title != none [ #h(0.5em) · #h(0.5em) #conf.short-title ]
+      }),
+      breadcrumb(),
       context {
         let current = logical-slide-counter.get().at(0)
         
