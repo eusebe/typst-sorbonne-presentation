@@ -282,6 +282,7 @@
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
   - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
   - `frame-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
+  - `footer-author` / `footer-title`: Boolean toggles for footer info.
 ]
 
 #ending-slide()

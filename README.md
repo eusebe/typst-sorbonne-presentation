@@ -92,6 +92,8 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `bib-style` | string | `"apa"` | Bibliography and citation style |
 | `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
 | `frame-break-suffix` | content | `[ (cont.)]` | Suffix appended to titles on broken slides |
+| `footer-author` | bool | `true` | Toggle author display in footer |
+| `footer-title` | bool | `true` | Toggle title display in footer |
 
 ## Component Reference
 

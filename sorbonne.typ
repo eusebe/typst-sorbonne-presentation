@@ -129,26 +129,48 @@
     set text(size: 0.65em, fill: gray.darken(20%))
     line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
     v(0.5em)
-    grid(
-      columns: (1fr, 1fr, 1fr),
-      align: (left, center, right),
-      text(size: 0.9em, weight: "regular", {
-        conf.short-author
-        if conf.short-title != none [ #h(0.5em) · #h(0.5em) #conf.short-title ]
-      }),
-      breadcrumb(),
-      context {
-        let current = logical-slide-counter.get().at(0)
-        
-        let appendix-marker = query(<sorbonne-appendix-marker>)
-        let total = if appendix-marker.len() > 0 {
-          logical-slide-counter.at(appendix-marker.first().location()).at(0) - 1
-        } else {
-          logical-slide-counter.final().at(0)
+
+    let show-author = conf.footer-author
+    let show-title = conf.footer-title
+    
+    if not show-author and not show-title {
+      grid(
+        columns: (1fr, auto),
+        align: (left, right),
+        breadcrumb(),
+        context {
+          let current = logical-slide-counter.get().at(0)
+          let appendix-marker = query(<sorbonne-appendix-marker>)
+          let total = if appendix-marker.len() > 0 {
+            logical-slide-counter.at(appendix-marker.first().location()).at(0) - 1
+          } else {
+            logical-slide-counter.final().at(0)
+          }
+          [#current / #total]
         }
-        [#current / #total]
-      }
-    )
+      )
+    } else {
+      grid(
+        columns: (1fr, 1fr, 1fr),
+        align: (left, center, right),
+        text(size: 0.9em, weight: "regular", {
+          if show-author { conf.short-author }
+          if show-author and show-title [ #h(0.5em) · #h(0.5em) ]
+          if show-title { conf.short-title }
+        }),
+        breadcrumb(),
+        context {
+          let current = logical-slide-counter.get().at(0)
+          let appendix-marker = query(<sorbonne-appendix-marker>)
+          let total = if appendix-marker.len() > 0 {
+            logical-slide-counter.at(appendix-marker.first().location()).at(0) - 1
+          } else {
+            logical-slide-counter.final().at(0)
+          }
+          [#current / #total]
+        }
+      )
+    }
   })
 }
 
@@ -562,6 +584,8 @@
   auto-title: true,
   progress-bar: "none", // "none", "top", "bottom"
   frame-break-suffix: [ (cont.)],
+  footer-author: true,
+  footer-title: true,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -603,6 +627,8 @@
     text-size: text-size,
     progress-bar: progress-bar,
     frame-break-suffix: frame-break-suffix,
+    footer-author: footer-author,
+    footer-title: footer-title,
   ))
   
   nav.navigator-config.update(c => {
