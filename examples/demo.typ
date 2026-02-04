@@ -31,7 +31,7 @@
   - *Subtle*: For #subtle[tertiary] information.
 ]
 
-#slide(title: "Multi-column Layouts")[
+#slide(title: "Multi-column Layouts", allow-frame-breaks: true)[
   The template provides dedicated functions for balanced layouts:
   
   - `two-col(left, right, ..)` and `three-col(left, center, right, ..)`
@@ -65,7 +65,7 @@
   
   - Content flows naturally to the next physical slide.
   - Headers and footers are automatically repeated.
-  - A "(suite)" suffix is added to the title from the 2nd page.
+  - A suffix (default: " (cont.)") is added to the title from the 2nd page.
   
   *Long List Example:*
   #for i in range(1, 16) [
@@ -268,6 +268,7 @@
   - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
   - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
+  - `frame-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
 ]
 
 #ending-slide()

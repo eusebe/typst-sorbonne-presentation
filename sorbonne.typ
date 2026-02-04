@@ -98,7 +98,7 @@
   if resolved-title == none and h.subtitle == none { return none }
 
   let title-display = if is-continuation and resolved-title != none {
-    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), " (suite)")
+    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), conf.frame-break-suffix)
   } else {
     resolved-title
   }
@@ -554,6 +554,7 @@
   outline-columns: 1,
   auto-title: true,
   progress-bar: "none", // "none", "top", "bottom"
+  frame-break-suffix: [ (cont.)],
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -591,6 +592,7 @@
     text-font: text-font,
     text-size: text-size,
     progress-bar: progress-bar,
+    frame-break-suffix: frame-break-suffix,
   ))
   
   nav.navigator-config.update(c => {
