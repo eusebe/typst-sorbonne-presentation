@@ -89,7 +89,8 @@
       level-2: (active: (weight: "regular", fill: conf.primary-color)),
       level-3: (active: (weight: "regular", fill: conf.primary-color))
     ),
-    max-length: breadcrumb-max-length
+    max-length: breadcrumb-max-length,
+    use-short-title: conf.use-short-title
   )
 }
 
@@ -603,6 +604,7 @@
   footer-author: true,
   footer-title: true,
   max-length: none,
+  use-short-title: false,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -647,6 +649,7 @@
     footer-author: footer-author,
     footer-title: footer-title,
     max-length: max-length,
+    use-short-title: use-short-title,
   ))
   
   nav.navigator-config.update(c => {
