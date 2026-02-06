@@ -62,6 +62,21 @@
     let lvl = mapping.at(role, default: none)
     if lvl != none { level-modes.insert("level-" + str(lvl) + "-mode", "current") }
   }
+
+  let breadcrumb-max-length = if type(conf.max-length) == dictionary {
+    let ml = (:)
+    for (key, val) in conf.max-length {
+      let lvl = mapping.at(key, default: none)
+      if lvl != none {
+        ml.insert("level-" + str(lvl), val)
+      } else {
+        ml.insert(key, val)
+      }
+    }
+    ml
+  } else {
+    conf.max-length
+  }
   
   nav.progressive-outline(
     ..level-modes,
@@ -73,7 +88,8 @@
       level-1: (active: (weight: "bold", fill: conf.primary-color)),
       level-2: (active: (weight: "regular", fill: conf.primary-color)),
       level-3: (active: (weight: "regular", fill: conf.primary-color))
-    )
+    ),
+    max-length: breadcrumb-max-length
   )
 }
 
@@ -586,6 +602,7 @@
   frame-break-suffix: [ (cont.)],
   footer-author: true,
   footer-title: true,
+  max-length: none,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -629,6 +646,7 @@
     frame-break-suffix: frame-break-suffix,
     footer-author: footer-author,
     footer-title: footer-title,
+    max-length: max-length,
   ))
   
   nav.navigator-config.update(c => {
