@@ -283,6 +283,7 @@
   - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
   - `frame-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
+  - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
 ]
 
 #ending-slide()
