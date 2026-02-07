@@ -655,7 +655,7 @@
           level-3: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular"))
         ),
       ),
-      base: c.progressive-outline
+      base: c.at("progressive-outline", default: (:))
     )
     c
   })
