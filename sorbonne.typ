@@ -787,6 +787,7 @@
     nav.render-transition(
       h,
       top-padding: 0pt,
+      use-short-title: false,
       content-wrapper: (roadmap, h, active) => {
         set text(fill: white, font: "Fira Sans") 
         place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
