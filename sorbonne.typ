@@ -641,7 +641,7 @@
       parts: (visibility: (part: "none", section: "none", subsection: "none")),
       sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
       subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
-      style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
+      style: (active-weight: "bold", active-color: white, inactive-opacity: 0.6, completed-opacity: 0.6),
       marker: none,
     ) + transitions
     c.progressive-outline = (
