@@ -57,40 +57,17 @@
   set text(size: 0.8em, fill: gray.darken(20%))
   
   let mapping = conf.mapping
-  let level-modes = (level-1-mode: "none", level-2-mode: "none", level-3-mode: "none")
+  let level-modes = (:)
   for role in ("part", "section", "subsection") {
     let lvl = mapping.at(role, default: none)
     if lvl != none { level-modes.insert("level-" + str(lvl) + "-mode", "current") }
   }
 
-  let breadcrumb-max-length = if type(conf.max-length) == dictionary {
-    let ml = (:)
-    for (key, val) in conf.max-length {
-      let lvl = mapping.at(key, default: none)
-      if lvl != none {
-        ml.insert("level-" + str(lvl), val)
-      } else {
-        ml.insert(key, val)
-      }
-    }
-    ml
-  } else {
-    conf.max-length
-  }
-  
   nav.progressive-outline(
     ..level-modes,
     layout: "horizontal",
     separator: text(fill: gray.lighten(50%), "  /  "),
     clickable: false,
-    show-numbering: conf.show-header-numbering,
-    text-styles: (
-      level-1: (active: (weight: "bold", fill: conf.primary-color)),
-      level-2: (active: (weight: "regular", fill: conf.primary-color)),
-      level-3: (active: (weight: "regular", fill: conf.primary-color))
-    ),
-    max-length: breadcrumb-max-length,
-    use-short-title: conf.use-short-title
   )
 }
 
@@ -658,6 +635,8 @@
     c.show-heading-numbering = show-header-numbering
     c.slide-func = empty-slide
     c.theme-colors = (primary: final-primary)
+    c.max-length = max-length
+    c.use-short-title = use-short-title
     c.transitions = (
       parts: (visibility: (part: "none", section: "none", subsection: "none")),
       sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
@@ -665,6 +644,16 @@
       style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
       marker: none,
     ) + transitions
+    c.progressive-outline = (
+      level-1-mode: "none",
+      level-2-mode: "none",
+      level-3-mode: "none",
+      text-styles: (
+        level-1: (active: (weight: "bold", fill: final-primary)),
+        level-2: (active: (weight: "regular", fill: final-primary)),
+        level-3: (active: (weight: "regular", fill: final-primary))
+      ),
+    )
     c
   })
 
