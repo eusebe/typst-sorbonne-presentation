@@ -644,15 +644,18 @@
       style: (active-weight: "bold", active-color: white, inactive-opacity: 0.6, completed-opacity: 0.6),
       marker: none,
     ) + transitions
-    c.progressive-outline = (
-      level-1-mode: "none",
-      level-2-mode: "none",
-      level-3-mode: "none",
-      text-styles: (
-        level-1: (active: (weight: "bold", fill: final-primary), completed: (weight: "bold"), inactive: (weight: "bold")),
-        level-2: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular")),
-        level-3: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular"))
+    c.progressive-outline = nav.merge-dicts(
+      (
+        level-1-mode: "none",
+        level-2-mode: "none",
+        level-3-mode: "none",
+        text-styles: (
+          level-1: (active: (weight: "bold", fill: final-primary), completed: (weight: "bold"), inactive: (weight: "bold")),
+          level-2: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular")),
+          level-3: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular"))
+        ),
       ),
+      base: c.progressive-outline
     )
     c
   })
