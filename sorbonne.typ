@@ -649,9 +649,9 @@
       level-2-mode: "none",
       level-3-mode: "none",
       text-styles: (
-        level-1: (active: (weight: "bold", fill: final-primary)),
-        level-2: (active: (weight: "regular", fill: final-primary)),
-        level-3: (active: (weight: "regular", fill: final-primary))
+        level-1: (active: (weight: "bold", fill: final-primary), completed: (weight: "bold"), inactive: (weight: "bold")),
+        level-2: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular")),
+        level-3: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular"))
       ),
     )
     c
