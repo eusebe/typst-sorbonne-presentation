@@ -656,6 +656,15 @@
     c.mapping = mapping
     c.auto-title = auto-title
     c.show-heading-numbering = show-header-numbering
+    c.slide-func = empty-slide
+    c.theme-colors = (primary: final-primary)
+    c.transitions = (
+      parts: (visibility: (part: "none", section: "none", subsection: "none")),
+      sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
+      subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
+      style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
+      marker: none,
+    ) + transitions
     c
   })
 
@@ -785,18 +794,7 @@
 
     nav.render-transition(
       h,
-      mapping: mapping,
-      slide-func: empty-slide,
       top-padding: 0pt,
-      theme-colors: (primary: conf.primary-color),
-      transitions: (
-        parts: (visibility: (part: "none", section: "none", subsection: "none")),
-        sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
-        subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
-        style: (active-weight: "bold", active-color: white, inactive-opacity: 0.5, completed-opacity: 0.5),
-        marker: none,
-      ) + transitions,
-      show-heading-numbering: show-header-numbering,
       content-wrapper: (roadmap, h, active) => {
         set text(fill: white, font: "Fira Sans") 
         place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
