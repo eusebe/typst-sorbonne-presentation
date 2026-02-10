@@ -1,12 +1,12 @@
 # Sorbonne Presentation Theme
 
-A professional, structured, and modern presentation theme for **Sorbonne University**, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://github.com/eusebe/typst-navigator) packages.
+A non-official structured presentation theme for **Sorbonne University**, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://github.com/eusebe/typst-navigator) packages.
 
 ---
 
 ## Overview
 
-The **Sorbonne Presentation Theme** provides academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
+The theme provides academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
 
 - **Faculty Presets**: Built-in colors and logos for Health, Science, Humanities, and University-wide presentations.
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
