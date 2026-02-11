@@ -301,7 +301,7 @@ Les données sont dites #emph[manquantes complètement au hasard] (#emph[Missing
 La probabilité qu'une valeur soit manquante est indépendante de cette valeur elle-même et de toute autre valeur (observée ou manquante) du jeu de données.
 
 ]
-#slide(title: [Données manquantes au hasard (MAR)], allow-frame-breaks: true)[
+#slide(title: [Données manquantes au hasard (MAR)], allow-slide-breaks: true)[
 Les données sont #emph[manquantes au hasard] (#emph[Missing At Random];, MAR) lorsque le mécanisme de non-réponse dépend des données observées mais, conditionnellement à celles-ci, pas des données manquantes elles-mêmes.
 
 #block[
@@ -331,7 +331,7 @@ body_background_color:
 white
 )
 ]
-#framebreak()
+#slide-break()
 
 La condition MCAR est un cas particulier plus restrictif de MAR. Exemple :
 
@@ -415,7 +415,7 @@ En dehors de situations particulières (par exemple des données manquantes pré
 ]
 == Données utilisées dans la suite
 <données-utilisées-dans-la-suite>
-#slide(title: [Simulations des données], allow-frame-breaks: true)[
+#slide(title: [Simulations des données], allow-slide-breaks: true)[
 On simule 250 observations issues d'une loi normale bivariée avec :
 
 - Moyennes : $mu_1 = 10$, $mu_2 = 20$
@@ -424,7 +424,7 @@ On simule 250 observations issues d'une loi normale bivariée avec :
 
 La corrélation entre $X_1$ et $X_2$ est : $rho_12 = 8 / sqrt(9 times 16) = 2 / 3$
 
-#framebreak()
+#slide-break()
 
 Pentes de régression :
 
@@ -437,7 +437,7 @@ set.seed(20260204)
 n <- 250
 mu <- c(10, 20)
 sigma <- matrix(c(9, 8, 8, 16), 2, 2)
-df <- as.data.frame(MASS::mvrnorm(n = n, mu = mu, Sigma = sigma))
+df <- as.data.slide(MASS::mvrnorm(n = n, mu = mu, Sigma = sigma))
 names(df) <- c("X1", "X2")
 ```
 
@@ -445,7 +445,7 @@ names(df) <- c("X1", "X2")
 La variable $X_1$ est complètement observée, tandis que $X_2$ contient des données manquantes, générées selon 3 mécanismes.
 
 ]
-#slide(title: [Simulations des données manquantes], allow-frame-breaks: true)[
+#slide(title: [Simulations des données manquantes], allow-slide-breaks: true)[
 - #strong[MCAR] : 100 observations de $X_2$ sont rendues manquantes au hasard.
 
 #block[
@@ -455,7 +455,7 @@ df$X2_MCAR[sample(1:nrow(df), 100)] <- NA
 ```
 
 ]
-#framebreak()
+#slide-break()
 
 - #strong[MAR] : la probabilité que $X_2$ soit manquante dépend de $X_1$ observée.
 
@@ -476,7 +476,7 @@ sum(is.na(df$X2_MAR)) # nombre de NA
 ]
 Comme $X_1$ et $X_2$ sont corrélés positivement, les petites valeur de $X_2$ sont plus souvent manquantes.
 
-#framebreak()
+#slide-break()
 
 - #strong[MNAR] : la probabilité que $X_2$ soit manquante dépend de la valeur (potentiellement non observée) de $X_2$.
 
@@ -499,7 +499,7 @@ FALSE  TRUE
 ]
 Les petites valeur de $X_2$ sont également plus souvent manquantes.
 
-#framebreak()
+#slide-break()
 
 
 ]
@@ -513,7 +513,7 @@ Les petites valeur de $X_2$ sont également plus souvent manquantes.
 <méthodes-basiques>
 == Analyses sur cas complets
 <analyses-sur-cas-complets>
-#slide(title: [Complete-cases analysis], allow-frame-breaks: true)[
+#slide(title: [Complete-cases analysis], allow-slide-breaks: true)[
 Les observations avec au moins une valeur manquante sont exclues.
 
 #strong[Avantages] :
@@ -522,7 +522,7 @@ Les observations avec au moins une valeur manquante sont exclues.
 - Estimations sans biais si les données sont MCAR.
 - (Estimations sans biais des coefficients de régression si les données manquantes ne dépendent pas de la variable à expliquer.)
 
-#framebreak()
+#slide-break()
 
 #strong[Inconvénients] :
 

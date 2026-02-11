@@ -31,7 +31,7 @@
   - *Subtle*: For #subtle[tertiary] information.
 ]
 
-#slide(title: "Multi-column Layouts", allow-frame-breaks: true)[
+#slide(title: "Multi-column Layouts", allow-slide-breaks: true)[
   The template provides dedicated functions for balanced layouts:
   
   - `two-col(left, right, ..)` and `three-col(left, center, right, ..)`
@@ -60,8 +60,8 @@
   )
 ]
 
-#slide(title: "Automatic Page Breaks", allow-frame-breaks: true)[
-  When a slide contains too much content (like a long list or a bibliography), you can use `allow-frame-breaks: true`.
+#slide(title: "Automatic Page Breaks", allow-slide-breaks: true)[
+  When a slide contains too much content (like a long list or a bibliography), you can use `allow-slide-breaks: true`.
   
   - Content flows naturally to the next physical slide.
   - Headers and footers are automatically repeated.
@@ -73,13 +73,13 @@
   ]
 ]
 
-#slide(title: "Manual Frame Breaks", allow-frame-breaks: true)[
-  You can also force a break manually using `#framebreak()`.
+#slide(title: "Manual slide Breaks", allow-slide-breaks: true)[
+  You can also force a break manually using `#slide-break()`.
   
   - This is the first part of the slide.
   - Useful for logically separating long content.
   
-  #framebreak()
+  #slide-break()
   
   - This is the second part, after a manual break.
   - The title is automatically suffixed with "(cont.)".
@@ -208,7 +208,7 @@
   #uncover(4)[
     #v(1em)
     #alert-box(title: "Important Limitation")[
-      Dynamic animations are *incompatible* with the `allow-frame-breaks: true` option.
+      Dynamic animations are *incompatible* with the `allow-slide-breaks: true` option.
     ]
   ]
 
@@ -281,7 +281,7 @@
   - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
   - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
   - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
-  - `frame-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
+  - `slide-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
   - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
 ]

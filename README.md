@@ -1,6 +1,6 @@
 # Sorbonne Presentation Theme
 
-A non-official structured presentation theme for **Sorbonne University**, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://github.com/eusebe/typst-navigator) packages.
+A non-official structured presentation theme for **Sorbonne University**, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
 
 ---
 
@@ -91,7 +91,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `annex-numbering-format` | string | `"I"` | Numbering style for appendices |
 | `bib-style` | string | `"apa"` | Bibliography and citation style |
 | `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
-| `frame-break-suffix` | content | `[ (cont.)]` | Suffix appended to titles on broken slides |
+| `slide-break-suffix` | content | `[ (cont.)]` | Suffix appended to titles on broken slides |
 | `footer-author` | bool | `true` | Toggle author display in footer |
 | `footer-title` | bool | `true` | Toggle title display in footer |
 | `max-length` | int \| dict | `none` | Max length for breadcrumb titles before truncation |
@@ -99,11 +99,11 @@ For a comprehensive visual tour of all components and features, please refer to 
 ## Component Reference
 
 ### Slide Types
-- `#slide(title: none, subtitle: none, allow-frame-breaks: false, background: none, body)`: Standard content slide.
-  - `allow-frame-breaks`: If `true`, allows content to overflow onto multiple slides. A suffix (defined by `frame-break-suffix`) is automatically appended to the title from the second page. *Note: This feature is incompatible with dynamic animations like `#pause`.*
+- `#slide(title: none, subtitle: none, allow-slide-breaks: false, background: none, body)`: Standard content slide.
+  - `allow-slide-breaks`: If `true`, allows content to overflow onto multiple slides. A suffix (defined by `slide-break-suffix`) is automatically appended to the title from the second page. *Note: This feature is incompatible with dynamic animations like `#pause`.*
   - `background`: Optional content (e.g., an image) to display behind the slide content.
   ![Slide](assets/docs/component-slide.png)
-- `#framebreak()`: Manually forces a page break within a slide. *Note: Only works when `allow-frame-breaks: true` is set on the `#slide()`.*
+- `#slide-break()`: Manually forces a page break within a slide. *Note: Only works when `allow-slide-breaks: true` is set on the `#slide()`.*
 - `#focus-slide(body, subtitle: none)`: Highlight slide on solid theme background.
   ![Focus Slide](assets/docs/component-focus-slide.png)
 - `#figure-slide(fig, title: none, subtitle: none, caption: none, ..)`: Centered figure slide.
@@ -144,7 +144,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 
 ## Credits
 
-- **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://github.com/eusebe/typst-navigator).
+- **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator).
 - **Inspiration**: Layout features and component designs were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme. A special thanks to its author for the high-quality design inspiration.
 
 ## License

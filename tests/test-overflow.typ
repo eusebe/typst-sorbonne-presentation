@@ -8,16 +8,16 @@
 
 = Long Content Test
 
-#slide(title: "Page Overflow Scenario, no frame breaks", allow-frame-breaks: false)[
-  Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-frame-breaks: false`.
+#slide(title: "Page Overflow Scenario, no slide breaks", allow-slide-breaks: false)[
+  Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-slide-breaks: false`.
 
   #lorem(100)
   #lorem(100)
   #lorem(100)
   #lorem(100)
   #lorem(100)
-]#slide(title: "Page Overflow Scenario, frame breaks", allow-frame-breaks: true)[
-  Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-frame-breaks: true`.
+]#slide(title: "Page Overflow Scenario, slide breaks", allow-slide-breaks: true)[
+  Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-slide-breaks: true`.
 
   #lorem(100)
   #lorem(100)
@@ -28,9 +28,9 @@
 
   
 
-  #slide(title: "Interaction: Pause + Frame Breaks", allow-frame-breaks: true)[
+  #slide(title: "Interaction: Pause + slide Breaks", allow-slide-breaks: true)[
 
-    Cette diapositive teste le mélange de `#pause` et de `allow-frame-breaks`.
+    Cette diapositive teste le mélange de `#pause` et de `allow-slide-breaks`.
 
     
 
@@ -60,7 +60,7 @@
 
   ]
 
-#slide(title: "Two-Col Overflow: No Frame Breaks", allow-frame-breaks: false)[
+#slide(title: "Two-Col Overflow: No slide Breaks", allow-slide-breaks: false)[
   #two-col(
     [
       *Left Column*
@@ -73,7 +73,7 @@
       )
     ]
     
-    #slide(title: "Unbalanced Two-Col Overflow", allow-frame-breaks: true)[
+    #slide(title: "Unbalanced Two-Col Overflow", allow-slide-breaks: true)[
       #two-col(
         [
           *Short Column* \
@@ -88,7 +88,7 @@
     
     
 
-#slide(title: "Two-Col Overflow: With Frame Breaks", allow-frame-breaks: true)[
+#slide(title: "Two-Col Overflow: With slide Breaks", allow-slide-breaks: true)[
   #two-col(
     [
       *Left Column*
@@ -101,7 +101,7 @@
   )
 ]
 
-#slide(title: "Long Left Column Overflow", allow-frame-breaks: true)[
+#slide(title: "Long Left Column Overflow", allow-slide-breaks: true)[
   #two-col(
     [
       *Long Column* \

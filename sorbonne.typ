@@ -1,7 +1,7 @@
-#import "@preview/presentate:0.2.3" as p
+#import "@preview/presentate:0.2.4" as p
 #import p.store: states
 // On importe la version locale modifiée de navigator
-#import "../typst-navigator/lib.typ" as nav
+#import "@preview/navigator:0.1.3" as nav
 
 // --- Configuration et Couleurs ---
 #let sorbonne-red = rgb("#AC182E")
@@ -45,7 +45,7 @@
   [
     #logical-slide-counter.step()
     #p.slide(logical-slide: true, {
-      [#metadata((title: none, subtitle: none, allow-frame-breaks: false)) <sorbonne-slide-start>]
+      [#metadata((title: none, subtitle: none, allow-slide-breaks: false)) <sorbonne-slide-start>]
       body
     })
   ]
@@ -84,15 +84,15 @@
   let marker = markers.filter(m => m.location().page() <= current-page).last()
   let h = marker.value
   
-  // On n'affiche (suite) que si allow-frame-breaks est activé ET qu'on est sur une page physique suivante
-  let allow-breaks = if type(h) == dictionary { h.at("allow-frame-breaks", default: false) } else { false }
+  // On n'affiche (suite) que si allow-slide-breaks est activé ET qu'on est sur une page physique suivante
+  let allow-breaks = if type(h) == dictionary { h.at("allow-slide-breaks", default: false) } else { false }
   let is-continuation = current-page > marker.location().page() and allow-breaks
   
   let resolved-title = if type(h) == dictionary and h.title != none { h.title } else { nav.resolve-slide-title(none) }
   if resolved-title == none and h.subtitle == none { return none }
 
   let title-display = if is-continuation and resolved-title != none {
-    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), conf.frame-break-suffix)
+    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), conf.slide-break-suffix)
   } else {
     resolved-title
   }
@@ -254,12 +254,12 @@
   let named = args.named()
   let manual-title = named.at("title", default: none)
   let subtitle = named.at("subtitle", default: none)
-  let allow-frame-breaks = named.at("allow-frame-breaks", default: false)
+  let allow-slide-breaks = named.at("allow-slide-breaks", default: false)
   let background = named.at("background", default: none)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   
   let clean-named = named
-  for key in ("title", "subtitle", "allow-frame-breaks", "background") {
+  for key in ("title", "subtitle", "allow-slide-breaks", "background") {
     if key in clean-named { 
       let _ = clean-named.remove(key)
     }
@@ -271,8 +271,8 @@
       if background != none {
         place(top + left, dx: 0pt, dy: -4.5em, block(width: 100%, height: 100% + 4.5em + 3.0em, background))
       }
-      [#metadata((title: manual-title, subtitle: subtitle, allow-frame-breaks: allow-frame-breaks)) <sorbonne-slide-start>]
-      apply-layout(breakable: allow-frame-breaks, body)
+      [#metadata((title: manual-title, subtitle: subtitle, allow-slide-breaks: allow-slide-breaks)) <sorbonne-slide-start>]
+      apply-layout(breakable: allow-slide-breaks, body)
     })
   ]
 }
@@ -541,7 +541,7 @@
   }
 }
 
-#let framebreak() = colbreak(weak: true)
+#let slide-break() = colbreak(weak: true)
 
 // --- Template ---
 
@@ -577,7 +577,7 @@
   outline-columns: 1,
   auto-title: true,
   progress-bar: "none", // "none", "top", "bottom"
-  frame-break-suffix: [ (cont.)],
+  slide-break-suffix: [ (cont.)],
   footer-author: true,
   footer-title: true,
   max-length: none,
@@ -622,7 +622,7 @@
     text-font: text-font,
     text-size: text-size,
     progress-bar: progress-bar,
-    frame-break-suffix: frame-break-suffix,
+    slide-break-suffix: slide-break-suffix,
     footer-author: footer-author,
     footer-title: footer-title,
     max-length: max-length,
