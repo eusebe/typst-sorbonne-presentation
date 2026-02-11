@@ -29,9 +29,9 @@ Switch visual identities instantly using the `faculty` parameter:
 
 For a comprehensive visual tour of all components and features, please refer to the pre-compiled PDF documentation:
 
-- 📄 **[Main Demo Guide](examples/demo.pdf)**: All components, boxes, and slide types.
-- 🗺️ **[2-Levels Mapping Guide](examples/demo-mapping-2levels.pdf)**: Using Section/Subsection hierarchy.
-- 🗺️ **[3-Levels Mapping Guide](examples/demo-mapping-3levels.pdf)**: Using Part/Section/Subsection hierarchy.
+- **[Main Demo Guide](examples/demo.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo.pdf)): All components, boxes, and slide types.
+- **[2-Levels Mapping Guide](examples/demo-mapping-2levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo-mapping-2levels.pdf)): Using Section/Subsection hierarchy.
+- **[3-Levels Mapping Guide](examples/demo-mapping-3levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo-mapping-3levels.pdf)): Using Part/Section/Subsection hierarchy.
 
 ## Quick Start
 
