@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-#import "@preview/physica:0.9.6": *
+#import "@preview/physica:0.9.8": *
 
 #show: template.with(
   title: [Sorbonne Template: Complete Guide],
