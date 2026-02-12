@@ -1,7 +1,7 @@
 #import "../lib.typ": *
 
 #show: template.with(
-  title: [Sorbonne Presentation],
+  title: [An Example Presentation],
   subtitle: [An academic theme for Typst],
   author: [Community Template],
   affiliation: [Sorbonne Université],

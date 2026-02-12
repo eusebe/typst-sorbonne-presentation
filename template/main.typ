@@ -16,7 +16,7 @@
 = Introduction
 
 #slide(title: "Welcome")[
-  This is a sample presentation using the Sorbonne theme.
+  This is a sample presentation using the Unofficial Sorbonne theme.
   
   - Respects the university's visual identity.
   - Built on top of `presentate` and `navigator` packages.
@@ -42,5 +42,5 @@
 #ending-slide(
   title: [Thank you for your attention!],
   subtitle: [Any questions?],
-  contact: ("first.name@sorbonne-universite.fr",)
+  contact: ("first.name@my-universite.fr",)
 )

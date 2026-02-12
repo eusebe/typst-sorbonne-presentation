@@ -2,7 +2,7 @@
 #import "@preview/physica:0.9.8": *
 
 #show: template.with(
-  title: [Sorbonne Template: Complete Guide],
+  title: [(Unofficial) Sorbonne Template: Complete Guide],
   subtitle: [Demonstration of all features and components],
   author: [David Hajage],
   affiliation: [Sorbonne University],

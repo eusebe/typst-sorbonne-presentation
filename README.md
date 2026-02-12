@@ -1,6 +1,6 @@
 # Sorbonne Presentation Theme
 
-A non-official structured presentation theme for **Sorbonne University**, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
+A non-official structured presentation theme designed to match the branding and style guidelines of the Sorbonne University, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
 
 ---
 
@@ -24,6 +24,29 @@ Switch visual identities instantly using the `faculty` parameter:
 - `sante`: Sorbonne Red (Faculty of Health)
 - `sciences`: Sorbonne Light Blue (Faculty of Science & Engineering)
 - `lettres`: Sorbonne Yellow/Ocre (Faculty of Humanities)
+
+## Logo Customization
+
+You can easily replace the default institutional logos with your own by using the following parameters in the `template` function.
+
+### `logo-transition` (Monochrome/White version)
+This logo is used on **solid theme-colored backgrounds**. For best results, use a white or high-contrast monochrome version of your logo.
+It appears on:
+- The **Title Slide** (bottom right).
+- All **Transition Slides** (Parts, Sections, Subsections) in the top left.
+- **Focus Slides** and the **Ending Slide**.
+
+### `logo-slide` (Color version)
+This logo is used on **standard slides** (white background). Use your full-color logo here.
+It appears in the **Header** of every content slide, next to the title.
+
+**Example:**
+```typ
+#show: template.with(
+  logo-slide: "assets/my-logo-color.png",
+  logo-transition: "assets/my-logo-white.png",
+)
+```
 
 ## Documentation
 

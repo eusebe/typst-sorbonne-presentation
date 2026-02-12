@@ -16,7 +16,9 @@
   #lorem(100)
   #lorem(100)
   #lorem(100)
-]#slide(title: "Page Overflow Scenario, slide breaks", allow-slide-breaks: true)[
+]
+
+#slide(title: "Page Overflow Scenario, slide breaks", allow-slide-breaks: true)[
   Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-slide-breaks: true`.
 
   #lorem(100)
@@ -26,6 +28,13 @@
   #lorem(100)
 ]
 
+#slide(title: "Page Overflow Scenario, slide breaks", allow-slide-breaks: true)[
+  Ce test vérifie le comportement du thème lorsqu'un texte est trop long pour tenir sur une seule diapositive, en utilisant l'option `allow-slide-breaks: true` et un slide-break manuel :
+  
+  #lorem(20)
+  #slide-break()
+  #lorem(20)
+]
   
 
   #slide(title: "Interaction: Pause + slide Breaks", allow-slide-breaks: true)[
