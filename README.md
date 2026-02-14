@@ -52,14 +52,14 @@ It appears in the **Header** of every content slide, next to the title.
 
 For a comprehensive visual tour of all components and features, please refer to the pre-compiled PDF documentation:
 
-- **[Main Demo Guide](examples/demo.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo.pdf)): All components, boxes, and slide types.
-- **[2-Levels Mapping Guide](examples/demo-mapping-2levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo-mapping-2levels.pdf)): Using Section/Subsection hierarchy.
-- **[3-Levels Mapping Guide](examples/demo-mapping-3levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.0/examples/demo-mapping-3levels.pdf)): Using Part/Section/Subsection hierarchy.
+- **[Main Demo Guide](examples/demo.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo.pdf)): All components, boxes, and slide types.
+- **[2-Levels Mapping Guide](examples/demo-mapping-2levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo-mapping-2levels.pdf)): Using Section/Subsection hierarchy.
+- **[3-Levels Mapping Guide](examples/demo-mapping-3levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo-mapping-3levels.pdf)): Using Part/Section/Subsection hierarchy.
 
 ## Quick Start
 
 ```typ
-#import "@preview/sorbonne-presentation:0.1.0": *
+#import "@preview/sorbonne-presentation:0.1.1": *
 
 #show: template.with(
   title: [Scientific Discovery],
@@ -169,6 +169,12 @@ For a comprehensive visual tour of all components and features, please refer to 
 
 - **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator).
 - **Inspiration**: Layout features and component designs were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme. A special thanks to its author for the high-quality design inspiration.
+
+## Changelog
+
+### v0.1.1
+- **Fix**: Improved `max-length` option. It now automatically maps role names (`part`, `section`, `subsection`) to their corresponding heading levels for breadcrumb truncation.
+- **Maintenance**: Minor internal optimizations.
 
 ## License
 
