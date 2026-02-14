@@ -4,6 +4,8 @@
 #show: template.with(
   title: [(Unofficial) Sorbonne Template: Complete Guide],
   subtitle: [Demonstration of all features and components],
+  short-title: [Template guide],
+  short-author: [D. Hajage],
   author: [David Hajage],
   affiliation: [Sorbonne University],
   faculty: "univ",

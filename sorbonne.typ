@@ -602,6 +602,22 @@
   let final-logo-transition = if logo-transition != none { logo-transition } else { def-logo-transition }
   let final-logo-slide = if logo-slide != none { logo-slide } else { def-logo-slide }
 
+  // Résolution de max-length : si c'est un dictionnaire utilisant des noms de rôles (part, section, etc.)
+  // on les convertit en "level-N" pour que typst-navigator les comprenne.
+  let resolved-max-length = if type(max-length) == dictionary {
+    let new-dict = (:)
+    for (key, val) in max-length {
+      if key in mapping {
+        new-dict.insert("level-" + str(mapping.at(key)), val)
+      } else {
+        new-dict.insert(key, val)
+      }
+    }
+    new-dict
+  } else {
+    max-length
+  }
+
   config-state.update(c => (
     title: title,
     author: author,
@@ -625,7 +641,7 @@
     slide-break-suffix: slide-break-suffix,
     footer-author: footer-author,
     footer-title: footer-title,
-    max-length: max-length,
+    max-length: resolved-max-length,
     use-short-title: use-short-title,
   ))
   
@@ -635,7 +651,7 @@
     c.show-heading-numbering = show-header-numbering
     c.slide-func = empty-slide
     c.theme-colors = (primary: final-primary)
-    c.max-length = max-length
+    c.max-length = resolved-max-length
     c.use-short-title = use-short-title
     c.transitions = (
       parts: (visibility: (part: "none", section: "none", subsection: "none")),
