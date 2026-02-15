@@ -429,7 +429,11 @@
           let cite-content = if lbl != none { lbl } else { labels.map(l => cite(l)).join(", ") }
           
           // Style "Signature" : à droite, en gris, avec tiret
-          align(right, pad(right: 15%, text(fill: gray.darken(20%), size: 0.9em, [--- #cite-content])))
+          context {
+            let conf = config-state.get()
+            let sig-color = if conf.dark-mode { white.darken(20%) } else { gray.darken(20%) }
+            align(right, pad(right: 15%, text(fill: sig-color, size: 0.9em, [--- #cite-content])))
+          }
         }
       ),
       
@@ -437,10 +441,13 @@
       if definitions != none {
         context {
           let conf = config-state.get()
+          let fill-color = if conf.dark-mode { conf.primary-color.darken(60%) } else { conf.primary-color.lighten(95%) }
+          let stroke-color = if conf.dark-mode { conf.primary-color.lighten(20%) } else { conf.primary-color }
+
           block(
             width: 85%,
-            fill: conf.primary-color.lighten(95%),
-            stroke: (left: 3pt + conf.primary-color), // Bordure gauche élégante
+            fill: fill-color,
+            stroke: (left: 3pt + stroke-color), // Bordure gauche élégante
             inset: 1.5em,
             radius: (right: 4pt),
             align(left, {
@@ -487,14 +494,14 @@
   let is-dark = if conf != none { conf.dark-mode } else { false }
 
   let (fill-body, stroke-box) = if fill-mode == "fill" {
-    (if is-dark { color.darken(60%) } else { color.lighten(90%) }, 0.5pt + color)
+    (if is-dark { color.darken(60%) } else { color.lighten(90%) }, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
   } else if fill-mode == "full" {
-    (if is-dark { color.darken(40%) } else { color.lighten(80%) }, 0.5pt + color)
+    (if is-dark { color.darken(40%) } else { color.lighten(80%) }, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
   } else if fill-mode == "transparent" {
     (none, none)
   } else {
     // outline
-    (none, 0.5pt + color)
+    (none, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
   }
   
   block(
