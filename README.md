@@ -118,6 +118,7 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `footer-author` | bool | `true` | Toggle author display in footer |
 | `footer-title` | bool | `true` | Toggle title display in footer |
 | `max-length` | int \| dict | `none` | Max length for breadcrumb titles before truncation |
+| `dark-mode` | bool | `false` | Enable dark theme for content slides |
 
 ## Component Reference
 

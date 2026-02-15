@@ -54,7 +54,11 @@
 #let breadcrumb() = context {
   let conf = config-state.get()
   if conf == none { return none }
-  set text(size: 0.8em, fill: gray.darken(20%))
+  
+  let fg-color = if conf.dark-mode { white.darken(20%) } else { gray.darken(20%) }
+  let sep-color = if conf.dark-mode { gray.darken(40%) } else { gray.lighten(50%) }
+  
+  set text(size: 0.8em, fill: fg-color)
   
   let mapping = conf.mapping
   let level-modes = (:)
@@ -66,7 +70,7 @@
   nav.progressive-outline(
     ..level-modes,
     layout: "horizontal",
-    separator: text(fill: gray.lighten(50%), "  /  "),
+    separator: text(fill: sep-color, "  /  "),
     clickable: false,
   )
 }
@@ -88,11 +92,15 @@
   let allow-breaks = if type(h) == dictionary { h.at("allow-slide-breaks", default: false) } else { false }
   let is-continuation = current-page > marker.location().page() and allow-breaks
   
+  let fg-color = if conf.dark-mode { white } else { sorbonne-text }
+  let subtitle-color = if conf.dark-mode { white.transparentize(20%) } else { sorbonne-text.lighten(20%) }
+  let continuation-color = if conf.dark-mode { white.transparentize(40%) } else { sorbonne-text.lighten(40%) }
+
   let resolved-title = if type(h) == dictionary and h.title != none { h.title } else { nav.resolve-slide-title(none) }
   if resolved-title == none and h.subtitle == none { return none }
 
   let title-display = if is-continuation and resolved-title != none {
-    resolved-title + text(size: 0.8em, weight: "regular", fill: sorbonne-text.lighten(40%), conf.slide-break-suffix)
+    resolved-title + text(size: 0.8em, weight: "regular", fill: continuation-color, conf.slide-break-suffix)
   } else {
     resolved-title
   }
@@ -105,10 +113,10 @@
       image(conf.logo-slide, width: 4.5em),
       stack(dir: ttb, spacing: 0.3em,
         if resolved-title != none {
-          text(size: 1.1em, weight: "bold", fill: sorbonne-text, smallcaps(title-display))
+          text(size: 1.1em, weight: "bold", fill: fg-color, smallcaps(title-display))
         },
         if h.subtitle != none {
-          text(size: 0.85em, style: "italic", fill: sorbonne-text.lighten(20%), h.subtitle)
+          text(size: 0.85em, style: "italic", fill: subtitle-color, h.subtitle)
         }
       )
     )
@@ -119,9 +127,12 @@
   let conf = config-state.get()
   if conf == none { return none }
   
+  let fg-color = if conf.dark-mode { white.darken(20%) } else { gray.darken(20%) }
+  let line-color = if conf.dark-mode { gray.darken(60%) } else { gray.lighten(80%) }
+
   block(width: 100%, inset: (x: 2.5em, bottom: 0.8em, top: 0.2em), {
-    set text(size: 0.65em, fill: gray.darken(20%))
-    line(length: 100%, stroke: 0.5pt + gray.lighten(80%))
+    set text(size: 0.65em, fill: fg-color)
+    line(length: 100%, stroke: 0.5pt + line-color)
     v(0.5em)
 
     let show-author = conf.footer-author
@@ -170,7 +181,8 @@
 
 #let apply-layout(breakable: true, body) = context {
   let config = config-state.get()
-  set text(font: config.text-font, size: config.text-size, fill: sorbonne-text)
+  let fg-color = if config.dark-mode { white } else { sorbonne-text }
+  set text(font: config.text-font, size: config.text-size, fill: fg-color)
   
   if not breakable {
     // Le grid 1fr occupe tout l'espace disponible, permettant le centrage vertical (horizon)
@@ -194,7 +206,7 @@
 
 #let focus-slide(body, subtitle: none) = context {
   let conf = config-state.get()
-  empty-slide(fill: conf.primary-color, {
+  empty-slide(fill: conf.transition-fill, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white, weight: "bold")
     align(center + horizon, stack(dir: ttb, spacing: 1em,
@@ -211,9 +223,17 @@
   text(fill: conf.alert-color, weight: "bold", body)
 }
 
-#let muted(body) = text(fill: gray, body)
+#let muted(body) = context {
+  let conf = config-state.get()
+  let color = if conf.dark-mode { luma(70%) } else { gray }
+  text(fill: color, body)
+}
 
-#let subtle(body) = text(fill: gray.lighten(40%), body)
+#let subtle(body) = context {
+  let conf = config-state.get()
+  let color = if conf.dark-mode { luma(50%) } else { gray.lighten(40%) }
+  text(fill: color, body)
+}
 
 #let two-col(left, right, columns: (1fr, 1fr), gutter: 2em) = {
   grid(
@@ -361,12 +381,17 @@
   }
 
   if content != none {
+    let (fill-color, text-color) = if conf.dark-mode {
+      (conf.primary-color.darken(60%), white)
+    } else {
+      (conf.primary-color.lighten(95%), conf.primary-color)
+    }
     place(align-pos, dx: dx, dy: dy, block(
-      fill: conf.primary-color.lighten(95%),
+      fill: fill-color,
       stroke: 0.5pt + conf.primary-color,
       radius: 3pt,
       inset: 0.4em, 
-      text(size: 0.65em, fill: conf.primary-color, content)
+      text(size: 0.65em, fill: text-color, content)
     ))
   }
 }
@@ -435,7 +460,7 @@
   contact: ("email@example.com", "github.com/username")
 ) = context {
   let conf = config-state.get()
-  empty-slide(fill: conf.primary-color, {
+  empty-slide(fill: conf.transition-fill, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white)
     align(center + horizon, stack(
@@ -457,11 +482,14 @@
 
 // --- Boîtes et Blocs ---
 
-#let _base-box(title: none, body, color: black, fill-mode: "outline") = {
+#let _base-box(title: none, body, color: black, fill-mode: "outline") = context {
+  let conf = config-state.get()
+  let is-dark = if conf != none { conf.dark-mode } else { false }
+
   let (fill-body, stroke-box) = if fill-mode == "fill" {
-    (color.lighten(90%), 0.5pt + color)
+    (if is-dark { color.darken(60%) } else { color.lighten(90%) }, 0.5pt + color)
   } else if fill-mode == "full" {
-    (color.lighten(80%), 0.5pt + color)
+    (if is-dark { color.darken(40%) } else { color.lighten(80%) }, 0.5pt + color)
   } else if fill-mode == "transparent" {
     (none, none)
   } else {
@@ -582,6 +610,7 @@
   footer-title: true,
   max-length: none,
   use-short-title: false,
+  dark-mode: false,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -598,9 +627,28 @@
 
   // 2. Application des surcharges si fournies
   let final-primary = if primary-color != none { primary-color } else { def-primary }
-  let final-alert = if alert-color != none { alert-color } else { def-alert }
   let final-logo-transition = if logo-transition != none { logo-transition } else { def-logo-transition }
-  let final-logo-slide = if logo-slide != none { logo-slide } else { def-logo-slide }
+  let final-logo-slide = if logo-slide != none { 
+    logo-slide 
+  } else { 
+    if dark-mode { def-logo-transition } else { def-logo-slide }
+  }
+  
+  // En mode sombre, on adapte les couleurs pour la lisibilité
+  let final-transition-fill = if dark-mode { final-primary.darken(40%) } else { final-primary }
+  
+  // Couleur pour les puces, numéros et alertes (plus claire en mode sombre)
+  let final-marker-color = if dark-mode { 
+    if faculty == "univ" { final-primary.lighten(60%) }
+    else if faculty == "sante" { final-primary.lighten(50%) }
+    else { final-primary.lighten(30%) }
+  } else { final-primary }
+  
+  let final-alert = if alert-color != none { 
+    alert-color 
+  } else { 
+    if dark-mode { final-marker-color } else { def-alert }
+  }
 
   // Résolution de max-length : si c'est un dictionnaire utilisant des noms de rôles (part, section, etc.)
   // on les convertit en "level-N" pour que typst-navigator les comprenne.
@@ -632,6 +680,8 @@
     annex-numbering-format: annex-numbering-format,
     mapping: mapping,
     primary-color: final-primary,
+    marker-color: final-marker-color,
+    transition-fill: final-transition-fill,
     alert-color: final-alert,
     logo-transition: final-logo-transition,
     logo-slide: final-logo-slide,
@@ -643,6 +693,7 @@
     footer-title: footer-title,
     max-length: resolved-max-length,
     use-short-title: use-short-title,
+    dark-mode: dark-mode,
   ))
   
   nav.navigator-config.update(c => {
@@ -650,7 +701,7 @@
     c.auto-title = auto-title
     c.show-heading-numbering = show-header-numbering
     c.slide-func = empty-slide
-    c.theme-colors = (primary: final-primary)
+    c.theme-colors = (primary: final-transition-fill)
     c.max-length = resolved-max-length
     c.use-short-title = use-short-title
     c.transitions = (
@@ -666,9 +717,9 @@
         level-2-mode: "none",
         level-3-mode: "none",
         text-styles: (
-          level-1: (active: (weight: "bold", fill: final-primary), completed: (weight: "bold"), inactive: (weight: "bold")),
-          level-2: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular")),
-          level-3: (active: (weight: "regular", fill: final-primary), completed: (weight: "regular"), inactive: (weight: "regular"))
+          level-1: (active: (weight: "bold", fill: final-marker-color), completed: (weight: "bold"), inactive: (weight: "bold")),
+          level-2: (active: (weight: "regular", fill: final-marker-color), completed: (weight: "regular"), inactive: (weight: "regular")),
+          level-3: (active: (weight: "regular", fill: final-marker-color), completed: (weight: "regular"), inactive: (weight: "regular"))
         ),
       ),
       base: c.at("progressive-outline", default: (:))
@@ -681,6 +732,7 @@
     margin: (top: 4.5em, bottom: 3.0em, x: 0pt), 
     header: none, 
     footer: none,
+    fill: if dark-mode { rgb("#21232c") } else { white },
     foreground: context {
       let conf = config-state.get()
       if conf == none { return none }
@@ -700,12 +752,12 @@
       }
     }
   )
-  set text(font: text-font, size: text-size, fill: sorbonne-text)
+  set text(font: text-font, size: text-size, fill: if dark-mode { white } else { sorbonne-text })
   show math.equation: set text(font: "Fira Math")
 
   // Listes à puces et énumérations thématiques
-  set list(marker: ([•], [‣], [–]).map(m => text(fill: final-primary, m)))
-  set enum(numbering: (n) => text(fill: final-primary, weight: "bold", str(n) + "."))
+  set list(marker: ([•], [‣], [–]).map(m => text(fill: final-marker-color, m)))
+  set enum(numbering: (n) => text(fill: final-marker-color, weight: "bold", str(n) + "."))
   
   // Définit le style de bibliographie
   set bibliography(style: bib-style)
@@ -713,14 +765,19 @@
     // Style des citations
     show cite: it => context {
       let conf = config-state.get()
+      let (fill-color, text-color) = if conf.dark-mode {
+        (conf.primary-color.darken(50%), white)
+      } else {
+        (conf.primary-color.lighten(90%), conf.primary-color)
+      }
       box(
         inset: (x: 2pt),
         outset: (y: 2pt),
         radius: 2pt,
-        fill: conf.primary-color.lighten(90%),
-              text(fill: conf.primary-color, it)
-            )
-          }
+        fill: fill-color,
+        text(fill: text-color, it)
+      )
+    }
         
           set heading(numbering: (..nums) => context {
         
@@ -758,7 +815,7 @@
   })
 
   // Page de Titre
-  empty-slide(fill: final-primary, {
+  empty-slide(fill: final-transition-fill, {
     set text(fill: white)
     place(bottom + right, pad(bottom: 2em, right: 2em, image(final-logo-transition, width: 6em)))
     align(horizon, pad(x: 3em, y: 2em, stack(
