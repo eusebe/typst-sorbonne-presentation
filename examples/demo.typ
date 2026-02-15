@@ -183,8 +183,8 @@
     // Center text
     content((2.5, -1.5), text(gray, size: 0.8em)[_Workflow Cycle_])
   }),
-  title: "Integrated Drawing with CeTZ",
-  caption: [A polished diagram generated directly in Typst.]
+  title: "Figure Slide",
+  caption: [A polished diagram generated with CeTZ.]
 )
 
 #acknowledgement-slide(
