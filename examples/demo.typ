@@ -1,5 +1,4 @@
 #import "../lib.typ": *
-#import "@preview/physica:0.9.8": *
 
 #show: template.with(
   title: [(Unofficial) Sorbonne Template: Complete Guide],
@@ -168,13 +167,13 @@
 )
 
 #equation-slide(
-  $ i hbar pdv(Psi, t) = - hbar^2 / (2m) laplacian(Psi) + V Psi $,
+  $ f(x) = 1 / (sigma sqrt(2 pi)) exp(- 1/2 ( (x - mu) / sigma )^2) $,
   title: [Equation Slide],
   definitions: [
-    / $Psi$: Wavefunction
-    / $V$: Potential energy
+    / $mu$: Mean of the distribution
+    / $sigma$: Standard deviation
   ],
-  citation: (bib-key: "einstein1905", label: "Quantum Origins")
+  citation: (bib-key: "einstein1905", label: "Gaussian Distribution")
 )
 
 // ==========================================
