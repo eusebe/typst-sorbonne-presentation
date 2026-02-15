@@ -286,6 +286,15 @@
   - `slide-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
   - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
+  - `dark-mode`: Boolean. Enable dark theme for content slides.
+]
+
+#slide(title: "Dark Mode Support")[
+  The template includes a built-in dark mode for content slides.
+  
+  - *Usage*: Set `dark-mode: true` in the `template` configuration.
+  - *Behavior*: Automatically switches background to dark and adjusts text/box colors for optimal contrast.
+  - *Institutional Identity*: Remains compatible with all faculty presets.
 ]
 
 #ending-slide()

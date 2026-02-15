@@ -9,6 +9,7 @@ A non-official structured presentation theme designed to match the branding and 
 The theme provides academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
 
 - **Faculty Presets**: Built-in colors and logos for Health, Science, Humanities, and University-wide presentations.
+- **Dark Mode**: Support for dark-themed content slides via the `dark-mode` parameter.
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
 - **Dynamic Content**: Seamless integration of `pause`, `uncover`, and `only` for step-by-step reveals.
 - **Scientific Ready**: Specialized slides for equations, figures, and algorithms.
