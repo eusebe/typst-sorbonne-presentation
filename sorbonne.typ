@@ -209,12 +209,12 @@
   empty-slide(fill: conf.transition-fill, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white, weight: "bold")
-    align(center + horizon, stack(dir: ttb, spacing: 1em,
+    align(center + horizon, pad(x: 3em, stack(dir: ttb, spacing: 1em,
       text(size: 2.5em, body),
       if subtitle != none {
         text(size: 1.5em, weight: "regular", style: "italic", fill: white.transparentize(20%), subtitle)
       }
-    ))
+    )))
   })
 }
 
@@ -463,7 +463,7 @@
   empty-slide(fill: conf.transition-fill, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white)
-    align(center + horizon, stack(
+    align(center + horizon, pad(x: 3em, stack(
       spacing: 1.5em,
       text(size: 2.5em, weight: "bold", title),
       if subtitle != none { text(size: 1.5em, style: "italic", fill: white.transparentize(20%), subtitle) },
@@ -476,7 +476,7 @@
           contact
         }
       }
-    ))
+    )))
   })
 }
 
