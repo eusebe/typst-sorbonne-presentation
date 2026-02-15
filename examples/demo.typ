@@ -33,38 +33,6 @@
   - *Subtle*: For #subtle[tertiary] information.
 ]
 
-#figure-slide(
-  canvas({
-    import draw: *
-    set-style(
-      rect: (stroke: 0.5pt, radius: 5pt),
-      line: (stroke: 1pt, mark: (end: "stealth", fill: black, scale: 0.6)),
-      content: (padding: 10pt)
-    )
-    
-    // Nodes
-    rect((-1.5, 0.5), (1.5, -0.5), fill: blue.lighten(90%), stroke: blue, name: "data")
-    content("data", [*Data*])
-    
-    rect((3.5, 0.5), (6.5, -0.5), fill: red.lighten(90%), stroke: red, name: "proc")
-    content("data.east", h(2.5em)) // spacing
-    content("proc", [*Analysis*])
-    
-    rect((1, -2.5), (4, -3.5), fill: green.lighten(90%), stroke: green, name: "viz")
-    content("viz", [*Results*])
-    
-    // Connections
-    line("data.east", "proc.west")
-    line("proc.south", (5, -3), "viz.east")
-    line("viz.west", (0, -3), "data.south")
-    
-    // Center text
-    content((2.5, -1.5), text(gray, size: 0.8em)[_Workflow Cycle_])
-  }),
-  title: "Integrated Drawing with CeTZ",
-  caption: [A polished diagram generated directly in Typst.]
-)
-
 #slide(title: "Multi-column Layouts", allow-slide-breaks: true)[
   The template provides dedicated functions for balanced layouts:
   
@@ -188,9 +156,35 @@
 ]
 
 #figure-slide(
-  rect(width: 40%, height: 30%, fill: sorbonne-lightblue),
-  title: "Figure Slide",
-  caption: [A centered caption]
+  canvas({
+    import draw: *
+    set-style(
+      rect: (stroke: 0.5pt, radius: 5pt),
+      line: (stroke: 1pt, mark: (end: "stealth", fill: black, scale: 0.6)),
+      content: (padding: 10pt)
+    )
+    
+    // Nodes
+    rect((-1.5, 0.5), (1.5, -0.5), fill: blue.lighten(90%), stroke: blue, name: "data")
+    content("data", [*Data*])
+    
+    rect((3.5, 0.5), (6.5, -0.5), fill: red.lighten(90%), stroke: red, name: "proc")
+    content("data.east", h(2.5em)) // spacing
+    content("proc", [*Analysis*])
+    
+    rect((1, -2.5), (4, -3.5), fill: green.lighten(90%), stroke: green, name: "viz")
+    content("viz", [*Results*])
+    
+    // Connections
+    line("data.east", "proc.west")
+    line("proc.south", (5, -3), "viz.east")
+    line("viz.west", (0, -3), "data.south")
+    
+    // Center text
+    content((2.5, -1.5), text(gray, size: 0.8em)[_Workflow Cycle_])
+  }),
+  title: "Integrated Drawing with CeTZ",
+  caption: [A polished diagram generated directly in Typst.]
 )
 
 #acknowledgement-slide(
