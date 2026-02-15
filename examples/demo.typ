@@ -173,7 +173,7 @@
     / $mu$: Mean of the distribution
     / $sigma$: Standard deviation
   ],
-  citation: (bib-key: "einstein1905", label: "Gaussian Distribution")
+  citation: (bib-key: "gauss1809", label: "Gaussian Distribution")
 )
 
 // ==========================================
