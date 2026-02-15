@@ -2,7 +2,7 @@
 
 #show: template.with(
   title: [Test Code Mode Sombre (Sorbonne)],
-  faculty: "univ",
+  faculty: "sante",
   dark-mode: true,
 )
 

@@ -578,28 +578,6 @@
 
 #let slide-break() = colbreak(weak: true)
 
-// --- Style des blocs de code ---
-#show raw.where(block: true): it => context {
-  let conf = config-state.get()
-  let is-dark = if conf != none { conf.dark-mode } else { false }
-  
-  let bg-color = if is-dark { rgb("#2d2d2d") } else { luma(245) }
-  let stroke-color = if is-dark { gray.darken(40%) } else { gray.lighten(50%) }
-  let text-color = if is-dark { white } else { sorbonne-text }
-
-  block(
-    width: 100%,
-    fill: bg-color,
-    inset: 10pt,
-    radius: 4pt,
-    stroke: 0.5pt + stroke-color,
-    {
-      set text(fill: text-color)
-      it
-    }
-  )
-}
-
 // --- Template ---
 
 #let template(
@@ -783,6 +761,26 @@
   )
   set text(font: text-font, size: text-size, fill: if dark-mode { white } else { sorbonne-text })
   show math.equation: set text(font: "Fira Math")
+
+  // Style des blocs de code
+  show raw.where(block: true): it => {
+    let bg-color = if dark-mode { rgb("#2d2d2d") } else { luma(245) }
+    let stroke-color = if dark-mode { gray.darken(40%) } else { gray.lighten(50%) }
+    let text-color = if dark-mode { white } else { sorbonne-text }
+
+    block(
+      width: 100%,
+      fill: bg-color,
+      inset: 10pt,
+      radius: 4pt,
+      stroke: 0.5pt + stroke-color,
+      {
+        set text(fill: text-color)
+        show block: set block(fill: none, inset: 0pt, radius: 0pt, stroke: none)
+        it
+      }
+    )
+  }
 
   // Listes à puces et énumérations thématiques
   set list(marker: ([•], [‣], [–]).map(m => text(fill: final-marker-color, m)))
