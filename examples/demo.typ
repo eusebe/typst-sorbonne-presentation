@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-#import "@preview/cetz:0.3.2": canvas, draw
+#import "@preview/cetz:0.4.2": canvas, draw
 
 #show: template.with(
   title: [(Unofficial) Sorbonne Template: Complete Guide],
@@ -36,21 +36,33 @@
 #figure-slide(
   canvas({
     import draw: *
-    circle((0,0), radius: 2, fill: blue.lighten(80%), stroke: blue, name: "c")
-    content("c", text(blue, weight: "bold")[Content])
+    set-style(
+      rect: (stroke: 0.5pt, radius: 5pt),
+      line: (stroke: 1pt, mark: (end: "stealth", fill: black, scale: 0.6)),
+      content: (padding: 10pt)
+    )
     
-    circle((4,0), radius: 2, fill: red.lighten(80%), stroke: red, name: "s")
-    content("s", text(red, weight: "bold")[Style])
+    // Nodes
+    rect((-1.5, 0.5), (1.5, -0.5), fill: blue.lighten(90%), stroke: blue, name: "data")
+    content("data", [*Data*])
     
-    circle((2,-3), radius: 2, fill: orange.lighten(80%), stroke: orange, name: "p")
-    content("p", text(orange, weight: "bold")[Programmable])
+    rect((3.5, 0.5), (6.5, -0.5), fill: red.lighten(90%), stroke: red, name: "proc")
+    content("data.east", h(2.5em)) // spacing
+    content("proc", [*Analysis*])
     
-    line("c", "s", stroke: 1pt, mark: (end: ">", fill: black))
-    line("s", "p", stroke: 1pt, mark: (end: ">", fill: black))
-    line("p", "c", stroke: 1pt, mark: (end: ">", fill: black))
+    rect((1, -2.5), (4, -3.5), fill: green.lighten(90%), stroke: green, name: "viz")
+    content("viz", [*Results*])
+    
+    // Connections
+    line("data.east", "proc.west")
+    line("proc.south", (5, -3), "viz.east")
+    line("viz.west", (0, -3), "data.south")
+    
+    // Center text
+    content((2.5, -1.5), text(gray, size: 0.8em)[_Workflow Cycle_])
   }),
   title: "Integrated Drawing with CeTZ",
-  caption: [A simple diagram generated directly in Typst.]
+  caption: [A polished diagram generated directly in Typst.]
 )
 
 #slide(title: "Multi-column Layouts", allow-slide-breaks: true)[
