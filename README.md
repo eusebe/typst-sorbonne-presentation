@@ -15,11 +15,12 @@ The theme provides academic and institutional slide decks that respect the visua
 - **Scientific Ready**: Specialized slides for equations, figures, and algorithms.
 
 ### 🎨 Faculty Presets
-Switch visual identities instantly using the `faculty` parameter:
+Switch visual identities instantly using the `faculty` and `dark-mode` parameters:
 
-| Univ | Sante | Sciences | Lettres |
-|:---:|:---:|:---:|:---:|
-| ![Univ](assets/docs/faculty-univ.png) | ![Sante](assets/docs/faculty-sante.png) | ![Sciences](assets/docs/faculty-sciences.png) | ![Lettres](assets/docs/faculty-lettres.png) |
+| Mode | Univ | Sante | Sciences | Lettres |
+|:---:|:---:|:---:|:---:|:---:|
+| **Light** | <img src="assets/docs/faculty-univ.png" width="200"> | <img src="assets/docs/faculty-sante.png" width="200"> | <img src="assets/docs/faculty-sciences.png" width="200"> | <img src="assets/docs/faculty-lettres.png" width="200"> |
+| **Dark** | <img src="assets/docs/faculty-univ-dark.png" width="200"> | <img src="assets/docs/faculty-sante-dark.png" width="200"> | <img src="assets/docs/faculty-sciences-dark.png" width="200"> | <img src="assets/docs/faculty-lettres-dark.png" width="200"> |
 
 - `univ`: Sorbonne Blue (University-wide)
 - `sante`: Sorbonne Red (Faculty of Health)

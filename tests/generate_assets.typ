@@ -1,5 +1,4 @@
 #import "../lib.typ": *
-#import "@preview/physica:0.9.6": *
 
 #set bibliography(style: "apa")
 
@@ -14,6 +13,14 @@
   template(faculty: "sciences", title: [Faculty: Sciences], author: [John Doe], date: none)[]
 } else if comp == "faculty-lettres" {
   template(faculty: "lettres", title: [Faculty: Lettres], author: [John Doe], date: none)[]
+} else if comp == "faculty-univ-dark" {
+  template(faculty: "univ", dark-mode: true, title: [Faculty: Univ (Dark)], author: [John Doe], date: none)[]
+} else if comp == "faculty-sante-dark" {
+  template(faculty: "sante", dark-mode: true, title: [Faculty: Sante (Dark)], author: [John Doe], date: none)[]
+} else if comp == "faculty-sciences-dark" {
+  template(faculty: "sciences", dark-mode: true, title: [Faculty: Sciences (Dark)], author: [John Doe], date: none)[]
+} else if comp == "faculty-lettres-dark" {
+  template(faculty: "lettres", dark-mode: true, title: [Faculty: Lettres (Dark)], author: [John Doe], date: none)[]
 } else if comp == "slide" {
   show: template.with(title: [Standard Slide], author: [John Doe])
   slide(title: "Normal Slide Usage", subtitle: "With an optional subtitle")[
@@ -36,14 +43,14 @@
   show: template.with()
   // On place la biblio à la fin pour éviter le décalage (voir fin de fichier)
   equation-slide(
-    $ i hbar pdv(Psi, t) = - hbar^2 / (2m) laplacian(Psi) + V Psi $,
+    $ f(x) = 1 / (sigma sqrt(2 pi)) exp(- 1/2 ( (x - mu) / sigma )^2) $,
     title: [Scientific Formulas],
-    subtitle: [The foundation of modern physics],
+    subtitle: [The foundation of modern statistics],
     definitions: [
-      / $Psi$: Wavefunction
-      / $V$: Potential energy
+      / $mu$: Mean of the distribution
+      / $sigma$: Standard deviation
     ],
-    citation: (bib-key: "einstein1905", label: "Quantum Origins")
+    citation: (bib-key: "gauss1809", label: "Gaussian Distribution")
   )
 } else if comp == "acknowledgement-slide" {
   show: template.with()

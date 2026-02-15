@@ -11,8 +11,8 @@ echo "🎨 Generating assets for Sorbonne theme documentation (Smart Page Select
 mkdir -p "$OUTPUT_DIR"
 
 # Liste des composants et fichiers
-COMPS=("faculty-univ" "faculty-sante" "faculty-sciences" "faculty-lettres" "slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "layout-grid2x2" "boxes" "citations")
-FILES=("faculty-univ.png" "faculty-sante.png" "faculty-sciences.png" "faculty-lettres.png" "component-slide.png" "component-focus-slide.png" "component-figure-slide.png" "component-equation-slide.png" "component-acknowledgement-slide.png" "component-ending-slide.png" "helper-text.png" "layout-2col.png" "layout-3col.png" "layout-grid2x2.png" "component-boxes.png" "component-citation.png")
+COMPS=("faculty-univ" "faculty-sante" "faculty-sciences" "faculty-lettres" "faculty-univ-dark" "faculty-sante-dark" "faculty-sciences-dark" "faculty-lettres-dark" "slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "layout-grid2x2" "boxes" "citations")
+FILES=("faculty-univ.png" "faculty-sante.png" "faculty-sciences.png" "faculty-lettres.png" "faculty-univ-dark.png" "faculty-sante-dark.png" "faculty-sciences-dark.png" "faculty-lettres-dark.png" "component-slide.png" "component-focus-slide.png" "component-figure-slide.png" "component-equation-slide.png" "component-acknowledgement-slide.png" "component-ending-slide.png" "helper-text.png" "layout-2col.png" "layout-3col.png" "layout-grid2x2.png" "component-boxes.png" "component-citation.png")
 
 for i in "${!COMPS[@]}"; do
     COMP="${COMPS[$i]}"
