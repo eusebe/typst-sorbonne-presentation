@@ -578,6 +578,28 @@
 
 #let slide-break() = colbreak(weak: true)
 
+// --- Style des blocs de code ---
+#show raw.where(block: true): it => context {
+  let conf = config-state.get()
+  let is-dark = if conf != none { conf.dark-mode } else { false }
+  
+  let bg-color = if is-dark { rgb("#2d2d2d") } else { luma(245) }
+  let stroke-color = if is-dark { gray.darken(40%) } else { gray.lighten(50%) }
+  let text-color = if is-dark { white } else { sorbonne-text }
+
+  block(
+    width: 100%,
+    fill: bg-color,
+    inset: 10pt,
+    radius: 4pt,
+    stroke: 0.5pt + stroke-color,
+    {
+      set text(fill: text-color)
+      it
+    }
+  )
+}
+
 // --- Template ---
 
 #let template(
@@ -768,23 +790,6 @@
   
   // Définit le style de bibliographie
   set bibliography(style: bib-style)
-
-  // Style des blocs de code
-  show raw.where(block: true): it => block(
-    fill: if dark-mode { luma(40) } else { luma(245) },
-    inset: 8pt,
-    radius: 2pt,
-    width: 100%,
-    it
-  )
-  
-  show raw.where(block: false): it => box(
-    fill: if dark-mode { luma(40) } else { luma(245) },
-    inset: (x: 3pt),
-    outset: (y: 3pt),
-    radius: 2pt,
-    it
-  )
 
     // Style des citations
     show cite: it => context {
