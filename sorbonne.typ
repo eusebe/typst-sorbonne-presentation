@@ -769,6 +769,23 @@
   // Définit le style de bibliographie
   set bibliography(style: bib-style)
 
+  // Style des blocs de code
+  show raw.where(block: true): it => block(
+    fill: if dark-mode { luma(40) } else { luma(245) },
+    inset: 8pt,
+    radius: 2pt,
+    width: 100%,
+    it
+  )
+  
+  show raw.where(block: false): it => box(
+    fill: if dark-mode { luma(40) } else { luma(245) },
+    inset: (x: 3pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+    it
+  )
+
     // Style des citations
     show cite: it => context {
       let conf = config-state.get()
