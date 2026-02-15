@@ -1,4 +1,5 @@
 #import "../lib.typ": *
+#import "@preview/cetz:0.3.2": canvas, draw
 
 #show: template.with(
   title: [(Unofficial) Sorbonne Template: Complete Guide],
@@ -31,6 +32,26 @@
   - *Muted*: For #muted[secondary] information.
   - *Subtle*: For #subtle[tertiary] information.
 ]
+
+#figure-slide(
+  canvas({
+    import draw: *
+    circle((0,0), radius: 2, fill: blue.lighten(80%), stroke: blue, name: "c")
+    content("c", text(blue, weight: "bold")[Content])
+    
+    circle((4,0), radius: 2, fill: red.lighten(80%), stroke: red, name: "s")
+    content("s", text(red, weight: "bold")[Style])
+    
+    circle((2,-3), radius: 2, fill: orange.lighten(80%), stroke: orange, name: "p")
+    content("p", text(orange, weight: "bold")[Programmable])
+    
+    line("c", "s", stroke: 1pt, mark: (end: ">", fill: black))
+    line("s", "p", stroke: 1pt, mark: (end: ">", fill: black))
+    line("p", "c", stroke: 1pt, mark: (end: ">", fill: black))
+  }),
+  title: "Integrated Drawing with CeTZ",
+  caption: [A simple diagram generated directly in Typst.]
+)
 
 #slide(title: "Multi-column Layouts", allow-slide-breaks: true)[
   The template provides dedicated functions for balanced layouts:
