@@ -12,7 +12,6 @@
 
 // État pour la configuration du thème
 #let config-state = state("sorbonne-config", none)
-#let last-main-page = state("last-main-page", none)
 #let logical-slide-counter = counter("sorbonne-logical-slide")
 
 // --- Composants ---
@@ -40,11 +39,11 @@
   block(width: 100% * ratio, height: 2pt, fill: conf.primary-color)
 }
 
-#let empty-slide(fill: none, body) = {
+#let empty-slide(body, fill: none, logical-slide: true) = {
   set page(margin: 0pt, fill: fill, header: none, footer: none, foreground: none)
   [
-    #logical-slide-counter.step()
-    #p.slide(logical-slide: true, {
+    #if logical-slide { logical-slide-counter.step() }
+    #p.slide(logical-slide: logical-slide, {
       [#metadata((title: none, subtitle: none, allow-slide-breaks: false)) <sorbonne-slide-start>]
       body
     })
@@ -204,9 +203,62 @@
   }
 }
 
+#let title-slide(..args) = context {
+  let conf = config-state.get()
+  if conf == none { return none }
+
+  let named = args.named()
+  let title = named.at("title", default: conf.title)
+  let subtitle = named.at("subtitle", default: conf.subtitle)
+  let author = named.at("author", default: conf.author)
+  let affiliation = named.at("affiliation", default: conf.affiliation)
+  let date = named.at("date", default: conf.date)
+  let logo = named.at("logo", default: conf.logo-transition)
+  let fill = named.at("fill", default: conf.transition-fill)
+
+  empty-slide(fill: fill, logical-slide: false, {
+    set text(fill: white)
+    if logo != none {
+      place(bottom + right, pad(bottom: 2em, right: 2em, image(logo, width: 6em)))
+    }
+    align(horizon, pad(x: 3em, y: 2em, stack(
+      spacing: 1.2em,
+      text(size: 2.5em, weight: "bold", smallcaps(title)),
+      if subtitle != none { text(size: 1.4em, style: "italic", subtitle) },
+      v(1.5em),
+      text(size: 1.2em, weight: "bold", author),
+      text(size: 1em, affiliation),
+      text(size: 0.9em, fill: white.transparentize(20%), date),
+    )))
+  })
+}
+
+#let outline-slide(..args) = context {
+  let conf = config-state.get()
+  if conf == none { return none }
+
+  let named = args.named()
+  let title = named.at("title", default: conf.outline-title)
+  let depth = named.at("depth", default: conf.outline-depth)
+  let columns-count = named.at("columns", default: conf.outline-columns)
+  let body = if args.pos().len() > 0 { args.pos().at(0) } else { named.at("body", default: none) }
+
+  slide(title: title, logical-slide: false, {
+    if body != none {
+      body
+    } else {
+      if columns-count > 1 {
+        columns(columns-count, outline(title: none, depth: depth, indent: 2em))
+      } else {
+        outline(title: none, depth: depth, indent: 2em)
+      }
+    }
+  })
+}
+
 #let focus-slide(body, subtitle: none) = context {
   let conf = config-state.get()
-  empty-slide(fill: conf.transition-fill, {
+  empty-slide(fill: conf.transition-fill, logical-slide: false, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white, weight: "bold")
     align(center + horizon, pad(x: 3em, stack(dir: ttb, spacing: 1em,
@@ -276,18 +328,19 @@
   let subtitle = named.at("subtitle", default: none)
   let allow-slide-breaks = named.at("allow-slide-breaks", default: false)
   let background = named.at("background", default: none)
+  let logical-slide = named.at("logical-slide", default: true)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   
   let clean-named = named
-  for key in ("title", "subtitle", "allow-slide-breaks", "background") {
+  for key in ("title", "subtitle", "allow-slide-breaks", "background", "logical-slide") {
     if key in clean-named { 
       let _ = clean-named.remove(key)
     }
   }
   
   [
-    #logical-slide-counter.step()
-    #p.slide(..clean-named, {
+    #if logical-slide { logical-slide-counter.step() }
+    #p.slide(logical-slide: logical-slide, ..clean-named, {
       if background != none {
         place(top + left, dx: 0pt, dy: -4.5em, block(width: 100%, height: 100% + 4.5em + 3.0em, background))
       }
@@ -304,11 +357,11 @@
   })
 }
 
-#let figure-slide-split(fig-left, fig-right, title: none, subtitle: none, caption-left: none, caption-right: none, ..args) = {
+#let figure-slide-split(fig-left, fig-right, title: none, subtitle: none, caption-left: none, caption-right: none, columns: (1fr, 1fr), ..args) = {
   slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     grid(
-      columns: (1fr, 1fr),
+      columns: columns,
       column-gutter: 2em,
       figure(fig-left, caption: caption-left),
       figure(fig-right, caption: caption-right)
@@ -467,7 +520,7 @@
   contact: ("email@example.com", "github.com/username")
 ) = context {
   let conf = config-state.get()
-  empty-slide(fill: conf.transition-fill, {
+  empty-slide(fill: conf.transition-fill, logical-slide: false, {
     place(top + left, pad(top: 2em, left: 2em, image(conf.logo-transition, width: 5em)))
     set text(fill: white)
     align(center + horizon, pad(x: 3em, stack(
@@ -632,6 +685,8 @@
   outline-title: [Sommaire],
   outline-depth: 2,
   outline-columns: 1,
+  outline-body: none,
+  title-slide-body: none,
   auto-title: true,
   progress-bar: "none", // "none", "top", "bottom"
   slide-break-suffix: [ (cont.)],
@@ -729,7 +784,7 @@
     c.mapping = mapping
     c.auto-title = auto-title
     c.show-heading-numbering = show-header-numbering
-    c.slide-func = empty-slide
+    c.slide-func = (body) => empty-slide(body, logical-slide: false)
     c.theme-colors = (primary: final-transition-fill)
     c.max-length = resolved-max-length
     c.use-short-title = use-short-title
@@ -788,6 +843,17 @@
   set list(marker: ([•], [‣], [–]).map(m => text(fill: final-marker-color, m)))
   set enum(numbering: (n) => text(fill: final-marker-color, weight: "bold", str(n) + "."))
   
+  // Style de l'outline
+  show outline.entry: it => {
+    v(0.5em)
+    if it.level == 1 {
+      text(weight: "bold", fill: final-marker-color, it)
+    } else {
+      h(1.5em)
+      it
+    }
+  }
+
   // Définit le style de bibliographie
   set bibliography(style: bib-style)
 
@@ -844,29 +910,15 @@
   })
 
   // Page de Titre
-  empty-slide(fill: final-transition-fill, {
-    set text(fill: white)
-    place(bottom + right, pad(bottom: 2em, right: 2em, image(final-logo-transition, width: 6em)))
-    align(horizon, pad(x: 3em, y: 2em, stack(
-      spacing: 1.2em,
-      text(size: 2.5em, weight: "bold", smallcaps(title)),
-      if subtitle != none { text(size: 1.4em, style: "italic", subtitle) },
-      v(1.5em),
-      text(size: 1.2em, weight: "bold", author),
-      text(size: 1em, affiliation),
-      text(size: 0.9em, fill: white.transparentize(20%), date),
-    )))
-  })
+  if title-slide-body != none {
+    title-slide-body
+  } else {
+    title-slide()
+  }
 
   // Sommaire automatique
   if show-outline {
-    slide(title: outline-title, {
-      if outline-columns > 1 {
-        columns(outline-columns, outline(title: none, depth: outline-depth, indent: 2em))
-      } else {
-        outline(title: none, depth: outline-depth, indent: 2em)
-      }
-    })
+    outline-slide(body: outline-body)
   }
 
   show heading: h => context {

@@ -106,6 +106,8 @@ For a comprehensive visual tour of all components and features, please refer to 
 | `outline-title` | content | `[Sommaire]` | Title of the summary slide |
 | `outline-depth` | int | `2` | Levels shown in summary |
 | `outline-columns` | int | `1` | Number of columns for summary |
+| `outline-body` | content | `none` | Custom content for the summary slide |
+| `title-slide-body` | content | `none` | Custom content for the title slide |
 | `mapping` | dict | `(sec: 1, sub: 2)` | Logic mapping for headings |
 | `auto-title` | bool | `true` | Use section name as slide title if none provided |
 | `show-header-numbering` | bool | `true` | Toggle all heading numbers |
@@ -134,6 +136,7 @@ For a comprehensive visual tour of all components and features, please refer to 
   ![Focus Slide](assets/docs/component-focus-slide.png)
 - `#figure-slide(fig, title: none, subtitle: none, caption: none, ..)`: Centered figure slide.
   ![Figure Slide](assets/docs/component-figure-slide.png)
+- `#figure-slide-split(fig-left, fig-right, columns: (1fr, 1fr), ..)`: Two-figure side-by-side slide.
 - `#equation-slide(equation, title: none, subtitle: none, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
   ![Equation Slide](assets/docs/component-equation-slide.png)
 - `#acknowledgement-slide(title: none, subtitle: none, people: (), institutions: (), ..)`: Thank-you slide.
@@ -152,6 +155,10 @@ For a comprehensive visual tour of all components and features, please refer to 
 - Inline and corner citations.
   `#cite-box("smith2023", position: "bottom-right")`
   ![Citations](assets/docs/component-citation.png)
+
+### Special Slides (Manual call)
+- `#title-slide(..)`: Generate the title slide manually.
+- `#outline-slide(body: none, ..)`: Generate an outline slide manually.
 
 ### Layout & Boxes
 - `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
@@ -176,6 +183,11 @@ For a comprehensive visual tour of all components and features, please refer to 
 ## Changelog
 
 ### v0.1.1
+- **Feature**: Added `title-slide-body` and `outline-body` parameters for custom title/outline slides.
+- **Feature**: Added `columns` parameter to `figure-slide-split` for custom widths.
+- **Improvement**: Title slide, focus slides, outline slides, and transition slides are no longer counted in the slide counter (footer and progress bar).
+- **Improvement**: Refactored `title-slide` and `outline-slide` as independent components.
+- **Improvement**: Styled the automatic outline to match the university theme.
 - **Fix**: Improved `max-length` option. It now automatically maps role names (`part`, `section`, `subsection`) to their corresponding heading levels for breadcrumb truncation.
 - **Maintenance**: Minor internal optimizations.
 
