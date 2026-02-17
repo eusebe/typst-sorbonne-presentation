@@ -1,4 +1,4 @@
-#import "@preview/sorbonne-presentation:0.1.0": *
+#import "@preview/sorbonne-presentation:0.1.1": *
 
 // --- Theme Configuration ---
 #show: template.with(
