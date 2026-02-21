@@ -29,6 +29,26 @@
 )
 
 // ==========================================
+= How to use this Demo
+// ==========================================
+
+#slide(title: "Compiling this Gallery")[
+  This file (`demo.typ`) is a living manual. Since it supports multiple themes and dark mode, it must be compiled using the `--input` flag:
+
+  ```bash
+  # For Sorbonne (default)
+  typst compile demo.typ --input theme=sorbonne
+
+  # For IPLESP (Dark mode)
+  typst compile demo.typ --input theme=iplesp --input dark=true
+  ```
+
+  *Current settings:*
+  - Theme: #highlight-box(fill-mode: "fill", theme-choice)
+  - Mode: #highlight-box(fill-mode: "fill", if is-dark [Dark] else [Light])
+]
+
+// ==========================================
 = Basic Components & Layout
 // ==========================================
 

@@ -24,7 +24,7 @@
 #slide(
   title: "Image de fond",
   background: block(width: 100%, height: 100%, {
-    let logo-path = if theme-choice == "iplesp" { "../assets/iplesp/iplesp.svg" } else { "../assets/sorbonne/sorbonne-univ.png" }
+    let logo-path = if theme-choice == "iplesp" { "../assets/iplesp/iplesp.png" } else { "../assets/sorbonne/sorbonne-univ.png" }
     align(center + horizon, image(logo-path, width: 60%))
     place(top + left, rect(fill: white.transparentize(50%), width: 100%, height: 100%))
   })

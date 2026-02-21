@@ -80,6 +80,24 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ---
 
+## Documentation & Demo
+
+The [**`examples/demo.typ`**](examples/demo.typ) file serves as both a comprehensive feature gallery and a technical manual. Since it supports multiple themes and dark mode, you must compile it using the `--input` flag:
+
+```bash
+# Compile for Sorbonne (Light)
+typst compile examples/demo.typ --input theme=sorbonne
+
+# Compile for IPLESP (Dark)
+typst compile examples/demo.typ --input theme=iplesp --input dark=true
+```
+
+Available inputs:
+- `theme`: `"sorbonne"` (default) or `"iplesp"`.
+- `dark`: `"true"` or `"false"` (default).
+
+---
+
 ## Logo Customization
 
 You can easily replace the institutional logos with your own by using the following parameters.
