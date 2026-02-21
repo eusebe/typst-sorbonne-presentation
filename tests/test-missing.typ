@@ -44,7 +44,7 @@
   if type(v) == str {
     // two dollar signs here because we're technically inside
     // a Pandoc template :grimace:
-    v.matches(regex("^\\s*$")).at(0, default: none) != none
+    v.matches(regex("^\s*$")).at(0, default: none) != none
   } else if type(v) == content {
     if v.at("text", default: none) != none {
       return empty(v.text)
@@ -172,11 +172,7 @@
 #import "../lib.typ": *
 #import "@preview/fontawesome:0.5.0": *
 
-#set page(
-  paper: "us-letter",
-  margin: (x: 1.25in, y: 1.25in),
-  numbering: "1",
-)
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
 
 #let slide-level = 3
 #let mapping = {
@@ -186,37 +182,19 @@
   else { (part: 1, section: 2, subsection: 3) }
 }
 
-#show: template.with(
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "sante")
+}
+
+#show: my-template.with(
   title: [Une (rapide) introduction aux données manquantes],
-  
-  
-  
-   author: [David Hajage #link("mailto:david.hajage@aphp.fr")[david.hajage\@aphp.fr];], 
-   affiliation: [Sorbonne Université], 
-  
+  author: [David Hajage #link("mailto:david.hajage@aphp.fr")[david.hajage\@aphp.fr];], 
+  affiliation: [Sorbonne Université], 
   mapping: mapping,
-  
-  
-  
-  
-   faculty: "sante", 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-   show-outline: true, 
-  
-  
-  
-  
-   progress-bar: "bottom", 
+  show-outline: true, 
+  progress-bar: "bottom", 
   footer-author: false,
   footer-title: false,
 )
@@ -422,7 +400,7 @@ On simule 250 observations issues d'une loi normale bivariée avec :
 - Variances : $sigma_1^2 = 9$, $sigma_2^2 = 16$
 - Covariance : $sigma_12 = 8$
 
-La corrélation entre $X_1$ et $X_2$ est : $rho_12 = 8 / sqrt(9 times 16) = 2 / 3$
+La corrélation entre $X_1$ and $X_2$ est : $rho_12 = 8 / sqrt(9 times 16) = 2 / 3$
 
 #slide-break()
 
@@ -474,7 +452,7 @@ sum(is.na(df$X2_MAR)) # nombre de NA
 
 ]
 ]
-Comme $X_1$ et $X_2$ sont corrélés positivement, les petites valeur de $X_2$ sont plus souvent manquantes.
+Comme $X_1$ and $X_2$ sont corrélés positivement, les petites valeur de $X_2$ sont plus souvent manquantes.
 
 #slide-break()
 
@@ -581,4 +559,3 @@ seaman-white-2011-review-of-inverse-probability-weighting-for-dealing-with-missi
 Erler
 
 ]
-

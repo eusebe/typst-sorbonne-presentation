@@ -1,16 +1,23 @@
 #import "../lib.typ": *
 
-#show: template.with(
-  title: [Faculté des Sciences],
-  subtitle: [Démonstration du thème Sciences],
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "sciences")
+}
+
+#show: my-template.with(
+  title: [Test Faculté],
+  subtitle: [Démonstration du thème],
   author: [David Hajage],
-  affiliation: [Sorbonne Université, Faculté des Sciences et Ingénierie],
-  faculty: "sciences",
+  affiliation: [Sorbonne Université],
   show-outline: true,
 )
 
 = Introduction
-== Recherche à Sorbonne
+== Recherche
 #slide[
   - Laboratoires d'excellence
   - Projets internationaux

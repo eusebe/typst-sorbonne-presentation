@@ -1,6 +1,14 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Diapositives Spéciales],
   subtitle: [Focus, Figures et Comparaisons],
   author: [David Hajage],
@@ -14,19 +22,19 @@
 ]
 
 #focus-slide[
-  Ceci est une Focus Slide.\
+  Ceci est une Focus Slide.
   Pour les messages percutants.
 ]
 
 #figure-slide(
-  rect(width: 60%, height: 40%, fill: sorbonne-lightblue, stroke: 2pt + sorbonne-blue),
+  rect(width: 60%, height: 40%, fill: blue.lighten(80%), stroke: 2pt + blue),
   title: [Visualisation simple],
   caption: [Une figure centrée avec sa légende automatique.]
 )
 
 #figure-slide-split(
-  rect(width: 100%, height: 50%, fill: sorbonne-red.lighten(80%), stroke: 1pt + sorbonne-red),
-  rect(width: 100%, height: 50%, fill: rgb("#2E7D32").lighten(80%), stroke: 1pt + rgb("#2E7D32")),
+  rect(width: 100%, height: 50%, fill: red.lighten(80%), stroke: 1pt + red),
+  rect(width: 100%, height: 50%, fill: green.lighten(80%), stroke: 1pt + green),
   title: [Comparaison Côte à Côte],
   caption-left: [Analyse A],
   caption-right: [Analyse B],

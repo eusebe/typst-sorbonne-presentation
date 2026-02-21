@@ -1,6 +1,14 @@
 #import "../lib.typ": *
 
-#show: template.with(show-outline: true, 
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(show-outline: true, 
   title: [Test Mapping Part/Section],
   subtitle: [Niveau 1 = Part, Niveau 2 = Section],
   author: [David Hajage],

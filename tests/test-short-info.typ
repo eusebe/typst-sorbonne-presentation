@@ -1,11 +1,18 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "sciences")
+}
+
+#show: my-template.with(
   title: [Ceci est un titre extrêmement long qui ne tiendrait pas bien dans un pied de page],
   short-title: [Titre Court],
   author: [David Hajage (Sorbonne Université, Labo IPLESP, Equipe ERES)],
   short-author: [D. Hajage],
-  faculty: "sciences",
 )
 
 = Test des versions courtes

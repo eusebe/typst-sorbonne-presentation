@@ -1,10 +1,17 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "lettres")
+}
+
+#show: my-template.with(
   title: [Test Composants de Boîtes],
   subtitle: [Démonstration des variantes et modes],
   author: [David Hajage],
-  faculty: "lettres",
 )
 
 = Boîtes Institutionnelles
@@ -48,7 +55,7 @@
 
 #slide(title: "Algorithm Box")[
   #algorithm-box(title: "Algorithm 1: Automatic Numbering")[
-    *Input:* Data $X$ \
+    *Input:* Data $X$ 
     *Output:* Result $Y$ 
     + Process data
     + Apply transformation
@@ -59,13 +66,13 @@
 
 = Blocs Thématiques
 #slide(title: "Adaptation à la Faculté")[
-  #themed-block(title: "Bloc Lettres (Outline)")[
-    S'adapte automatiquement à la couleur jaune/ocre de la faculté.
+  #themed-block(title: "Bloc Thématique (Outline)")[
+    S'adapte automatiquement à la couleur du thème.
   ]
   
   #v(2em)
   
-  #themed-block(title: "Bloc Lettres (Fill)", fill-mode: "fill")[
-    Version remplie avec la tonalité de la faculté.
+  #themed-block(title: "Bloc Thématique (Fill)", fill-mode: "fill")[
+    Version remplie avec la tonalité du thème.
   ]
 ]

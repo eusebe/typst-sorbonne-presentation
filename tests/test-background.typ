@@ -1,13 +1,21 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test Background Slide],
   author: [David Hajage],
 )
 
 = Background Color
-#slide(background: rect(fill: sorbonne-lightblue.lighten(80%), width: 100%, height: 100%))[
-  Cette slide a un fond bleu clair uniforme.
+#slide(background: rect(fill: blue.lighten(80%), width: 100%, height: 100%))[
+  Cette slide a un fond coloré uniforme.
   
   Le texte doit rester lisible par-dessus.
 ]
@@ -16,7 +24,8 @@
 #slide(
   title: "Image de fond",
   background: block(width: 100%, height: 100%, {
-    align(center + horizon, image("../assets/logo/sorbonne-univ.png", width: 60%))
+    let logo-path = if theme-choice == "iplesp" { "../assets/iplesp/iplesp.svg" } else { "../assets/sorbonne/sorbonne-univ.png" }
+    align(center + horizon, image(logo-path, width: 60%))
     place(top + left, rect(fill: white.transparentize(50%), width: 100%, height: 100%))
   })
 )[

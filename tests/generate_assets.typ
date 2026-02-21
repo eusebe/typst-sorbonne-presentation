@@ -2,131 +2,90 @@
 
 #set bibliography(style: "apa")
 
-// PPI et dimensions gérées par la CLI
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
 #let comp = sys.inputs.at("component", default: "slide")
 
-#if comp == "faculty-univ" {
-  template(faculty: "univ", title: [Faculty: Univ], author: [John Doe], date: none)[]
-} else if comp == "faculty-sante" {
-  template(faculty: "sante", title: [Faculty: Sante], author: [John Doe], date: none)[]
-} else if comp == "faculty-sciences" {
-  template(faculty: "sciences", title: [Faculty: Sciences], author: [John Doe], date: none)[]
-} else if comp == "faculty-lettres" {
-  template(faculty: "lettres", title: [Faculty: Lettres], author: [John Doe], date: none)[]
-} else if comp == "faculty-univ-dark" {
-  template(faculty: "univ", dark-mode: true, title: [Faculty: Univ (Dark)], author: [John Doe], date: none)[]
-} else if comp == "faculty-sante-dark" {
-  template(faculty: "sante", dark-mode: true, title: [Faculty: Sante (Dark)], author: [John Doe], date: none)[]
-} else if comp == "faculty-sciences-dark" {
-  template(faculty: "sciences", dark-mode: true, title: [Faculty: Sciences (Dark)], author: [John Doe], date: none)[]
-} else if comp == "faculty-lettres-dark" {
-  template(faculty: "lettres", dark-mode: true, title: [Faculty: Lettres (Dark)], author: [John Doe], date: none)[]
-} else if comp == "slide" {
-  show: template.with(title: [Standard Slide], author: [John Doe])
-  slide(title: "Normal Slide Usage", subtitle: "With an optional subtitle")[
+#let template-func = if theme-choice == "iplesp" {
+  iplesp-template.with(
+    theme: if comp.starts-with("theme-") { comp.split("-").at(1) } else { "blue" },
+    dark-mode: comp.contains("-dark"),
+  )
+} else {
+  sorbonne-template.with(
+    faculty: if comp.starts-with("faculty-") { comp.split("-").at(1) } else { "sante" },
+    dark-mode: comp.contains("-dark"),
+  )
+}
+
+#show: template-func.with(
+  title: [Gallery Preview],
+  author: [John Doe],
+)
+
+// Main content logic
+#if comp == "slide" {
+  slide(title: "Normal Slide Usage")[
     - Support for bullet points
     - Automatic layout management
     - Clean and academic style
   ]
 } else if comp == "focus-slide" {
-  show: template.with()
   focus-slide([Impactful Messages], subtitle: "A dedicated layout for key quotes")
 } else if comp == "figure-slide" {
-  show: template.with()
   figure-slide(
-    rect(width: 40%, height: 30%, fill: sorbonne-lightblue, stroke: 1pt + sorbonne-blue),
+    rect(width: 40%, height: 30%, fill: blue.lighten(80%), stroke: 1pt + black),
     title: "Data Visualization",
-    subtitle: "Including figures and charts",
     caption: [A centered figure with caption]
   )
 } else if comp == "equation-slide" {
-  show: template.with()
-  // On place la biblio à la fin pour éviter le décalage (voir fin de fichier)
   equation-slide(
     $ f(x) = 1 / (sigma sqrt(2 pi)) exp(- 1/2 ( (x - mu) / sigma )^2) $,
     title: [Scientific Formulas],
-    subtitle: [The foundation of modern statistics],
-    definitions: [
-      / $mu$: Mean of the distribution
-      / $sigma$: Standard deviation
-    ],
-    citation: (bib-key: "gauss1809", label: "Gaussian Distribution")
+    definitions: [/ $mu$: Mean / $sigma$: SD],
+    citation: (bib-key: "gauss1809", label: "Gauss")
   )
 } else if comp == "acknowledgement-slide" {
-  show: template.with()
   acknowledgement-slide(
     title: "Acknowledgements",
-    subtitle: [Special thanks to our contributors],
     people: ((name: "Prof. Smith", role: "Supervisor"),),
     institutions: ("Sorbonne University", "CNRS"),
   )
 } else if comp == "ending-slide" {
-  show: template.with()
   ending-slide(
-    title: [Thank you for your attention!],
-    subtitle: [Any questions?],
-    contact: ("contact@example.com", "github.com/user")
+    title: [Thank you!],
+    contact: ("contact\@example.com",)
   )
 } else if comp == "helper-text" {
-  show: template.with()
-  slide(title: "Text Helpers", subtitle: "Hierarchy of information")[
-    - #alert[Alert]: for critical information.
-    - #muted[Muted]: for secondary information.
-    - #subtle[Subtle]: for tertiary information.
+  slide(title: "Text Helpers")[
+    - #alert[Alert text]
+    - #muted[Muted text]
+    - #subtle[Subtle text]
   ]
 } else if comp == "layout-2col" {
-  show: template.with()
-  slide(title: "Layout: Two Columns", subtitle: "Balanced content distribution")[
-    #two-col(
-      [#lorem(10)],
-      [#lorem(10)]
-    )
+  slide(title: "Two Columns")[
+    #two-col([Left side content], [Right side content])
   ]
 } else if comp == "layout-3col" {
-  show: template.with()
-  slide(title: "Layout: Three Columns", subtitle: "Complex side-by-side components")[
-    #three-col(
-      [Col A],
-      [Col B],
-      [Col C]
-    )
+  slide(title: "Three Columns")[
+    #three-col([A], [B], [C])
   ]
 } else if comp == "layout-grid2x2" {
-  show: template.with()
-  slide(title: "Layout: 2x2 Grid", subtitle: "Balanced four-quadrant distribution")[
-    #align(center + horizon, grid-2x2(
-      rect(width: 4em, height: 4em, fill: sorbonne-blue),
-      rect(width: 4em, height: 4em, fill: sorbonne-red),
-      rect(width: 4em, height: 4em, fill: sorbonne-lightblue),
-      rect(width: 4em, height: 4em, fill: sorbonne-yellow),
-      columns: (auto, auto),
-      gutter: 1em,
-    ))
+  slide(title: "Grid Layout")[
+    #grid-2x2([1], [2], [3], [4])
   ]
 } else if comp == "boxes" {
-  show: template.with()
-  slide(title: "Boxes & Blocks", subtitle: "Highlighting key information")[
-    #highlight-box(title: "Highlight")[Key points using theme color.]
-    #v(0.5em)
-    #alert-box(title: "Alert", fill-mode: "fill")[Warnings and critical info.]
-    #v(0.5em)
-    #algorithm-box(title: "Algorithm")[
-      + Initialize data
-      + Compute results
-    ]
+  slide(title: "Boxes")[
+    #highlight-box(title: "Note")[Some content]
+    #v(1em)
+    #alert-box(title: "Warning")[Caution]
   ]
 } else if comp == "citations" {
-  show: template.with()
-  slide(title: "Citations Style", subtitle: "Standard and custom corner references")[
-    Inline citations like @smith2023 are automatically highlighted.
-    
-    You can also use corner boxes with custom labels:
-    #cite-box("doe2024", display-label: "Jane Doe (2024)", position: "bottom-right")
+  slide(title: "Citations Style")[
+    Check this @smith2023.
+    #cite-box("doe2024", position: "bottom-right")
   ]
 }
 
-// On place la bibliographie à la fin, elle ne sera pas dans les pages extraites (1 ou 2)
-// mais elle permettra la résolution des citations dans tout le document.
 #context {
   if query(cite).len() > 0 {
     bibliography("refs.bib", title: none)

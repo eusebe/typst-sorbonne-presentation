@@ -1,9 +1,16 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test Long Text Overflow],
   author: [David Hajage],
-  faculty: "univ",
 )
 
 = Long Content Test
@@ -85,11 +92,11 @@
     #slide(title: "Unbalanced Two-Col Overflow", allow-slide-breaks: true)[
       #two-col(
         [
-          *Short Column* \
+          *Short Column* 
           This column fits easily on one slide.
         ],
         [
-          *Long Column* \
+          *Long Column* 
           #lorem(250)
         ]
       )
@@ -113,14 +120,12 @@
 #slide(title: "Long Left Column Overflow", allow-slide-breaks: true)[
   #two-col(
     [
-      *Long Column* \
+      *Long Column* 
       #lorem(250)
     ],
     [
-      *Short Column* \
+      *Short Column* 
       This column fits easily on one slide.
     ]
   )
 ]
-
-  

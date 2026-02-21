@@ -1,13 +1,21 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test Styles de Texte],
   author: [David Hajage],
 )
 
 = Styles de Texte
 #slide[
-  Voici du texte standard (Couleur Sorbonne Text).
+  Voici du texte standard.
 
   Voici une information #alert[importante] (Couleur Alert).
 

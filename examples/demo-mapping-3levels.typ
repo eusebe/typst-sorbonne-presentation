@@ -1,7 +1,23 @@
 #import "../lib.typ": *
 
-#show: template.with(
-  title: [Complex Mapping Guide],
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+#let is-dark = sys.inputs.at("dark", default: "false") == "true"
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with(
+    title: [Complex Mapping Guide],
+    theme: "blue",
+    dark-mode: is-dark,
+  )
+} else {
+  sorbonne-template.with(
+    title: [Complex Mapping Guide],
+    faculty: "univ",
+    dark-mode: is-dark,
+  )
+}
+
+#show: my-template.with(
   subtitle: [Part, Section & Subsection Hierarchy],
   author: [David Hajage],
   // Complex mapping: 3 levels of hierarchy

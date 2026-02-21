@@ -1,12 +1,19 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "univ")
+}
+
+#show: my-template.with(
   title: [An Example Presentation],
   subtitle: [An academic theme for Typst],
   author: [Community Template],
   affiliation: [Sorbonne Université],
-  date: none, // Pas de date
-  faculty: "univ", // Bleu institutionnel par défaut
+  date: none,
 )
 
-// On laisse le corps vide, seule la slide de titre nous intéresse pour la vignette
+// Empty body, only title slide matters for thumbnail

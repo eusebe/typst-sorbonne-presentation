@@ -1,15 +1,23 @@
 #import "../lib.typ": *
 
-#show: template.with(show-outline: true, 
-  title: [Ma Présentation Sorbonne],
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with(faculty: "univ")
+}
+
+#show: my-template.with(
+  show-outline: true, 
+  title: [Ma Présentation Sorbonne/IPLESP],
   subtitle: [Template basé sur presentate],
   author: [David Hajage],
   affiliation: [Sorbonne Université],
-  faculty: "univ",
 )
 
 #slide(title: "Introduction")[
-  Voici une présentation utilisant le nouveau thème Sorbonne.
+  Voici une présentation utilisant le nouveau thème unifié.
   
   - Basé sur `presentate`
   - Utilise `navigator` pour les transitions

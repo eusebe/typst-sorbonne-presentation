@@ -1,32 +1,45 @@
 #!/bin/bash
 
 # Configuration
-SOURCE="typst-sorbonne-presentation/tests/generate_assets.typ"
-OUTPUT_DIR="typst-sorbonne-presentation/assets/docs"
+SOURCE="tests/generate_assets.typ"
+SORBONNE_OUT="assets/sorbonne-docs"
+IPLESP_OUT="assets/iplesp-docs"
 ROOT_DIR="."
 PPI=144
 
-echo "🎨 Generating assets for Sorbonne theme documentation (Smart Page Selection)..."
+echo "🎨 Generating assets for Unified themes documentation..."
 
-mkdir -p "$OUTPUT_DIR"
+mkdir -p "$SORBONNE_OUT"
+mkdir -p "$IPLESP_OUT"
 
-# Liste des composants et fichiers
-COMPS=("faculty-univ" "faculty-sante" "faculty-sciences" "faculty-lettres" "faculty-univ-dark" "faculty-sante-dark" "faculty-sciences-dark" "faculty-lettres-dark" "slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "layout-grid2x2" "boxes" "citations")
-FILES=("faculty-univ.png" "faculty-sante.png" "faculty-sciences.png" "faculty-lettres.png" "faculty-univ-dark.png" "faculty-sante-dark.png" "faculty-sciences-dark.png" "faculty-lettres-dark.png" "component-slide.png" "component-focus-slide.png" "component-figure-slide.png" "component-equation-slide.png" "component-acknowledgement-slide.png" "component-ending-slide.png" "helper-text.png" "layout-2col.png" "layout-3col.png" "layout-grid2x2.png" "component-boxes.png" "component-citation.png")
-
-for i in "${!COMPS[@]}"; do
-    COMP="${COMPS[$i]}"
-    FILENAME="${FILES[$i]}"
-    
-    # Sélection de la page : 1 pour les facultés, 2 pour les composants
-    if [[ $COMP == faculty-* ]]; then
-        PAGE=1
-    else
-        PAGE=2
-    fi
-
-    echo "  → Generating $FILENAME from component '$COMP' (page $PAGE)..."
-    typst compile "$SOURCE" "$OUTPUT_DIR/$FILENAME" --format png --pages "$PAGE" --ppi "$PPI" --root "$ROOT_DIR" --input component="$COMP"
+# 1. Sorbonne Faculty Presets (Page 1: Title Slide)
+FACULTIES=("univ" "sante" "sciences" "lettres")
+for f in "${FACULTIES[@]}"; do
+    echo "  → Sorbonne: faculty-$f"
+    typst compile "$SOURCE" "$SORBONNE_OUT/faculty-$f.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=sorbonne --input component="faculty-$f"
+    typst compile "$SOURCE" "$SORBONNE_OUT/faculty-$f-dark.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=sorbonne --input component="faculty-$f-dark"
 done
 
-echo "✅ All assets generated in $OUTPUT_DIR"
+# 2. IPLESP Theme Presets (Page 1: Title Slide)
+THEMES=("blue" "red" "green" "purple" "yellow" "teal" "orange" "slate")
+for t in "${THEMES[@]}"; do
+    echo "  → IPLESP: theme-$t"
+    typst compile "$SOURCE" "$IPLESP_OUT/theme-$t.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=iplesp --input component="theme-$t"
+    typst compile "$SOURCE" "$IPLESP_OUT/theme-$t-dark.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=iplesp --input component="theme-$t-dark"
+done
+
+# 3. Components (Page 2: Content Slide)
+COMPS=("slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "layout-grid2x2" "boxes" "citations")
+for c in "${COMPS[@]}"; do
+    echo "  → Component: $c"
+    typst compile "$SOURCE" "$SORBONNE_OUT/component-$c.png" --format png --pages 2 --ppi "$PPI" --root "$ROOT_DIR" --input theme=sorbonne --input component="$c"
+done
+
+# Special case for naming consistency in README
+[ -f "$SORBONNE_OUT/component-helper-text.png" ] && mv "$SORBONNE_OUT/component-helper-text.png" "$SORBONNE_OUT/helper-text.png"
+[ -f "$SORBONNE_OUT/component-layout-2col.png" ] && mv "$SORBONNE_OUT/component-layout-2col.png" "$SORBONNE_OUT/layout-2col.png"
+[ -f "$SORBONNE_OUT/component-layout-3col.png" ] && mv "$SORBONNE_OUT/component-layout-3col.png" "$SORBONNE_OUT/layout-3col.png"
+[ -f "$SORBONNE_OUT/component-layout-grid2x2.png" ] && mv "$SORBONNE_OUT/component-layout-grid2x2.png" "$SORBONNE_OUT/layout-grid2x2.png"
+[ -f "$SORBONNE_OUT/component-citations.png" ] && cp "$SORBONNE_OUT/component-citations.png" "$SORBONNE_OUT/component-citation.png"
+
+echo "✅ All assets generated."

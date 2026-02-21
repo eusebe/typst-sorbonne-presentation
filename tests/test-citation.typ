@@ -1,11 +1,16 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test Citations],
   author: [David Hajage],
-  // On teste avec la faculté "univ" (bleu) par défaut, 
-  // mais cela marchera avec "sante" (rouge), etc.
-  faculty: "univ" 
 )
 
 = État de l'art
@@ -16,7 +21,7 @@
   Cependant, une approche purement artistique reste pertinente pour capter l'auditoire @doe2024.
   
   #v(2em)
-  _Note : La couleur de l'encadré suit la couleur principale du thème (ici Bleu Sorbonne)._
+  _Note : La couleur de l'encadré suit la couleur principale du thème._
 
   Autre essai utilisant `#cite(..., form: "prose")` : #cite(<smith2023>, form: "prose")
 ]

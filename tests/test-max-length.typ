@@ -1,6 +1,14 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test de l'option max-length dans le fil d'ariane],
   subtitle: [Vérification du tronquage global et par rôle],
   author: [David Hajage],

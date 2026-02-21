@@ -1,14 +1,29 @@
 #import "../lib.typ": *
 #import "@preview/cetz:0.4.2": canvas, draw
 
-#show: template.with(
-  title: [(Unofficial) Sorbonne Template: Complete Guide],
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+#let is-dark = sys.inputs.at("dark", default: "false") == "true"
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with(
+    title: [(Unofficial) IPLESP Template: Complete Guide],
+    theme: "blue",
+    dark-mode: is-dark,
+  )
+} else {
+  sorbonne-template.with(
+    title: [(Unofficial) Sorbonne Template: Complete Guide],
+    faculty: "univ",
+    dark-mode: is-dark,
+  )
+}
+
+#show: my-template.with(
   subtitle: [Demonstration of all features and components],
   short-title: [Template guide],
   short-author: [D. Hajage],
   author: [David Hajage],
-  affiliation: [Sorbonne University],
-  faculty: "univ",
+  affiliation: [Sorbonne University / IPLESP],
   show-outline: true,
   mapping: (section: 1),
 )
@@ -96,13 +111,14 @@
 #slide(
   title: "Slide with Background",
   background: block(width: 100%, height: 100%, {
-    place(center + horizon, image("../assets/logo/sorbonne-univ.png", width: 40%))
+    let logo-path = if theme-choice == "iplesp" { "../assets/iplesp/iplesp.png" } else { "../assets/sorbonne/sorbonne-univ.png" }
+    place(center + horizon, image(logo-path, width: 40%))
     place(top + left, rect(fill: white.transparentize(50%), width: 100%, height: 100%))
   })
 )[
   You can add a background to any slide using the `background` parameter.
   
-  In this example, we use the university logo with a semi-transparent white overlay to ensure content readability.
+  In this example, we use the institutional logo with a semi-transparent white overlay to ensure content readability.
 ]
 
 // ==========================================
@@ -110,9 +126,9 @@
 // ==========================================
 
 #slide(title: "Institutional Boxes")[
-  #highlight-box(title: "Highlight Box")[Key points using theme blue.]
+  #highlight-box(title: "Highlight Box")[Key points using theme color.]
   #v(0.5em)
-  #alert-box(title: "Alert Box", fill-mode: "fill")[Warnings using theme red.]
+  #alert-box(title: "Alert Box", fill-mode: "fill")[Warnings using alert color.]
   #v(0.5em)
   #example-box(title: "Example Box", fill-mode: "full")[Examples using green.]
 ]
@@ -123,7 +139,7 @@
     + Step 2: Process
   ]
   #v(1em)
-  #themed-block(title: "Themed Block")[Adapts to the chosen faculty color.]
+  #themed-block(title: "Themed Block")[Adapts to the chosen faculty/theme color.]
 ]
 
 // ==========================================
@@ -320,7 +336,7 @@
   
   - *Usage*: Set `dark-mode: true` in the `template` configuration.
   - *Behavior*: Automatically switches background to dark and adjusts text/box colors for optimal contrast.
-  - *Institutional Identity*: Remains compatible with all faculty presets.
+  - *Institutional Identity*: Remains compatible with all preset presets.
 ]
 
 #ending-slide()

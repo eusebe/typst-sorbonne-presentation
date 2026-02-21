@@ -1,11 +1,18 @@
 #import "../lib.typ": *
 
-#show: template.with(
+#let theme-choice = sys.inputs.at("theme", default: "sorbonne")
+
+#let my-template = if theme-choice == "iplesp" {
+  iplesp-template.with()
+} else {
+  sorbonne-template.with()
+}
+
+#show: my-template.with(
   title: [Test Footer Toggle],
   author: [David Hajage],
   footer-author: false,
   footer-title: false,
-  faculty: "univ",
 )
 
 = Test sans auteur ni titre

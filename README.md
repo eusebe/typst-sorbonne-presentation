@@ -1,183 +1,185 @@
-# Sorbonne Presentation Theme
+# Unified Academic Presentation Themes (Sorbonne & IPLESP)
 
-A non-official structured presentation theme designed to match the branding and style guidelines of the Sorbonne University, built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
+A non-official structured presentation toolkit for Typst, providing two institutional themes: **Sorbonne University** and **IPLESP**. Built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
 
 ---
 
 ## Overview
 
-The theme provides academic and institutional slide decks that respect the visual identity of Sorbonne University while offering powerful dynamic features.
+This package offers highly customizable, academic-ready slide decks with a shared core engine. Whether you are presenting for a Sorbonne Faculty or the IPLESP laboratory, you benefit from the same powerful features:
 
-- **Faculty Presets**: Built-in colors and logos for Health, Science, Humanities, and University-wide presentations.
-- **Dark Mode**: Support for dark-themed content slides via the `dark-mode` parameter.
+- **Institutional Identities**: Pre-configured colors and logos for both institutions.
+- **Dark Mode**: Full support for dark-themed slides via the `dark-mode` parameter.
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
 - **Dynamic Content**: Seamless integration of `pause`, `uncover`, and `only` for step-by-step reveals.
 - **Scientific Ready**: Specialized slides for equations, figures, and algorithms.
 
-### 🎨 Faculty Presets
-Switch visual identities instantly using the `faculty` and `dark-mode` parameters:
+---
+
+## 🎨 Sorbonne Theme Presets
+
+Switch between Sorbonne University faculties using the `faculty` and `dark-mode` parameters.
 
 | Mode | Univ | Sante | Sciences | Lettres |
 |:---:|:---:|:---:|:---:|:---:|
-| **Light** | <img src="assets/docs/faculty-univ.png" width="200"> | <img src="assets/docs/faculty-sante.png" width="200"> | <img src="assets/docs/faculty-sciences.png" width="200"> | <img src="assets/docs/faculty-lettres.png" width="200"> |
-| **Dark** | <img src="assets/docs/faculty-univ-dark.png" width="200"> | <img src="assets/docs/faculty-sante-dark.png" width="200"> | <img src="assets/docs/faculty-sciences-dark.png" width="200"> | <img src="assets/docs/faculty-lettres-dark.png" width="200"> |
+| **Light** | <img src="assets/sorbonne-docs/faculty-univ.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sante.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sciences.png" width="200"> | <img src="assets/sorbonne-docs/faculty-lettres.png" width="200"> |
+| **Dark** | <img src="assets/sorbonne-docs/faculty-univ-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sante-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sciences-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-lettres-dark.png" width="200"> |
 
 - `univ`: Sorbonne Blue (University-wide)
 - `sante`: Sorbonne Red (Faculty of Health)
 - `sciences`: Sorbonne Light Blue (Faculty of Science & Engineering)
 - `lettres`: Sorbonne Yellow/Ocre (Faculty of Humanities)
 
-## Logo Customization
+---
 
-You can easily replace the default institutional logos with your own by using the following parameters in the `template` function.
+## 🎨 IPLESP Theme Presets
 
-### `logo-transition` (Monochrome/White version)
-This logo is used on **solid theme-colored backgrounds**. For best results, use a white or high-contrast monochrome version of your logo.
-It appears on:
-- The **Title Slide** (bottom right).
-- All **Transition Slides** (Parts, Sections, Subsections) in the top left.
-- **Focus Slides** and the **Ending Slide**.
+The IPLESP theme provides multiple color variants via the `theme` parameter. It features a modern header with a logo bar (Inserm, IPLESP, Sorbonne Health).
 
-### `logo-slide` (Color version)
-This logo is used on **standard slides** (white background). Use your full-color logo here.
-It appears in the **Header** of every content slide, next to the title.
+| Mode | Blue | Red | Green | Purple |
+|:---:|:---:|:---:|:---:|:---:|
+| **Light** | <img src="assets/iplesp-docs/theme-blue.png" width="200"> | <img src="assets/iplesp-docs/theme-red.png" width="200"> | <img src="assets/iplesp-docs/theme-green.png" width="200"> | <img src="assets/iplesp-docs/theme-purple.png" width="200"> |
+| **Dark** | <img src="assets/iplesp-docs/theme-blue-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-red-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-green-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-purple-dark.png" width="200"> |
 
-**Example:**
-```typ
-#show: template.with(
-  logo-slide: "assets/my-logo-color.png",
-  logo-transition: "assets/my-logo-white.png",
-)
-```
+*Other available colors: `yellow`, `teal`, `orange`, `slate`.*
 
-## Documentation
-
-For a comprehensive visual tour of all components and features, please refer to the pre-compiled PDF documentation:
-
-- **[Main Demo Guide](examples/demo.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo.pdf)): All components, boxes, and slide types.
-- **[2-Levels Mapping Guide](examples/demo-mapping-2levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo-mapping-2levels.pdf)): Using Section/Subsection hierarchy.
-- **[3-Levels Mapping Guide](examples/demo-mapping-3levels.typ)** (⇒ [pdf results](https://github.com/eusebe/typst-sorbonne-presentation/blob/0.1.1/examples/demo-mapping-3levels.pdf)): Using Part/Section/Subsection hierarchy.
+---
 
 ## Quick Start
 
+### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-presentation:0.1.1": *
+#import "@preview/sorbonne-iplesp-presentation:0.1.0": sorbonne-template, slide
 
-#show: template.with(
-  title: [Scientific Discovery],
+#show: sorbonne-template.with(
+  title: [Academic Discovery],
   author: [John Doe],
   faculty: "sciences",
-  show-outline: true,
 )
 
 = Introduction
 #slide[
-  - High performance
-  - Intuitive syntax
+  - High performance Typst engine
   #show: pause
-  - *Dynamic* animations
+  - Custom Sorbonne styling
 ]
-
-#ending-slide()
 ```
+
+### For IPLESP
+```typ
+#import "@preview/sorbonne-iplesp-presentation:0.1.0": iplesp-template, slide
+
+#show: iplesp-template.with(
+  title: [Epidemiological Study],
+  author: [Jane Smith],
+  theme: "teal",
+)
+
+= Methodology
+#slide[
+  Research conducted at Laboratory...
+]
+```
+
+---
+
+## Logo Customization
+
+You can easily replace the institutional logos with your own by using the following parameters.
+
+### `logo-transition` (Monochrome/White version)
+Used on **solid theme-colored backgrounds**.
+- **Sorbonne**: Title slide (bottom right), Transitions (top left), Focus & Ending slides.
+- **IPLESP**: Title & Special slides (top left logo bar).
+
+### `logo-slide` (Color version)
+Used on **standard slides** (white background).
+- **Sorbonne**: Header next to title.
+- **IPLESP**: Top-left corner of the logo bar.
+
+---
 
 ## Configuration Reference
 
-### The `template` function
+### Common Parameters
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `title` | content | `none` | Main presentation title |
-| `short-title` | content | `none` | Short version of title for footer |
+| `short-title` | content | `none` | Short version for footer |
 | `subtitle` | content | `none` | Optional subtitle |
 | `author` | content | `none` | Presenter's name |
-| `short-author` | content | `none` | Short version of author for footer |
+| `short-author` | content | `none` | Short version for footer |
 | `affiliation` | content | `none` | Department or Laboratory |
 | `date` | content | `datetime...` | Custom date display |
-| `faculty` | string | `"sante"` | Preset: `"sante"`, `"sciences"`, `"lettres"`, `"univ"` |
-| `primary-color` | color | `none` | Manual override for theme color |
-| `alert-color` | color | `none` | Manual override for alert text color |
-| `logo-slide` | string | `none` | Path to custom logo for content slides |
-| `logo-transition` | string | `none` | Path to custom logo for transition slides |
-| `text-font` | string | `"Fira Sans"` | Main font family |
-| `text-size` | length | `20pt` | Base text size |
-| `aspect-ratio` | string | `"16-9"` | `"16-9"` or `"4-3"` |
-| `show-outline` | bool | `false` | Toggle summary slide |
-| `outline-title` | content | `[Sommaire]` | Title of the summary slide |
-| `outline-depth` | int | `2` | Levels shown in summary |
-| `outline-columns` | int | `1` | Number of columns for summary |
-| `mapping` | dict | `(sec: 1, sub: 2)` | Logic mapping for headings |
-| `auto-title` | bool | `true` | Use section name as slide title if none provided |
-| `show-header-numbering` | bool | `true` | Toggle all heading numbers |
-| `numbering-format` | string | `"1.1"` | Format for sections and subsections |
-| `part-numbering-format` | string | `"I"` | Format for parts |
-| `annex-title` | content | `[Annexe]` | Prefix for single appendix |
-| `annex-main-title` | content | `[Annexes]` | Focus slide text for appendix start |
-| `annex-numbering-format` | string | `"I"` | Numbering style for appendices |
-| `bib-style` | string | `"apa"` | Bibliography and citation style |
-| `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
-| `slide-break-suffix` | content | `[ (cont.)]` | Suffix appended to titles on broken slides |
-| `footer-author` | bool | `true` | Toggle author display in footer |
-| `footer-title` | bool | `true` | Toggle title display in footer |
-| `max-length` | int \| dict | `none` | Max length for breadcrumb titles before truncation |
 | `dark-mode` | bool | `false` | Enable dark theme for content slides |
+| `aspect-ratio` | string | `"16-9"` | `"16-9"` or `"4-3"` |
+| `text-size` | length | `20pt` | Base text size |
+| `show-outline` | bool | `false` | Toggle summary slide |
+| `mapping` | dict | `(sec: 1, sub: 2)` | Logic mapping for headings |
+| `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
+
+### Theme-Specific Parameters
+
+- **Sorbonne (`sorbonne-template`)**:
+  - `faculty`: `"univ"`, `"sante"`, `"sciences"`, `"lettres"`.
+  - `text-font`: Default `"Fira Sans"`.
+- **IPLESP (`iplesp-template`)**:
+  - `theme`: `"blue"`, `"red"`, `"yellow"`, `"green"`, `"teal"`, `"purple"`, `"orange"`, `"slate"`.
+  - `text-font`: Default `"Lato"`.
+
+---
 
 ## Component Reference
 
+*Illustrated with Sorbonne Theme.*
+
 ### Slide Types
 - `#slide(title: none, subtitle: none, allow-slide-breaks: false, background: none, body)`: Standard content slide.
-  - `allow-slide-breaks`: If `true`, allows content to overflow onto multiple slides. A suffix (defined by `slide-break-suffix`) is automatically appended to the title from the second page. *Note: This feature is incompatible with dynamic animations like `#pause`.*
-  - `background`: Optional content (e.g., an image) to display behind the slide content.
-  ![Slide](assets/docs/component-slide.png)
-- `#slide-break()`: Manually forces a page break within a slide. *Note: Only works when `allow-slide-breaks: true` is set on the `#slide()`.*
+  ![Slide](assets/sorbonne-docs/component-slide.png)
 - `#focus-slide(body, subtitle: none)`: Highlight slide on solid theme background.
-  ![Focus Slide](assets/docs/component-focus-slide.png)
-- `#figure-slide(fig, title: none, subtitle: none, caption: none, ..)`: Centered figure slide.
-  ![Figure Slide](assets/docs/component-figure-slide.png)
-- `#equation-slide(equation, title: none, subtitle: none, definitions: none, citation: none, ..)`: Large equation with "signature" citation.
-  ![Equation Slide](assets/docs/component-equation-slide.png)
-- `#acknowledgement-slide(title: none, subtitle: none, people: (), institutions: (), ..)`: Thank-you slide.
-  ![Acknowledgement Slide](assets/docs/component-acknowledgement-slide.png)
-- `#ending-slide(title: none, subtitle: none, contact: ())`: Closing slide with contact information.
-  ![Ending Slide](assets/docs/component-ending-slide.png)
+  ![Focus Slide](assets/sorbonne-docs/component-focus-slide.png)
+- `#figure-slide(fig, title: none, caption: none, ..)`: Centered figure slide.
+  ![Figure Slide](assets/sorbonne-docs/component-figure-slide.png)
+- `#equation-slide(equation, title: none, definitions: none, citation: none, ..)`: Large equation with "signature".
+  ![Equation Slide](assets/sorbonne-docs/component-equation-slide.png)
+- `#acknowledgement-slide(people: (), institutions: (), ..)`: Thank-you slide.
+  ![Acknowledgement Slide](assets/sorbonne-docs/component-acknowledgement-slide.png)
+- `#ending-slide(title: none, subtitle: none, contact: ())`: Closing slide.
+  ![Ending Slide](assets/sorbonne-docs/component-ending-slide.png)
 
 ### Text Helpers
-- `#alert[text]`: Highlighted bold text.
+- `#alert[text]`: Highlighted bold text in primary color.
 - `#muted[text]`: Gray secondary text.
 - `#subtle[text]`: Light gray tertiary text.
+![Text Helpers](assets/sorbonne-docs/helper-text.png)
 
-![Text Helpers](assets/docs/helper-text.png)
-
-### Citations & References
+### Citations
 - Inline and corner citations.
   `#cite-box("smith2023", position: "bottom-right")`
-  ![Citations](assets/docs/component-citation.png)
+  ![Citations](assets/sorbonne-docs/component-citations.png)
 
 ### Layout & Boxes
-- `#two-col(left, right, columns: (1fr, 1fr), gutter: 2em)`: Balanced columns.
-  ![Layout 2-col](assets/docs/layout-2col.png)
-- `#three-col(left, center, right, ..)`: Three column layout.
-  ![Layout 3-col](assets/docs/layout-3col.png)
-- `#grid-2x2(tl, tr, bl, br, ..)`: Four-quadrant grid layout.
-  ![Layout Grid-2x2](assets/docs/layout-grid2x2.png)
-- **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`, or `"transparent"`).
-  ![Boxes](assets/docs/component-boxes.png)
+- `#two-col(left, right, columns: (1fr, 1fr))`: Balanced columns.
+  ![Layout 2-col](assets/sorbonne-docs/layout-2col.png)
+- `#three-col(left, center, right)`: Three column layout.
+  ![Layout 3-col](assets/sorbonne-docs/layout-3col.png)
+- `#grid-2x2(tl, tr, bl, br)`: Four-quadrant grid layout.
+  ![Layout Grid-2x2](assets/sorbonne-docs/layout-grid2x2.png)
+- **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`).
+  ![Boxes](assets/sorbonne-docs/component-boxes.png)
   - `#highlight-box(title, body)`: Blue university-styled box for key points.
   - `#alert-box(title, body)`: Red cautionary box for warnings.
   - `#example-box(title, body)`: Green academic box for examples.
-  - `#algorithm-box(title, body)`: Monospace box for algorithmic logic.
-  - `#themed-block(title, body)`: Box automatically matching the faculty color.
+  - `#algorithm-box(title, body)`: Monospace box for code/logic.
+  - `#themed-block(title, body)`: Box automatically matching the theme color.
+
+---
 
 ## Credits
 
 - **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator).
-- **Inspiration**: Layout features and component designs were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme. A special thanks to its author for the high-quality design inspiration.
-
-## Changelog
-
-### v0.1.1
-- **Fix**: Improved `max-length` option. It now automatically maps role names (`part`, `section`, `subsection`) to their corresponding heading levels for breadcrumb truncation.
-- **Maintenance**: Minor internal optimizations.
+- **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
 
 ## License
 
