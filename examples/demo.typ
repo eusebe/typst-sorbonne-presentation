@@ -292,8 +292,10 @@
       
       *Visual Identity*
       - `faculty`: `"univ"` (default), `"sante"`, `"sciences"`, `"lettres"`.
+      - `theme` (IPLESP): `"blue"`, `"red"`, `"green"`, etc.
       - `primary-color` / `alert-color`: Manual hex/rgb overrides.
       - `logo-slide` / `logo-transition`: Image paths.
+      - `logo-left` / `logo-center` / `logo-right`: IPLESP header bar.
       
       *Typography & Global*
       - `text-font` / `text-size`: e.g., `"Fira Sans"`, `20pt`.

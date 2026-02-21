@@ -1,22 +1,19 @@
 # Unified Academic Presentation Themes (Sorbonne & IPLESP)
 
-A non-official structured presentation toolkit for Typst, providing two institutional themes: **Sorbonne University** and **IPLESP**. Built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
+A non-official structured presentation template for Typst, providing two institutional themes: [**Sorbonne University**](https://www.sorbonne-universite.fr/) and [**IPLESP**](https://www.iplesp.fr/). Built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
 
 ---
 
 ## Overview
 
-This package offers highly customizable, academic-ready slide decks with a shared core engine. Whether you are presenting for a Sorbonne Faculty or the IPLESP laboratory, you benefit from the same powerful features:
+This package offers customizable, academic-ready slide decks with a shared core engine. Whether you are presenting for a Sorbonne Faculty or the IPLESP institute, you benefit from the same powerful features:
 
 - **Institutional Identities**: Pre-configured colors and logos for both institutions.
 - **Dark Mode**: Full support for dark-themed slides via the `dark-mode` parameter.
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
 - **Dynamic Content**: Seamless integration of `pause`, `uncover`, and `only` for step-by-step reveals.
-- **Scientific Ready**: Specialized slides for equations, figures, and algorithms.
 
----
-
-## 🎨 Sorbonne Theme Presets
+## Sorbonne Theme Presets
 
 Switch between Sorbonne University faculties using the `faculty` and `dark-mode` parameters.
 
@@ -32,7 +29,7 @@ Switch between Sorbonne University faculties using the `faculty` and `dark-mode`
 
 ---
 
-## 🎨 IPLESP Theme Presets
+## IPLESP Theme Presets
 
 The IPLESP theme provides multiple color variants via the `theme` parameter. It features a modern header with a logo bar (Inserm, IPLESP, Sorbonne Health).
 
@@ -49,7 +46,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-iplesp-presentation:0.1.0": sorbonne-template, slide
+#import "@preview/sorbonne-presentation:0.2.0": sorbonne-template, slide
 
 #show: sorbonne-template.with(
   title: [Academic Discovery],
@@ -67,7 +64,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For IPLESP
 ```typ
-#import "@preview/sorbonne-iplesp-presentation:0.1.0": iplesp-template, slide
+#import "@preview/sorbonne-presentation:0.2.0": iplesp-template, slide
 
 #show: iplesp-template.with(
   title: [Epidemiological Study],
@@ -87,15 +84,23 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 You can easily replace the institutional logos with your own by using the following parameters.
 
+### IPLESP Logo Slots
+The IPLESP theme features a three-logo bar in the header. You can customize each slot individually:
+- **`logo-left`** / **`logo-left-transition`**: Replaces the Inserm logo.
+- **`logo-center`** / **`logo-center-transition`**: Replaces the IPLESP logo.
+- **`logo-right`** / **`logo-right-transition`**: Replaces the Sorbonne Health logo.
+
+If you provide **`logo-slide`**, it will override the entire three-logo bar with a single centered logo.
+
 ### `logo-transition` (Monochrome/White version)
 Used on **solid theme-colored backgrounds**.
 - **Sorbonne**: Title slide (bottom right), Transitions (top left), Focus & Ending slides.
-- **IPLESP**: Title & Special slides (top left logo bar).
+- **IPLESP**: Title & Special slides (top right logo bar). Also used as fallback for `logo-left-transition`, etc.
 
 ### `logo-slide` (Color version)
 Used on **standard slides** (white background).
 - **Sorbonne**: Header next to title.
-- **IPLESP**: Top-left corner of the logo bar.
+- **IPLESP**: Overrides the entire logo bar if provided. Otherwise, individual slots are used.
 
 ---
 
@@ -127,6 +132,8 @@ Used on **standard slides** (white background).
 - **IPLESP (`iplesp-template`)**:
   - `theme`: `"blue"`, `"red"`, `"yellow"`, `"green"`, `"teal"`, `"purple"`, `"orange"`, `"slate"`.
   - `text-font`: Default `"Lato"`.
+  - `logo-left`, `logo-center`, `logo-right`: Individual logo slots for the header bar.
+  - `logo-left-transition`, `logo-center-transition`, `logo-right-transition`: Monochrome versions for dark backgrounds.
 
 ---
 
@@ -180,6 +187,16 @@ Used on **standard slides** (white background).
 
 - **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator).
 - **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
+
+## Changelog
+
+### v0.2.0
+- **New template**: the IPLESP template was added, with the same features than the already available Sorbonne template
+- **Dark mode**: all themes of all templates has a new dark-mode parameter
+
+### v0.1.1
+- **Fix**: Improved `max-length` option. It now automatically maps role names (`part`, `section`, `subsection`) to their corresponding heading levels for breadcrumb truncation.
+- **Maintenance**: Minor internal optimizations.
 
 ## License
 

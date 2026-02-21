@@ -20,12 +20,24 @@
   } else {
     let suffix = if conf.dark-mode { "-white" } else { "" }
     
+    let get-logo(key, def-path) = {
+      let trans-key = key + "-transition"
+      if conf.dark-mode {
+        if conf.at(trans-key, default: none) != none { conf.at(trans-key) }
+        else if conf.at(key, default: none) != none { conf.at(key) }
+        else { image("../../assets/iplesp/" + def-path + "-white.png", height: 2.2em) }
+      } else {
+        if conf.at(key, default: none) != none { conf.at(key) }
+        else { image("../../assets/iplesp/" + def-path + ".png", height: 2.2em) }
+      }
+    }
+
     grid(
       columns: (1fr, 1fr, 1fr),
       align: horizon,
-      align(left, image("../../assets/iplesp/inserm" + suffix + ".png", height: 2.2em)),
-      align(center, image("../../assets/iplesp/iplesp" + suffix + ".png", height: 2.2em)),
-      align(right, image("../../assets/iplesp/iplesp-sante" + suffix + ".png", height: 2.2em))
+      align(left, set-logo(get-logo("logo-left", "inserm"), height: 2.2em)),
+      align(center, set-logo(get-logo("logo-center", "iplesp"), height: 2.2em)),
+      align(right, set-logo(get-logo("logo-right", "iplesp-sante"), height: 2.2em))
     )
   }
 }
@@ -131,6 +143,12 @@
   alert-color: none,
   logo-slide: none,
   logo-transition: none,
+  logo-left: none,
+  logo-center: none,
+  logo-right: none,
+  logo-left-transition: none,
+  logo-center-transition: none,
+  logo-right-transition: none,
   show-header-numbering: true,
   numbering-format: "1.1",
   part-title: [Partie],
@@ -220,6 +238,12 @@
     alert-color: final-alert,
     logo-transition: final-logo-transition,
     logo-slide: final-logo-slide,
+    logo-left: if type(logo-left) == str { image(logo-left) } else { logo-left },
+    logo-center: if type(logo-center) == str { image(logo-center) } else { logo-center },
+    logo-right: if type(logo-right) == str { image(logo-right) } else { logo-right },
+    logo-left-transition: if type(logo-left-transition) == str { image(logo-left-transition) } else { logo-left-transition },
+    logo-center-transition: if type(logo-center-transition) == str { image(logo-center-transition) } else { logo-center-transition },
+    logo-right-transition: if type(logo-right-transition) == str { image(logo-right-transition) } else { logo-right-transition },
     show-header-numbering: show-header-numbering,
     numbering-format: numbering-format,
     part-numbering-format: part-numbering-format,
