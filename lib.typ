@@ -5,4 +5,4 @@
 // Aliases pour la commodité (par défaut vers Sorbonne car c'est le plus ancien)
 #let template = sorbonne-template
 
-#import "@preview/presentate:0.2.4": pause, uncover, only, fragments, step-item
+#import "@preview/presentate:0.2.4": pause, uncover, only, fragments, step-item, pdfpc

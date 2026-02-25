@@ -50,7 +50,7 @@
   ```
 ]
 
-#slide(title: "Current Compilation State")[
+#slide(title: "Current Compilation State", allow-slide-breaks: true)[
   *Current settings used to generate this PDF:*
 
   - Theme: #highlight-box(fill-mode: "fill", theme-choice)
