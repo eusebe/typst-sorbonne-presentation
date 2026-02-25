@@ -171,6 +171,7 @@
   max-length: none,
   use-short-title: false,
   dark-mode: false,
+  handout: false,
   body
 ) = {
   let (def-primary, def-alert) = if theme == "red" {
@@ -267,6 +268,7 @@
     max-length: resolved-max-length,
     use-short-title: use-short-title,
     dark-mode: dark-mode,
+    handout: handout,
     // Customization for IPLESP
     margin-top: 5.5em,
     header-inset-top: 0.2em,

@@ -120,6 +120,7 @@
   max-length: none,
   use-short-title: false,
   dark-mode: false,
+  handout: false,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -213,6 +214,7 @@
     max-length: resolved-max-length,
     use-short-title: use-short-title,
     dark-mode: dark-mode,
+    handout: handout,
     header-func: sorbonne-header,
     // Title and Ending slides
     title-slide-func: sorbonne-title-slide,

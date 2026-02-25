@@ -809,7 +809,8 @@
   body
 ) = {
   config-state.update(c => conf)
-  
+  p.set-options(handout: conf.at("handout", default: false))
+
   nav.navigator-config.update(c => {
     c.mapping = conf.mapping
     c.auto-title = conf.auto-title
