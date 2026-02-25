@@ -7,8 +7,15 @@
 #let last-main-page = state("last-main-page", none)
 #let logical-slide-counter = counter("uni-pres-logical-slide")
 #let appendix-state = state("uni-pres-appendix", false)
+#let note-state = state("uni-pres-notes", none)
 
 // --- Composants ---
+
+#let note(body) = {
+  note-state.update(old => {
+    if old == none { body } else { old + parbreak() + body }
+  })
+}
 
 #let progress-bar-line() = context {
   let conf = config-state.get()
@@ -322,6 +329,30 @@
   )
 }
 
+#let render-note-slide(conf, slide-title, body) = {
+  let bg = if conf.dark-mode { conf.at("dark-bg", default: rgb("#21232c")) } else { white }
+  
+  empty-slide(fill: bg, count: false, {
+    let txt-color = if conf.dark-mode { white } else { conf.text-color }
+    set text(fill: txt-color)
+    
+    block(width: 100%, inset: (x: 2.5em, top: 2em, bottom: 0.5em), {
+      text(size: 0.8em, fill: conf.primary-color, weight: "bold", smallcaps[Notes])
+      if slide-title != none {
+        text(size: 0.8em, weight: "bold", " : " + slide-title)
+      }
+      v(-0.5em)
+      line(length: 100%, stroke: 0.5pt + conf.primary-color)
+    })
+    
+    block(width: 100%, inset: (x: 2.5em, y: 1em), {
+      set text(size: 0.8em)
+      set par(justify: true)
+      body
+    })
+  })
+}
+
 // --- API ---
 
 #let slide(..args) = {
@@ -345,6 +376,7 @@
   [
     #if count { logical-slide-counter.step() }
     #p.slide(..clean-named, {
+      note-state.update(none)
       if background != none {
         context {
           let conf = config-state.get()
@@ -356,6 +388,15 @@
       [#metadata((title: manual-title, subtitle: subtitle, allow-slide-breaks: allow-slide-breaks, is-special: is-special)) <uni-pres-slide-start>]
       apply-layout(breakable: allow-slide-breaks, body)
     })
+    #context {
+      let conf = config-state.get()
+      if conf != none and conf.at("handout", default: false) {
+        let n = note-state.get()
+        if n != none {
+          render-note-slide(conf, manual-title, n)
+        }
+      }
+    }
   ]
 }
 
