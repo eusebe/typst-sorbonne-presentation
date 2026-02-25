@@ -48,8 +48,11 @@
   # For Handout version (with notes)
   typst compile demo.typ --input handout=true
   ```
+]
 
-  *Current settings:*
+#slide(title: "Current Compilation State")[
+  *Current settings used to generate this PDF:*
+
   - Theme: #highlight-box(fill-mode: "fill", theme-choice)
   - Mode: #highlight-box(fill-mode: "fill", if is-dark [Dark] else [Light])
   - Handout: #highlight-box(fill-mode: "fill", if handout-mode [ON] else [OFF])
