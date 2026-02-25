@@ -50,12 +50,11 @@
   ```
 ]
 
-#slide(title: "Current Compilation State", allow-slide-breaks: true)[
-  *Current settings used to generate this PDF:*
+#slide(title: "Current settings used to generate this PDF", allow-slide-breaks: true)[
 
-  - Theme: #highlight-box(fill-mode: "fill", theme-choice)
-  - Mode: #highlight-box(fill-mode: "fill", if is-dark [Dark] else [Light])
-  - Handout: #highlight-box(fill-mode: "fill", if handout-mode [ON] else [OFF])
+  #highlight-box(title: "Theme", fill-mode: "fill", theme-choice)
+  #highlight-box(title: "Mode", fill-mode: "fill", if is-dark [Dark] else [Light])
+  #highlight-box(title: "Handout", fill-mode: "fill", if handout-mode [ON] else [OFF])
 ]
 
 // ==========================================
@@ -149,6 +148,14 @@
   You can add a background to any slide using the `background` parameter.
   
   In this example, we use the institutional logo with a semi-transparent white overlay to ensure content readability.
+]
+
+#slide(title: "Dark Mode Support")[
+  The template includes a built-in dark mode for content slides.
+  
+  - *Usage*: Set `dark-mode: true` in the `template` configuration.
+  - *Behavior*: Automatically switches background to dark and adjusts text/box colors for optimal contrast.
+  - *Institutional Identity*: Remains compatible with all preset presets.
 ]
 
 // ==========================================
@@ -353,13 +360,13 @@
       - `theme` (IPLESP): `"blue"`, `"red"`, `"green"`, etc.
       - `primary-color` / `alert-color`: Manual hex/rgb overrides.
       - `logo-slide` / `logo-transition`: Image paths.
-      - `logo-left` / `logo-center` / `logo-right`: IPLESP header bar.
-      
+      - `logo-left` / `logo-center` / `logo-right`: IPLESP header bar.      
+    ],
+    [
       *Typography & Global*
       - `text-font` / `text-size`: e.g., `"Fira Sans"`, `20pt`.
       - `aspect-ratio`: `"16-9"` or `"4-3"`.
-    ],
-    [
+
       *Outline (TOC)*
       - `show-outline`: Toggle summary slide.
       - `outline-title`: Title of the TOC.
@@ -390,14 +397,6 @@
   - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
   - `dark-mode`: Boolean. Enable dark theme for content slides.
   - `handout`: Boolean. Enable handout mode (static slides + physical notes).
-]
-
-#slide(title: "Dark Mode Support")[
-  The template includes a built-in dark mode for content slides.
-  
-  - *Usage*: Set `dark-mode: true` in the `template` configuration.
-  - *Behavior*: Automatically switches background to dark and adjusts text/box colors for optimal contrast.
-  - *Institutional Identity*: Remains compatible with all preset presets.
 ]
 
 #ending-slide()
