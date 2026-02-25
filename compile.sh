@@ -10,18 +10,23 @@ cd "$(dirname "$0")"
 EXAMPLES_DIR="examples"
 TEST_DIR="tests"
 
-# 1. Démos principales (en 4 variantes : Sorbonne/IPLESP x Light/Dark)
+# 1. Démos principales (en 8 variantes : Sorbonne/IPLESP x Light/Dark x Normal/Handout)
 echo "--- Compiling Demos ---"
 for theme in sorbonne iplesp; do
     for dark in false true; do
+        for handout in false true; do
+            suffix=""
+            [ "$dark" == "true" ] && suffix="$suffix-dark"
+            [ "$handout" == "true" ] && suffix="$suffix-handout"
+            echo "  → $theme$suffix"
+            
+            # Demo principale
+            typst compile --root .. "$EXAMPLES_DIR/demo.typ" --input theme=$theme --input dark=$dark --input handout=$handout "$EXAMPLES_DIR/demo-$theme$suffix.pdf"
+        done
+
+        # Mappings (seulement en mode normal)
         suffix=""
         [ "$dark" == "true" ] && suffix="-dark"
-        echo "  → $theme$suffix"
-        
-        # Demo principale
-        typst compile --root .. "$EXAMPLES_DIR/demo.typ" --input theme=$theme --input dark=$dark "$EXAMPLES_DIR/demo-$theme$suffix.pdf"
-        
-        # Mappings
         typst compile --root .. "$EXAMPLES_DIR/demo-mapping-2levels.typ" --input theme=$theme --input dark=$dark "$EXAMPLES_DIR/demo-mapping-2levels-$theme$suffix.pdf"
         typst compile --root .. "$EXAMPLES_DIR/demo-mapping-3levels.typ" --input theme=$theme --input dark=$dark "$EXAMPLES_DIR/demo-mapping-3levels-$theme$suffix.pdf"
     done

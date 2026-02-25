@@ -331,18 +331,19 @@
 
 #let render-note-slide(conf, slide-title, body) = {
   let bg = if conf.dark-mode { conf.at("dark-bg", default: rgb("#21232c")) } else { white }
+  let accent-color = conf.marker-color
   
   empty-slide(fill: bg, count: false, {
     let txt-color = if conf.dark-mode { white } else { conf.text-color }
     set text(fill: txt-color)
     
     block(width: 100%, inset: (x: 2.5em, top: 2em, bottom: 0.5em), {
-      text(size: 0.8em, fill: conf.primary-color, weight: "bold", smallcaps[Notes])
+      text(size: 0.8em, fill: accent-color, weight: "bold", smallcaps[Notes])
       if slide-title != none {
         text(size: 0.8em, weight: "bold", " : " + slide-title)
       }
       v(-0.5em)
-      line(length: 100%, stroke: 0.5pt + conf.primary-color)
+      line(length: 100%, stroke: 0.5pt + accent-color)
     })
     
     block(width: 100%, inset: (x: 2.5em, y: 1em), {
