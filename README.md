@@ -136,6 +136,7 @@ Used on **standard slides** (white background).
 | `affiliation` | content | `none` | Department or Laboratory |
 | `date` | content | `datetime...` | Custom date display |
 | `dark-mode` | bool | `false` | Enable dark theme for content slides |
+| `handout` | bool | `false` | Disable animations and enable physical notes pages |
 | `aspect-ratio` | string | `"16-9"` | `"16-9"` or `"4-3"` |
 | `text-size` | length | `20pt` | Base text size |
 | `show-outline` | bool | `false` | Toggle summary slide |
@@ -201,12 +202,39 @@ Used on **standard slides** (white background).
 
 ---
 
+## Handout Mode & Notes
+
+This package provides a dedicated **Handout Mode** (`handout: true`) designed for printing or distributing a static version of your presentation.
+
+- **Animations Disabled**: All dynamic content (`pause`, `uncover`, `only`, etc.) is shown immediately on a single page per logical slide.
+- **Physical Notes Pages**: When `handout` is enabled, any content provided via the `#note(body)` function will be rendered on a **new, dedicated page** following the corresponding slide. 
+
+```typ
+#slide(title: "My Slide")[
+  Main content...
+  
+  #note[
+    Additional details, references, or explanations 
+    that should only appear in the handout version.
+  ]
+]
+```
+
+Multiple calls to `#note()` within the same slide will be concatenated, separated by a paragraph break.
+
+---
+
 ## Credits
 
 - **Underlying Packages**: Built with [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator).
 - **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
 
 ## Changelog
+
+### v0.3.0
+- **Native Handout Support**: Integrated `presentate`'s native handout mode.
+- **Physical Notes**: Added `#note()` function to generate dedicated notes pages in handout mode.
+- **Improved Notes Separation**: Successive calls to `#note()` are now separated by paragraph breaks.
 
 ### v0.2.0
 - **New template**: the IPLESP template was added, with the same features than the already available Sorbonne template

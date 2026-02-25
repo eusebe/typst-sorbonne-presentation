@@ -3,18 +3,21 @@
 
 #let theme-choice = sys.inputs.at("theme", default: "sorbonne")
 #let is-dark = sys.inputs.at("dark", default: "false") == "true"
+#let handout-mode = sys.inputs.at("handout", default: "false") == "true"
 
 #let my-template = if theme-choice == "iplesp" {
   iplesp-template.with(
     title: [(Unofficial) IPLESP Template: Complete Guide],
     theme: "blue",
     dark-mode: is-dark,
+    handout: handout-mode,
   )
 } else {
   sorbonne-template.with(
     title: [(Unofficial) Sorbonne Template: Complete Guide],
     faculty: "univ",
     dark-mode: is-dark,
+    handout: handout-mode,
   )
 }
 
@@ -41,11 +44,15 @@
 
   # For IPLESP (Dark mode)
   typst compile demo.typ --input theme=iplesp --input dark=true
+
+  # For Handout version (with notes)
+  typst compile demo.typ --input handout=true
   ```
 
   *Current settings:*
   - Theme: #highlight-box(fill-mode: "fill", theme-choice)
   - Mode: #highlight-box(fill-mode: "fill", if is-dark [Dark] else [Light])
+  - Handout: #highlight-box(fill-mode: "fill", if handout-mode [ON] else [OFF])
 ]
 
 // ==========================================
@@ -279,6 +286,34 @@
 ]
 
 // ==========================================
+= Handout Mode & Notes
+// ==========================================
+
+#slide(title: "Handout Principles")[
+  The `handout: true` option is designed for printing. It affects the document in two ways:
+  
+  1. *Animation removal*: All step-by-step contents (`pause`, `uncover`, `only`, `fragments`) are rendered simultaneously on a single page.
+  2. *Notes rendering*: Enables the display of physical notes pages.
+]
+
+#slide(title: "Using the note function")[
+  You can attach notes to any slide using the `#note()` function. 
+  
+  - In *Normal* mode: Notes are invisible.
+  - In *Handout* mode: Notes are gathered and displayed on a separate page after the slide.
+  
+  #note[
+    This is an example of a note. 
+    
+    If you are viewing the handout version of this PDF, you should see this text on the following page, with a clean layout and a reference to this slide's title.
+  ]
+  
+  #note[
+    Multiple calls to the note function are automatically separated by paragraph breaks.
+  ]
+]
+
+// ==========================================
 = Template Configuration
 // ==========================================
 
@@ -351,6 +386,7 @@
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
   - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
   - `dark-mode`: Boolean. Enable dark theme for content slides.
+  - `handout`: Boolean. Enable handout mode (static slides + physical notes).
 ]
 
 #slide(title: "Dark Mode Support")[
