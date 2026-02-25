@@ -90,11 +90,15 @@ typst compile examples/demo.typ --input theme=sorbonne
 
 # Compile for IPLESP (Dark)
 typst compile examples/demo.typ --input theme=iplesp --input dark=true
+
+# Compile Handout version (static slides + notes)
+typst compile examples/demo.typ --input handout=true
 ```
 
 Available inputs:
 - `theme`: `"sorbonne"` (default) or `"iplesp"`.
 - `dark`: `"true"` or `"false"` (default).
+- `handout`: `"true"` or `"false"` (default).
 
 ---
 
