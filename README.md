@@ -237,8 +237,7 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 
 ### v0.3.0
 - **Native Handout Support**: Integrated `presentate`'s native handout mode.
-- **Physical Notes**: Added `#note()` function to generate dedicated notes pages in handout mode.
-- **Improved Notes Separation**: Successive calls to `#note()` are now separated by paragraph breaks.
+- **Physical Notes**: Added `#note()` function to generate dedicated notes pages in handout mode. Successive calls to `#note()` are separated by paragraph breaks.
 
 ### v0.2.0
 - **New template**: the IPLESP template was added, with the same features than the already available Sorbonne template
