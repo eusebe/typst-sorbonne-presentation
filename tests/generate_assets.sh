@@ -5,7 +5,7 @@ SOURCE="tests/generate_assets.typ"
 SORBONNE_OUT="assets/sorbonne-docs"
 IPLESP_OUT="assets/iplesp-docs"
 ROOT_DIR="."
-PPI=144
+PPI=72
 
 echo "🎨 Generating assets for Unified themes documentation..."
 
@@ -21,7 +21,7 @@ for f in "${FACULTIES[@]}"; do
 done
 
 # 2. IPLESP Theme Presets (Page 1: Title Slide)
-THEMES=("blue" "red" "green" "purple" "yellow" "teal" "orange" "slate")
+THEMES=("blue" "red" "green" "purple")
 for t in "${THEMES[@]}"; do
     echo "  → IPLESP: theme-$t"
     typst compile "$SOURCE" "$IPLESP_OUT/theme-$t.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=iplesp --input component="theme-$t"
@@ -40,6 +40,5 @@ done
 [ -f "$SORBONNE_OUT/component-layout-2col.png" ] && mv "$SORBONNE_OUT/component-layout-2col.png" "$SORBONNE_OUT/layout-2col.png"
 [ -f "$SORBONNE_OUT/component-layout-3col.png" ] && mv "$SORBONNE_OUT/component-layout-3col.png" "$SORBONNE_OUT/layout-3col.png"
 [ -f "$SORBONNE_OUT/component-layout-grid2x2.png" ] && mv "$SORBONNE_OUT/component-layout-grid2x2.png" "$SORBONNE_OUT/layout-grid2x2.png"
-[ -f "$SORBONNE_OUT/component-citations.png" ] && cp "$SORBONNE_OUT/component-citations.png" "$SORBONNE_OUT/component-citation.png"
 
 echo "✅ All assets generated."

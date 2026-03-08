@@ -86,8 +86,6 @@
   ]
 }
 
-#context {
-  if query(cite).len() > 0 {
-    bibliography("refs.bib", title: none)
-  }
+#if comp in ("citations", "equation-slide") {
+  bibliography("refs.bib", title: none)
 }

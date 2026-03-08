@@ -346,6 +346,8 @@
   )
 ]
 
+#appendix()
+
 #slide(title: "Theme Configuration Reference (1/2)")[
   #set text(size: 0.72em)
   #two-col(
