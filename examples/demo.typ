@@ -201,6 +201,19 @@
 ]
 
 // ==========================================
+= Appendix
+// ==========================================
+
+#slide(title: "Appendix")[
+  *Using Appendices*
+  
+  - Call `#appendix()` to start.
+  - Resets heading counters.
+  - Displays a focus slide using `annex-main-title`.
+  - Changes numbering style to `annex-title` + `annex-numbering-format`.
+]
+
+// ==========================================
 = Special Slide Types
 // ==========================================
 
@@ -327,26 +340,14 @@
 = Template Configuration
 // ==========================================
 
-#slide(title: "Appendix & Hierarchy Control")[
-  #two-col(
-    [
-      *Using Appendices*
-      - Call `#appendix()` to start.
-      - Resets heading counters.
-      - Displays a focus slide using `annex-main-title`.
-      - Changes numbering style to `annex-title` + `annex-numbering-format`.
-    ],
-    [
-      *Mapping Logic*
-      - `mapping` defines roles for levels:
-      - `(section: 1)` : Level 1 is a section.
-      - `(part: 1, section: 2)` : Level 1 is a Part, Level 2 is a Section.
-      - Transition slides and breadcrumbs adapt to these roles.
-    ]
-  )
+#slide(title: "Hierarchy Control")[
+  *Mapping Logic*
+  
+  - `mapping` defines roles for levels:
+  - `(section: 1)` : Level 1 is a section.
+  - `(part: 1, section: 2)` : Level 1 is a Part, Level 2 is a Section.
+  - Transition slides and breadcrumbs adapt to these roles.
 ]
-
-#appendix()
 
 #slide(title: "Theme Configuration Reference (1/2)")[
   #set text(size: 0.72em)
@@ -360,6 +361,7 @@
       *Visual Identity*
       - `faculty`: `"univ"` (default), `"sante"`, `"sciences"`, `"lettres"`.
       - `theme` (IPLESP): `"blue"`, `"red"`, `"green"`, etc.
+      - `dark-mode`: Boolean. Enable dark theme for content slides.
       - `primary-color` / `alert-color`: Manual hex/rgb overrides.
       - `logo-slide` / `logo-transition`: Image paths.
       - `logo-left` / `logo-center` / `logo-right`: IPLESP header bar.      
@@ -397,7 +399,6 @@
   - `slide-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
   - `max-length`: (`int` or `dict`) Truncate breadcrumb titles. Ex: `20` or `(section: 10, subsection: 20)`.
-  - `dark-mode`: Boolean. Enable dark theme for content slides.
   - `handout`: Boolean. Enable handout mode (static slides + physical notes).
 ]
 
