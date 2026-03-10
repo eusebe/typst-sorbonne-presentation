@@ -994,6 +994,17 @@
 
   if conf.show-outline {
     slide(title: conf.outline-title, {
+      // Masquer les numéros de page, les points de suite et les annexes
+      show outline.entry: it => context {
+        if appendix-state.at(it.element.location()) { return none }
+        let element = it.element
+        let num = if element.numbering != none {
+          numbering(element.numbering, ..counter(heading).at(element.location()))
+          h(0.5em)
+        }
+        let indent = (it.level - 1) * 1.5em
+        pad(left: indent, link(element.location(), num + element.body))
+      }
       if conf.outline-columns > 1 {
         columns(conf.outline-columns, outline(title: none, depth: conf.outline-depth, indent: 2em))
       } else {

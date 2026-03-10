@@ -109,7 +109,7 @@
   bib-style: "apa",
   transitions: (:),
   show-outline: false,
-  outline-title: [Sommaire],
+  outline-title: [Outline],
   outline-depth: 2,
   outline-columns: 1,
   auto-title: true,
