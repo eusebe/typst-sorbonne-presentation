@@ -160,7 +160,7 @@
   bib-style: "apa",
   transitions: (:),
   show-outline: false,
-  outline-title: [Sommaire],
+  outline-title: [Outline],
   outline-depth: 2,
   outline-columns: 1,
   auto-title: true,
@@ -172,6 +172,7 @@
   use-short-title: false,
   dark-mode: false,
   handout: false,
+  math-font: "Noto Sans Math",
   body
 ) = {
   let (def-primary, def-alert) = if theme == "red" {
@@ -233,6 +234,7 @@
     text-font: text-font,
     text-size: text-size,
     text-color: iplesp-text,
+    math-font: math-font,
     primary-color: final-primary,
     marker-color: if dark-mode { white } else { final-primary },
     transition-fill: if dark-mode { final-primary.darken(60%) } else { final-primary.lighten(80%) },

@@ -121,6 +121,7 @@
   use-short-title: false,
   dark-mode: false,
   handout: false,
+  math-font: "Fira Math",
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -186,7 +187,7 @@
     text-font: text-font,
     text-size: text-size,
     text-color: sorbonne-text,
-    math-font: "Fira Math",
+    math-font: math-font,
     primary-color: final-primary,
     marker-color: final-marker-color,
     transition-fill: final-transition-fill,

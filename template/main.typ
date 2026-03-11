@@ -1,4 +1,4 @@
-#import "@preview/sorbonne-presentation:0.3.0": *
+#import "@preview/sorbonne-presentation:0.3.1": *
 
 // --- Theme Configuration ---
 // Note: 'template' is an alias for 'sorbonne-template'. 

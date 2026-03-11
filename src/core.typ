@@ -213,6 +213,16 @@
   let fg-color = if config.dark-mode { white } else { config.text-color }
   set text(font: config.text-font, size: config.text-size, fill: fg-color)
   
+  let m-font = config.at("math-font", default: none)
+  show math.equation: it => {
+    if m-font != none {
+      set text(font: m-font)
+      it
+    } else {
+      it
+    }
+  }
+
   if not breakable {
     grid(
       columns: 100%,
@@ -518,7 +528,7 @@
         dir: ttb,
         spacing: 0.8em,
         block(
-          text(size: 2.5em, weight: "bold", equation)
+          text(size: 2.5em, equation)
         ),
         if citation != none {
           let key = if type(citation) == dictionary { citation.at("bib-key", default: none) } else { citation }
@@ -912,10 +922,6 @@
 
   set text(font: conf.text-font, size: conf.text-size, fill: if conf.dark-mode { white } else { conf.text-color })
   
-  if conf.at("math-font", default: none) != none {
-    show math.equation: set text(font: conf.math-font)
-  }
-
   show raw.where(block: true): it => {
     let bg-color = if conf.dark-mode { rgb("#2d2d2d") } else { luma(245) }
     let stroke-color = if conf.dark-mode { gray.darken(40%) } else { gray.lighten(50%) }
@@ -1030,5 +1036,15 @@
     base-render-transition(h, is-annex, conf)
   }
   
+  show math.equation: it => {
+    let m-font = conf.at("math-font", default: none)
+    if m-font != none {
+      set text(font: m-font)
+      it
+    } else {
+      it
+    }
+  }
+
   body
 }

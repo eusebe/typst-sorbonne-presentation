@@ -46,7 +46,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-presentation:0.3.0": sorbonne-template, slide
+#import "@preview/sorbonne-presentation:0.3.1": sorbonne-template, slide
 
 #show: sorbonne-template.with(
   title: [Academic Discovery],
@@ -64,7 +64,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For IPLESP
 ```typ
-#import "@preview/sorbonne-presentation:0.3.0": iplesp-template, slide
+#import "@preview/sorbonne-presentation:0.3.1": iplesp-template, slide
 
 #show: iplesp-template.with(
   title: [Epidemiological Study],
@@ -139,6 +139,7 @@ Used on **standard slides** (white background).
 | `short-author` | content | `none` | Short version for footer |
 | `affiliation` | content | `none` | Department or Laboratory |
 | `date` | content | `datetime...` | Custom date display |
+| `math-font` | string/none | (see below) | Custom math font (set to `none` for default serif) |
 | `dark-mode` | bool | `false` | Enable dark theme for content slides |
 | `handout` | bool | `false` | Disable animations and enable physical notes pages |
 | `aspect-ratio` | string | `"16-9"` | `"16-9"` or `"4-3"` |
@@ -152,9 +153,11 @@ Used on **standard slides** (white background).
 - **Sorbonne (`sorbonne-template`)**:
   - `faculty`: `"univ"`, `"sante"`, `"sciences"`, `"lettres"`.
   - `text-font`: Default `"Fira Sans"`.
+  - `math-font`: Default `"Fira Math"`.
 - **IPLESP (`iplesp-template`)**:
   - `theme`: `"blue"`, `"red"`, `"yellow"`, `"green"`, `"teal"`, `"purple"`, `"orange"`, `"slate"`.
   - `text-font`: Default `"Lato"`.
+  - `math-font`: Default `"Noto Sans Math"`.
   - `logo-left`, `logo-center`, `logo-right`: Individual logo slots for the header bar.
   - `logo-left-transition`, `logo-center-transition`, `logo-right-transition`: Monochrome versions for dark backgrounds.
 
@@ -234,6 +237,11 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 - **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
 
 ## Changelog
+
+### v0.3.1
+- **Math Font Customization**: Added `math-font` parameter to all templates.
+- **Improved Math Rendering**: Fixed a bug where math fonts would fallback to serif when bold weight was requested (e.g. in `equation-slide`).
+- **Standardized Defaults**: Sorbonne defaults to `Fira Math`, IPLESP defaults to `Noto Sans Math` for better visual consistency.
 
 ### v0.3.0
 - **Native Handout Support**: Integrated `presentate`'s native handout mode.

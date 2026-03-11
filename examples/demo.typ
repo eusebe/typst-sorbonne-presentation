@@ -369,6 +369,7 @@
     [
       *Typography & Global*
       - `text-font` / `text-size`: e.g., `"Fira Sans"`, `20pt`.
+      - `math-font`: e.g., `"Fira Math"`, `"Noto Sans Math"`, `none` (serif).
       - `aspect-ratio`: `"16-9"` or `"4-3"`.
 
       *Outline (TOC)*
