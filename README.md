@@ -46,7 +46,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-presentation:0.2.0": sorbonne-template, slide
+#import "@preview/sorbonne-presentation:0.3.0": sorbonne-template, slide
 
 #show: sorbonne-template.with(
   title: [Academic Discovery],
@@ -64,7 +64,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For IPLESP
 ```typ
-#import "@preview/sorbonne-presentation:0.2.0": iplesp-template, slide
+#import "@preview/sorbonne-presentation:0.3.0": iplesp-template, slide
 
 #show: iplesp-template.with(
   title: [Epidemiological Study],
@@ -241,7 +241,6 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 - **Outline Improvements**: 
   - Hidden page numbers and fill by default for a cleaner presentation look.
   - Automatic exclusion of appendix entries from the table of contents.
-  - Preserved hierarchy numbering and indentation.
 
 ### v0.2.0
 - **New template**: the IPLESP template was added, with the same features than the already available Sorbonne template
