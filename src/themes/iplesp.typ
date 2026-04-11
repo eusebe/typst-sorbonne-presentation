@@ -57,7 +57,6 @@
   }
 
   let title-block = if resolved-title != none or h.subtitle != none {
-    // v(-0.5em)
     stack(dir: ttb, spacing: 0.4em,
       if resolved-title != none {
         text(size: 1.25em, weight: "bold", fill: text-color, smallcaps(title-display))
