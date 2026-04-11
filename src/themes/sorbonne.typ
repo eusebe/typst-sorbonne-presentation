@@ -7,20 +7,15 @@
 #let sorbonne-text = rgb("#263068")
 
 #let sorbonne-header(conf) = context {
-  let markers = query(<uni-pres-slide-start>)
-  if markers.len() == 0 { return none }
-  let current-page = here().page()
-  let marker = markers.filter(m => m.location().page() <= current-page).last()
-  let meta = marker.value
+  let slide-meta = resolve-current-slide-meta()
+  if slide-meta == none { return none }
+  let meta = slide-meta.meta
+  let resolved-title = slide-meta.resolved-title
+  let is-continuation = slide-meta.is-continuation
 
-  let allow-breaks = if type(meta) == dictionary { meta.at("allow-slide-breaks", default: false) } else { false }
-  let is-continuation = current-page > marker.location().page() and allow-breaks
-  
   let fg-color = if conf.dark-mode { white } else { conf.text-color }
   let subtitle-color = if conf.dark-mode { white.transparentize(20%) } else { conf.text-color.lighten(20%) }
   let continuation-color = if conf.dark-mode { white.transparentize(40%) } else { conf.text-color.lighten(40%) }
-
-  let resolved-title = if type(meta) == dictionary and meta.title != none { meta.title } else { nav.resolve-slide-title(none) }
   
   let title-display = if is-continuation and resolved-title != none {
     resolved-title + text(size: 0.8em, weight: "regular", fill: continuation-color, conf.slide-break-suffix)

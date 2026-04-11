@@ -26,6 +26,20 @@
   }
 }
 
+// Retourne un dictionnaire (meta, resolved-title, is-continuation) pour le slide courant,
+// ou none si aucun marker n'est présent. Doit être appelé dans un contexte (context).
+#let resolve-current-slide-meta() = {
+  let markers = query(<uni-pres-slide-start>)
+  if markers.len() == 0 { return none }
+  let current-page = here().page()
+  let marker = markers.filter(m => m.location().page() <= current-page).last()
+  let meta = marker.value
+  let allow-breaks = if type(meta) == dictionary { meta.at("allow-slide-breaks", default: false) } else { false }
+  let is-continuation = current-page > marker.location().page() and allow-breaks
+  let resolved-title = if type(meta) == dictionary and meta.title != none { meta.title } else { nav.resolve-slide-title(none) }
+  (meta: meta, resolved-title: resolved-title, is-continuation: is-continuation)
+}
+
 // --- Composants ---
 
 #let note(body) = {

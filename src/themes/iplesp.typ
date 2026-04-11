@@ -43,16 +43,11 @@
 }
 
 #let iplesp-header(conf) = context {
-  let markers = query(<uni-pres-slide-start>)
-  if markers.len() == 0 { return none }
-  
-  let current-page = here().page()
-  let marker = markers.filter(m => m.location().page() <= current-page).last()
-  let h = marker.value
-  
-  let allow-breaks = if type(h) == dictionary { h.at("allow-slide-breaks", default: false) } else { false }
-  let is-continuation = current-page > marker.location().page() and allow-breaks
-  let resolved-title = if type(h) == dictionary and h.title != none { h.title } else { nav.resolve-slide-title(none) }
+  let slide-meta = resolve-current-slide-meta()
+  if slide-meta == none { return none }
+  let h = slide-meta.meta
+  let resolved-title = slide-meta.resolved-title
+  let is-continuation = slide-meta.is-continuation
   
   let text-color = if conf.dark-mode { iplesp-darktext } else { iplesp-text }
   let title-display = if is-continuation and resolved-title != none {
