@@ -135,14 +135,9 @@
   if type(logo) == str {
     image(logo, ..args)
   } else if type(logo) == content {
-    // If it's already an image or content
-    if logo.func() == image {
-      let w = args.named().at("width", default: auto)
-      let h = args.named().at("height", default: auto)
-      box(width: w, height: h, logo)
-    } else {
-      logo
-    }
+    let w = args.named().at("width", default: auto)
+    let h = args.named().at("height", default: auto)
+    box(width: w, height: h, logo)
   } else {
     logo
   }
