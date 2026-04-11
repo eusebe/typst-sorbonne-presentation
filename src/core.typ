@@ -428,7 +428,8 @@
       if conf != none and conf.at("handout", default: false) {
         let n = note-state.get()
         if n != none {
-          render-note-slide(conf, manual-title, n)
+          let note-title = if manual-title != none { manual-title } else { nav.resolve-slide-title(none) }
+          render-note-slide(conf, note-title, n)
         }
       }
     }
