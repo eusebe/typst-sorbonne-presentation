@@ -27,7 +27,7 @@
   
   let title-block = stack(dir: ttb, spacing: 0.3em,
     if resolved-title != none {
-      text(size: 1.25em, weight: "bold", fill: fg-color, smallcaps(title-display))
+      text(size: 1.25em, weight: "bold", fill: fg-color, if conf.at("title-smallcaps", default: true) { smallcaps(title-display) } else { title-display })
     },
     if meta.subtitle != none {
       text(size: 0.95em, style: "italic", fill: subtitle-color, meta.subtitle)
@@ -98,6 +98,7 @@
   numbering-format: "1.1",
   part-numbering-format: "I",
   part-title: [Part],
+  title-smallcaps: true,
   annex-title: [Annexe],
   annex-main-title: [Annexes],
   annex-numbering-format: "I",
@@ -194,6 +195,7 @@
     numbering-format: numbering-format,
     part-numbering-format: part-numbering-format,
     part-title: part-title,
+    title-smallcaps: title-smallcaps,
     annex-title: annex-title,
     annex-main-title: annex-main-title,
     annex-numbering-format: annex-numbering-format,
