@@ -46,7 +46,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-presentation:0.3.1": sorbonne-template, slide
+#import "@preview/sorbonne-presentation:0.4.0": sorbonne-template, slide
 
 #show: sorbonne-template.with(
   title: [Academic Discovery],
@@ -64,7 +64,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For IPLESP
 ```typ
-#import "@preview/sorbonne-presentation:0.3.1": iplesp-template, slide
+#import "@preview/sorbonne-presentation:0.4.0": iplesp-template, slide
 
 #show: iplesp-template.with(
   title: [Epidemiological Study],
@@ -147,6 +147,12 @@ Used on **standard slides** (white background).
 | `show-outline` | bool | `false` | Toggle summary slide |
 | `mapping` | dict | `(sec: 1, sub: 2)` | Logic mapping for headings |
 | `progress-bar` | string | `"none"` | Position: `"none"`, `"top"`, or `"bottom"` |
+| `progress-bar-height` | length | `2pt` | Height of the progress bar |
+| `title-smallcaps` | bool | `true` | Apply smallcaps to slide header titles |
+| `part-title` | content | `[Part]` | Label for part transition slides |
+| `annex-title` | content | `[Annexe]` | Label for appendix transition slides |
+| `equation-definitions-width` | ratio | `85%` | Width of the equation definitions block |
+| `transition-roadmap-width` | ratio | `60%` | Width of the roadmap in section transition slides |
 
 ### Theme-Specific Parameters
 
@@ -237,6 +243,16 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 - **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
 
 ## Changelog
+
+### v0.4.0
+
+- **New parameter `title-smallcaps`** (default: `true`): Controls whether slide header titles are rendered in smallcaps. Set to `false` to preserve the original casing — useful for acronyms, proper nouns, or stylistic preference.
+- **New parameter `part-title`** (default: `[Part]`): The label shown on part transition slides is now configurable. Previously hardcoded in French (`"Partie"`).
+- **New parameter `progress-bar-height`** (default: `2pt`): Controls the height of the progress bar.
+- **New parameter `equation-definitions-width`** (default: `85%`): Controls the width of the definitions block in `equation-slide`.
+- **New parameter `transition-roadmap-width`** (default: `60%`): Controls the width of the roadmap block in section transition slides.
+- **Bug fix — notes page titles**: When a slide title comes from a heading (i.e. no explicit `title:` argument to `#slide()`), the corresponding notes page in handout mode now displays the correct title instead of a blank one.
+- **Bug fix — outline indentation**: The outline indentation is now computed relative to the mapping's minimum heading level, fixing misalignment when the mapping starts at a heading level greater than 1.
 
 ### v0.3.1
 - **Math Font Customization**: Added `math-font` parameter to all templates.
