@@ -14,7 +14,9 @@
 //   outline-columns, auto-title, progress-bar, slide-break-suffix,
 //   footer-author, footer-title, max-length, use-short-title, dark-mode,
 //   render-transition-func, focus-slide-func, ending-slide-func,
-//   title-logo-func, transition-logo-func
+//   title-logo-func, transition-logo-func,
+//   title-smallcaps, progress-bar-height, equation-definitions-width,
+//   transition-roadmap-width
 //   → Accès direct : conf.field
 //
 // Champs "optionnels / thème-spécifiques" — absents dans certains thèmes :
@@ -84,7 +86,7 @@
   
   let ratio = calc.min(1.0, current / total)
   
-  block(width: 100% * ratio, height: 2pt, fill: conf.primary-color)
+  block(width: 100% * ratio, height: conf.at("progress-bar-height", default: 2pt), fill: conf.primary-color)
 }
 
 #let empty-slide(fill: none, count: true, body) = {
@@ -580,7 +582,7 @@
           let stroke-color = if conf.dark-mode { conf.primary-color.lighten(20%) } else { conf.primary-color }
 
           block(
-            width: 85%,
+            width: conf.at("equation-definitions-width", default: 85%),
             fill: fill-color,
             stroke: (left: 3pt + stroke-color),
             inset: 1.5em,
@@ -875,7 +877,7 @@
               },
               if not is-annex { text(size: conf.at("transition-title-size", default: 2.2em), weight: "bold", fill: title-text, smallcaps(section-head.body)) },
               v(1.2em),
-              block(width: 60%, align(left, roadmap-visible))
+              block(width: conf.at("transition-roadmap-width", default: 60%), align(left, roadmap-visible))
             ))
           ))
         }
