@@ -1038,7 +1038,13 @@
           numbering(element.numbering, ..counter(heading).at(element.location()))
           h(0.5em)
         }
-        let indent = (it.level - 1) * 1.5em
+        // L'indentation est calculée relativement au niveau minimal du mapping
+        // (et non depuis le niveau 1 absolu), pour que le premier niveau affiché
+        // parte toujours de la marge gauche, quelle que soit la profondeur du mapping.
+        // Note : ce renderer custom remplace entièrement outline.entry — le paramètre
+        // `indent` de outline() est sans effet ici.
+        let min-level = if conf.mapping.len() > 0 { calc.min(..conf.mapping.values()) } else { 1 }
+        let indent = (it.level - min-level) * 1.5em
         pad(left: indent, link(element.location(), num + element.body))
       }
       if conf.outline-columns > 1 {
