@@ -2,6 +2,31 @@
 #import p.store: states
 #import "@preview/navigator:0.1.3" as nav
 
+// Convention d'accès au dictionnaire `conf`
+// ─────────────────────────────────────────
+// Champs "core garantis" — toujours présents, initialisés par chaque template :
+//   title, author, short-title, short-author, affiliation, subtitle, date,
+//   aspect-ratio, text-font, text-size, text-color, primary-color, marker-color,
+//   transition-fill, alert-color, logo-transition, logo-slide,
+//   show-header-numbering, numbering-format, part-numbering-format,
+//   part-title, annex-title, annex-main-title, annex-numbering-format,
+//   mapping, bib-style, transitions, show-outline, outline-title, outline-depth,
+//   outline-columns, auto-title, progress-bar, slide-break-suffix,
+//   footer-author, footer-title, max-length, use-short-title, dark-mode,
+//   render-transition-func, focus-slide-func, ending-slide-func,
+//   title-logo-func, transition-logo-func
+//   → Accès direct : conf.field
+//
+// Champs "optionnels / thème-spécifiques" — absents dans certains thèmes :
+//   math-font, handout, header-layout, header-inset-top, margin-top,
+//   dark-bg, dark-text, dark-text-secondary, dark-line-color, dark-sep-color,
+//   focus-bg-light, focus-bg-dark, focus-text-color, focus-layout,
+//   title-bg-light, title-bg-dark, title-slide-func,
+//   transition-active-color, transition-text-color, transition-title-color,
+//   transition-title-size, transition-title-size-annex, transition-num-size,
+//   transition-part-layout, transition-section-layout
+//   → Accès défensif : conf.at("field", default: ...)
+
 // État pour la configuration du thème
 #let config-state = state("uni-pres-config", none)
 #let last-main-page = state("last-main-page", none)
@@ -77,15 +102,15 @@
   let conf = config-state.get()
   if conf == none { return none }
   
-  let fg-color = if conf.dark-mode { 
-    if conf.at("dark-text-secondary", default: none) != none { conf.dark-text-secondary } else { white.darken(20%) }
-  } else { 
-    gray.darken(20%) 
+  let fg-color = if conf.dark-mode {
+    conf.at("dark-text-secondary", default: white.darken(20%))
+  } else {
+    gray.darken(20%)
   }
-  let sep-color = if conf.dark-mode { 
-    if conf.at("dark-sep-color", default: none) != none { conf.dark-sep-color } else { gray.darken(40%) }
-  } else { 
-    gray.lighten(50%) 
+  let sep-color = if conf.dark-mode {
+    conf.at("dark-sep-color", default: gray.darken(40%))
+  } else {
+    gray.lighten(50%)
   }
   
   set text(size: 0.8em, fill: fg-color)
@@ -168,15 +193,15 @@
   let is-special = if type(meta) == dictionary { meta.at("is-special", default: false) } else { false }
   if is-special { return none }
 
-  let fg-color = if conf.dark-mode { 
-    if conf.at("dark-text-secondary", default: none) != none { conf.dark-text-secondary } else { white.darken(20%) }
-  } else { 
-    gray.darken(20%) 
+  let fg-color = if conf.dark-mode {
+    conf.at("dark-text-secondary", default: white.darken(20%))
+  } else {
+    gray.darken(20%)
   }
-  let line-color = if conf.dark-mode { 
-    if conf.at("dark-line-color", default: none) != none { conf.dark-line-color } else { gray.darken(60%) }
-  } else { 
-    gray.lighten(80%) 
+  let line-color = if conf.dark-mode {
+    conf.at("dark-line-color", default: gray.darken(60%))
+  } else {
+    gray.lighten(80%)
   }
 
   block(width: 100%, height: 3.0em, inset: (x: 2.5em, bottom: 0.8em, top: 0.2em), {
