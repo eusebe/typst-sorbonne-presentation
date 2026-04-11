@@ -223,16 +223,6 @@
   let fg-color = if config.dark-mode { white } else { config.text-color }
   set text(font: config.text-font, size: config.text-size, fill: fg-color)
   
-  let m-font = config.at("math-font", default: none)
-  show math.equation: it => {
-    if m-font != none {
-      set text(font: m-font)
-      it
-    } else {
-      it
-    }
-  }
-
   if not breakable {
     grid(
       columns: 100%,
