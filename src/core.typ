@@ -773,6 +773,9 @@
       for (r, lvl) in mapping { if lvl == h.level { role = r; break } }
       
       // --- CASE 1: PART TRANSITION (or Appendix Section if no parts) ---
+      // La seconde condition gère le cas d'un mapping sans niveau "partie" (ex: section-only) :
+      // dans l'annexe, les sections sont alors promues en transitions de type "partie" pour
+      // garantir un rendu visuel cohérent (titre centré pleine page) à un seul niveau hiérarchique.
       if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
          let num = if is-annex {
            numbering(conf.annex-numbering-format, counter(heading).at(h.location()).at(0))
