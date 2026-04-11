@@ -397,9 +397,13 @@
   let count = named.at("count", default: true)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
   
+  // Filtre les paramètres propres à slide() avant de transmettre le reste à p.slide().
+  // Limitation de Typst : on ne peut pas capturer les named args par nom et passer
+  // le reste via `..sink` simultanément. Cette liste doit rester synchronisée avec
+  // la signature de slide() — tout nouveau paramètre doit y être ajouté.
   let clean-named = named
   for key in ("title", "subtitle", "allow-slide-breaks", "background", "is-special", "count") {
-    if key in clean-named { 
+    if key in clean-named {
       let _ = clean-named.remove(key)
     }
   }
