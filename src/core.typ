@@ -775,7 +775,7 @@
              align: horizon,
              stack(dir: ttb, spacing: 0.5em,
                if conf.show-header-numbering {
-                 text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.annex-title } else { "Partie" }))
+                 text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.annex-title } else { conf.at("part-title", default: [Part]) }))
                  text(size: 6em, weight: "bold", fill: muted-text, num)
                }
              ),
