@@ -9,6 +9,23 @@
 #let appendix-state = state("uni-pres-appendix", false)
 #let note-state = state("uni-pres-notes", none)
 
+// --- Helpers internes ---
+
+// Retourne le nombre total de slides hors annexe (ou total si on est dans l'annexe).
+#let get-main-slide-count() = {
+  let is-annex = appendix-state.get()
+  if is-annex {
+    logical-slide-counter.final().at(0)
+  } else {
+    let appendix-marker = query(<uni-pres-appendix-before-reset>)
+    if appendix-marker.len() > 0 {
+      logical-slide-counter.at(appendix-marker.first().location()).at(0)
+    } else {
+      logical-slide-counter.final().at(0)
+    }
+  }
+}
+
 // --- Composants ---
 
 #let note(body) = {
@@ -22,19 +39,8 @@
   if conf == none or conf.progress-bar == "none" { return none }
   
   let current = logical-slide-counter.get().at(0)
-  let is-annex = appendix-state.get()
-  
-  let total = if is-annex {
-    logical-slide-counter.final().at(0)
-  } else {
-    let appendix-marker = query(<uni-pres-appendix-before-reset>)
-    if appendix-marker.len() > 0 {
-      logical-slide-counter.at(appendix-marker.first().location()).at(0)
-    } else {
-      logical-slide-counter.final().at(0)
-    }
-  }
-  
+  let total = get-main-slide-count()
+
   if total <= 0 or current <= 0 { return none }
   
   let ratio = calc.min(1.0, current / total)
@@ -169,17 +175,7 @@
     
     let slide-num = context {
       let current = logical-slide-counter.get().at(0)
-      let is-annex = appendix-state.get()
-      let total = if is-annex {
-        logical-slide-counter.final().at(0)
-      } else {
-        let appendix-marker = query(<uni-pres-appendix-before-reset>)
-        if appendix-marker.len() > 0 {
-          logical-slide-counter.at(appendix-marker.first().location()).at(0)
-        } else {
-          logical-slide-counter.final().at(0)
-        }
-      }
+      let total = get-main-slide-count()
       if current > 0 {
         box(width: 3.5em, align(right, [#current / #total]))
       }
