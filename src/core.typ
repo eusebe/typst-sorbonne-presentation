@@ -995,27 +995,23 @@
   set heading(numbering: (..nums) => context {
     if not conf.show-header-numbering { return none }
     let n = nums.pos()
-    
-    let is-annex = appendix-state.get()
 
-    if is-annex {
-      let formats = (conf.annex-numbering-format, "A", "1")
-      let parts = ()
-      for i in range(n.len()) {
-        parts.push(numbering(formats.at(i, default: "1"), n.at(i)))
-      }
-      return conf.annex-title + " " + parts.join("")
-    }
+    // NOTE: appendix-state.get() must NOT be called here. Reading any position-dependent
+    // state inside set heading(numbering:) causes layout convergence failures when combined
+    // with #show: pause + mapping, because the numbering function is evaluated in variable
+    // rendering contexts (breadcrumbs, outlines, etc.) whose positions shift between passes.
+    // Annex transition slides already compute their own numbering via conf.annex-numbering-format
+    // in base-render-transition, so transitions are visually unaffected by this change.
 
     let role = none
     for (r, lvl) in conf.mapping { if lvl == n.len() { role = r; break } }
-    
-    if role == "part" { 
-      numbering(conf.part-numbering-format, ..n) 
+
+    if role == "part" {
+      numbering(conf.part-numbering-format, ..n)
     } else if role == "section" or role == "subsection" {
       let start-idx = if conf.mapping.keys().contains("part") { 1 } else { 0 }
-      if n.len() > start-idx { 
-        numbering(conf.numbering-format, ..n.slice(start-idx)) 
+      if n.len() > start-idx {
+        numbering(conf.numbering-format, ..n.slice(start-idx))
       }
     } else {
       none
