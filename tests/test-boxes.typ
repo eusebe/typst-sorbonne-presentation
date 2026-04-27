@@ -66,20 +66,24 @@
 
 = Contraste du Titre
 #slide(title: "Titre sur fond clair vs fond sombre")[
-  #highlight-box(title: "Fond jaune — titre doit être noir", color: rgb("#FFB700"))[
-    Le texte du titre doit être noir (fond lumineux).
+  #highlight-box(title: [Jaune Sorbonne \#FFB700 (lum 0.72) — blanc], color: rgb("#FFB700"))[
+    Luminance < 0.75 → texte blanc conservé (couleurs saturées).
   ]
-  #v(1fr)
-  #highlight-box(title: "Fond rouge — titre doit être blanc", color: rgb("#AC182E"))[
-    Le texte du titre doit être blanc (fond sombre).
+  #v(0.5fr)
+  #highlight-box(title: [Jaune pâle \#FFE5B4 (lum 0.85) — noir], color: rgb("#FFE5B4"))[
+    Luminance > 0.75 → bascule au noir (fond vraiment clair).
   ]
-  #v(1fr)
-  #highlight-box(title: "Fond blanc — titre doit être noir", color: white)[
-    Le texte du titre doit être noir (fond blanc).
+  #v(0.5fr)
+  #highlight-box(title: [Rouge sombre \#AC182E — blanc], color: rgb("#AC182E"))[
+    Luminance < 0.75 → texte blanc.
   ]
-  #v(1fr)
-  #highlight-box(title: "Fond bleu nuit — titre doit être blanc", color: rgb("#1D2769"))[
-    Le texte du titre doit être blanc (fond très sombre).
+  #v(0.5fr)
+  #highlight-box(title: [Blanc — noir], color: white)[
+    Luminance = 1.0 > 0.75 → texte noir.
+  ]
+  #v(0.5fr)
+  #highlight-box(title: [Bleu nuit \#1D2769 — blanc], color: rgb("#1D2769"))[
+    Luminance < 0.75 → texte blanc.
   ]
 ]
 
