@@ -666,6 +666,16 @@
     (none, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
   }
   
+  // Choisit blanc ou noir selon la luminosité perçue du fond du titre
+  // Coefficients ITU-R BT.601 ; branche luma pour white/black/luma()
+  let title-fg = if color.space() == luma {
+    if color.components().first() / 100% > 0.5 { black } else { white }
+  } else {
+    let c = color.components()
+    let lum = 0.299 * c.at(0) / 100% + 0.587 * c.at(1) / 100% + 0.114 * c.at(2) / 100%
+    if lum > 0.5 { black } else { white }
+  }
+
   block(
     width: 100%,
     radius: 4pt,
@@ -678,7 +688,7 @@
           width: 100%,
           fill: color,
           inset: 0.6em,
-          text(fill: white, weight: "bold", title)
+          text(fill: title-fg, weight: "bold", title)
         )
       },
       block(

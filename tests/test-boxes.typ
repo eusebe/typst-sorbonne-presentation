@@ -64,6 +64,25 @@
   ]
 ]
 
+= Contraste du Titre
+#slide(title: "Titre sur fond clair vs fond sombre")[
+  #highlight-box(title: "Fond jaune — titre doit être noir", color: rgb("#FFB700"))[
+    Le texte du titre doit être noir (fond lumineux).
+  ]
+  #v(1fr)
+  #highlight-box(title: "Fond rouge — titre doit être blanc", color: rgb("#AC182E"))[
+    Le texte du titre doit être blanc (fond sombre).
+  ]
+  #v(1fr)
+  #highlight-box(title: "Fond blanc — titre doit être noir", color: white)[
+    Le texte du titre doit être noir (fond blanc).
+  ]
+  #v(1fr)
+  #highlight-box(title: "Fond bleu nuit — titre doit être blanc", color: rgb("#1D2769"))[
+    Le texte du titre doit être blanc (fond très sombre).
+  ]
+]
+
 = Blocs Thématiques
 #slide(title: "Adaptation à la Faculté")[
   #themed-block(title: "Bloc Thématique (Outline)")[
