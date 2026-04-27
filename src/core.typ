@@ -209,7 +209,7 @@
       let current = logical-slide-counter.get().at(0)
       let total = get-main-slide-count()
       if current > 0 {
-        box(width: 3.5em, align(right, [#current / #total]))
+        align(right, [#current / #total])
       }
     }
 
