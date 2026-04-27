@@ -251,8 +251,13 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 - **New parameter `progress-bar-height`** (default: `2pt`): Controls the height of the progress bar.
 - **New parameter `equation-definitions-width`** (default: `85%`): Controls the width of the definitions block in `equation-slide`.
 - **New parameter `transition-roadmap-width`** (default: `60%`): Controls the width of the roadmap block in section transition slides.
+- **New parameter `code-font`** (default: `("Fira Code", "DejaVu Sans Mono")`): Specifies the monospace font used for code blocks and `#algorithm-box`. Can be overridden per-template call.
+- **New parameter `font` in `algorithm-box`** (default: `none`, falls back to template `code-font`): Allows overriding the font for a specific algorithm box without changing the global template setting.
+- **Automatic box title text color**: `#highlight-box`, `#alert-box`, `#example-box`, and `#themed-block` now automatically choose white or black title text based on the perceived luminance of the header background (ITU-R BT.601 coefficients), ensuring readability across all theme colors.
 - **Bug fix — notes page titles**: When a slide title comes from a heading (i.e. no explicit `title:` argument to `#slide()`), the corresponding notes page in handout mode now displays the correct title instead of a blank one.
 - **Bug fix — outline indentation**: The outline indentation is now computed relative to the mapping's minimum heading level, fixing misalignment when the mapping starts at a heading level greater than 1.
+- **Bug fix — footer page counter**: The page number in the footer is now right-aligned without a fixed-width box, preventing clipping on high slide counts.
+- **Internal — `resolve-current-slide-meta()`**: Slide metadata resolution is now centralised in a single helper used by both `base-header` and `base-footer`, eliminating duplicated query logic.
 
 ### v0.3.1
 - **Math Font Customization**: Added `math-font` parameter to all templates.
