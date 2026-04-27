@@ -171,6 +171,7 @@
   dark-mode: false,
   handout: false,
   math-font: "Noto Sans Math",
+  code-font: ("Fira Code", "DejaVu Sans Mono"),
   body
 ) = {
   let (def-primary, def-alert) = if theme == "red" {
@@ -233,6 +234,7 @@
     text-size: text-size,
     text-color: iplesp-text,
     math-font: math-font,
+    code-font: code-font,
     primary-color: final-primary,
     marker-color: if dark-mode { white } else { final-primary },
     transition-fill: if dark-mode { final-primary.darken(60%) } else { final-primary.lighten(80%) },

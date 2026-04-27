@@ -713,9 +713,13 @@
   _base-box(title: title, body, color: color, fill-mode: fill-mode)
 }
 
-#let algorithm-box(title: "Algorithm", fill-mode: "outline", body, color: rgb("#455A64"), font: ("Fira Code", "DejaVu Sans Mono")) = {
+#let algorithm-box(title: "Algorithm", fill-mode: "outline", body, color: rgb("#455A64"), font: none) = context {
+  let conf = config-state.get()
+  let resolved-font = if font != none { font } else {
+    conf.at("code-font", default: ("Fira Code", "DejaVu Sans Mono"))
+  }
   let algorithm-body = {
-    set text(font: font, size: 0.9em)
+    set text(font: resolved-font, size: 0.9em)
     show enum: it => {
       grid(
         columns: (1.5em, 1fr),
