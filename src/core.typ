@@ -147,14 +147,11 @@
 
 #let base-header(conf, logo-content: none, title-block: none) = context {
   if conf == none { return none }
-  
-  let markers = query(<uni-pres-slide-start>)
-  if markers.len() == 0 { return none }
-  
-  let current-page = here().page()
-  let marker = markers.filter(m => m.location().page() <= current-page).last()
-  let meta = marker.value
-  
+
+  let slide-meta = resolve-current-slide-meta()
+  if slide-meta == none { return none }
+  let meta = slide-meta.meta
+
   // On ne dessine pas l'en-tête si c'est une slide spéciale (titre, transition, etc.)
   let is-special = if type(meta) == dictionary { meta.at("is-special", default: false) } else { false }
   if is-special { return none }
@@ -181,12 +178,11 @@
 
 #let base-footer(conf) = context {
   if conf == none { return none }
-  
-  let markers = query(<uni-pres-slide-start>)
-  if markers.len() == 0 { return none }
-  let current-page = here().page()
-  let marker = markers.filter(m => m.location().page() <= current-page).last()
-  let meta = marker.value
+
+  let slide-meta = resolve-current-slide-meta()
+  if slide-meta == none { return none }
+  let meta = slide-meta.meta
+
   let is-special = if type(meta) == dictionary { meta.at("is-special", default: false) } else { false }
   if is-special { return none }
 
