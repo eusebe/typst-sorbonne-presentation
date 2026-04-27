@@ -1,6 +1,6 @@
 #import "@preview/presentate:0.2.5" as p
 #import p.store: states
-#import "@preview/navigator:0.1.3" as nav
+#import "@preview/navigator:0.1.5" as nav
 
 // Convention d'accès au dictionnaire `conf`
 // ─────────────────────────────────────────
