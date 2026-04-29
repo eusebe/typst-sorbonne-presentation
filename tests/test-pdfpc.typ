@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-#import "@preview/presentate:0.2.4": pdfpc
+#import "@preview/presentate:0.2.5": pdfpc
 
 #show: sorbonne-template.with(
   title: [Test Speaker Notes (pdfpc)],
