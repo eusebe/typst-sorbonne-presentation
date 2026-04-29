@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-#import "@preview/cetz:0.4.2": canvas, draw
+#import "@preview/cetz:0.5.0": canvas, draw
 
 #let theme-choice = sys.inputs.at("theme", default: "sorbonne")
 #let is-dark = sys.inputs.at("dark", default: "false") == "true"
