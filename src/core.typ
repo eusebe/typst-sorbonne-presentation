@@ -9,7 +9,7 @@
 //   aspect-ratio, text-font, text-size, text-color, primary-color, marker-color,
 //   transition-fill, alert-color, logo-transition, logo-slide,
 //   show-header-numbering, numbering-format, part-numbering-format,
-//   part-title, annex-title, annex-main-title, annex-numbering-format,
+//   part-title, appendix-title, appendix-main-title, appendix-numbering-format,
 //   mapping, bib-style, transitions, show-outline, outline-title, outline-depth,
 //   outline-columns, auto-title, progress-bar, slide-break-suffix,
 //   footer-author, footer-title, max-length, use-short-title, dark-mode,
@@ -752,7 +752,7 @@
   [#metadata((is-special: true)) <uni-pres-appendix-marker>]
   context {
     let conf = config-state.get()
-    focus-slide(upper(conf.annex-main-title))
+    focus-slide(upper(conf.appendix-main-title))
   }
 }
 
@@ -792,7 +792,7 @@
       // garantir un rendu visuel cohérent (titre centré pleine page) à un seul niveau hiérarchique.
       if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
          let num = if is-annex {
-           numbering(conf.annex-numbering-format, counter(heading).at(h.location()).at(0))
+           numbering(conf.appendix-numbering-format, counter(heading).at(h.location()).at(0))
          } else {
            numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
          }
@@ -807,7 +807,7 @@
              align: horizon,
              stack(dir: ttb, spacing: 0.5em,
                if conf.show-header-numbering {
-                 text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.annex-title } else { conf.at("part-title", default: [Part]) }))
+                 text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.appendix-title } else { conf.at("part-title", default: [Part]) }))
                  text(size: 6em, weight: "bold", fill: muted-text, num)
                }
              ),
@@ -821,7 +821,7 @@
            align(center + horizon, stack(
             spacing: 1.5em,
             if conf.show-header-numbering {
-              let num-prefix = if is-annex { conf.annex-title + " " } else { "" }
+              let num-prefix = if is-annex { conf.appendix-title + " " } else { "" }
               text(size: if is-annex { 4em } else { 6em }, weight: "bold", fill: muted-text, num-prefix + num)
             },
             text(size: 3em, weight: "bold", fill: title-text, upper(h.body))
@@ -839,7 +839,7 @@
         let start-idx = if mapping.keys().contains("part") { 1 } else { 0 }
         let nums = count.slice(start-idx)
         let fmt-num = if is-annex {
-          numbering(conf.annex-numbering-format, ..nums)
+          numbering(conf.appendix-numbering-format, ..nums)
         } else {
           numbering(conf.numbering-format, ..nums)
         }
@@ -880,7 +880,7 @@
             align(center, stack(
               spacing: 0.8em, 
               if conf.show-header-numbering {
-                let prefix = if is-annex { conf.annex-title + " " } else { "" }
+                let prefix = if is-annex { conf.appendix-title + " " } else { "" }
                 if is-annex {
                   text(size: conf.at("transition-title-size-annex", default: 3.5em), weight: "bold", fill: title-text, prefix + fmt-num + " " + smallcaps(section-head.body))
                 } else {
@@ -1012,7 +1012,7 @@
     // state inside set heading(numbering:) causes layout convergence failures when combined
     // with #show: pause + mapping, because the numbering function is evaluated in variable
     // rendering contexts (breadcrumbs, outlines, etc.) whose positions shift between passes.
-    // Annex transition slides already compute their own numbering via conf.annex-numbering-format
+    // Annex transition slides already compute their own numbering via conf.appendix-numbering-format
     // in base-render-transition, so transitions are visually unaffected by this change.
 
     let role = none

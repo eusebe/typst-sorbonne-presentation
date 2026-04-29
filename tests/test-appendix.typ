@@ -11,8 +11,8 @@
 #show: my-template.with(
   title: [Test Support Annexes V2],
   author: [David Hajage],
-  annex-title: [Annexes],
-  annex-numbering-format: "I",
+  appendix-title: [Appendices],
+  appendix-numbering-format: "I",
 )
 
 = Partie Principale

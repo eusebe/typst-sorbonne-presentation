@@ -150,7 +150,9 @@ Used on **standard slides** (white background).
 | `progress-bar-height` | length | `2pt` | Height of the progress bar |
 | `title-smallcaps` | bool | `true` | Apply smallcaps to slide header titles |
 | `part-title` | content | `[Part]` | Label for part transition slides |
-| `annex-title` | content | `[Annexe]` | Label for appendix transition slides |
+| `appendix-title` | content | `[Appendix]` | Label for individual appendix transition slides |
+| `appendix-main-title` | content | `[Appendices]` | Title of the focus slide introducing appendices |
+| `appendix-numbering-format` | string | `"I"` | Numbering style for appendices (e.g. `"A"`, `"I"`, `"1"`) |
 | `equation-definitions-width` | ratio | `85%` | Width of the equation definitions block |
 | `transition-roadmap-width` | ratio | `60%` | Width of the roadmap in section transition slides |
 

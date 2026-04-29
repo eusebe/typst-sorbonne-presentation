@@ -209,8 +209,8 @@
   
   - Call `#appendix()` to start.
   - Resets heading counters.
-  - Displays a focus slide using `annex-main-title`.
-  - Changes numbering style to `annex-title` + `annex-numbering-format`.
+  - Displays a focus slide using `appendix-main-title`.
+  - Changes numbering style to `appendix-title` + `appendix-numbering-format`.
 ]
 
 // ==========================================
@@ -336,8 +336,6 @@
   ]
 ]
 
-#appendix()
-
 // ==========================================
 = Template Configuration
 // ==========================================
@@ -395,9 +393,9 @@
   - `auto-title`: Boolean. If true, slides without a title use the section name.
   - `transitions`: Dictionary for `navigator` roadmap customization.
   - `bib-style`: Bibliography style (default: `"apa"`).
-  - `annex-title`: Prefix for single appendix (e.g., `"Appendix"`).
-  - `annex-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
-  - `annex-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
+  - `appendix-title`: Prefix for single appendix (e.g., `"Appendix"`).
+  - `appendix-main-title`: Focus slide text (e.g., `"Technical Annexes"`).
+  - `appendix-numbering-format`: Numbering style (e.g., `"A"`, `"I"`, `"1"`).
   - `progress-bar`: Position of the bar (`"none"`, `"top"`, `"bottom"`).
   - `slide-break-suffix`: Suffix for broken slides (default: `" (cont.)"`).
   - `footer-author` / `footer-title`: Boolean toggles for footer info.
