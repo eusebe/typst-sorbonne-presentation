@@ -248,6 +248,7 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 
 ### v0.4.0
 
+- **Breaking — appendix parameters renamed**: `annex-title`, `annex-main-title`, and `annex-numbering-format` are now `appendix-title`, `appendix-main-title`, and `appendix-numbering-format`, matching the public `appendix()` function. Default values changed from French (`[Annexe]`/`[Annexes]`) to English (`[Appendix]`/`[Appendices]`).
 - **New parameter `title-smallcaps`** (default: `true`): Controls whether slide header titles are rendered in smallcaps. Set to `false` to preserve the original casing — useful for acronyms, proper nouns, or stylistic preference.
 - **New parameter `part-title`** (default: `[Part]`): The label shown on part transition slides is now configurable. Previously hardcoded in French (`"Partie"`).
 - **New parameter `progress-bar-height`** (default: `2pt`): Controls the height of the progress bar.
