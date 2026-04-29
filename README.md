@@ -19,8 +19,8 @@ Switch between Sorbonne University faculties using the `faculty` and `dark-mode`
 
 | Mode | Univ | Sante | Sciences | Lettres |
 |:---:|:---:|:---:|:---:|:---:|
-| **Light** | <img src="assets/sorbonne-docs/faculty-univ.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sante.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sciences.png" width="200"> | <img src="assets/sorbonne-docs/faculty-lettres.png" width="200"> |
-| **Dark** | <img src="assets/sorbonne-docs/faculty-univ-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sante-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-sciences-dark.png" width="200"> | <img src="assets/sorbonne-docs/faculty-lettres-dark.png" width="200"> |
+| **Light** | <img src="assets/sorbonne-docs/faculty-univ.png" width="200" alt="Sorbonne Univ light theme"> | <img src="assets/sorbonne-docs/faculty-sante.png" width="200" alt="Sorbonne Santé light theme"> | <img src="assets/sorbonne-docs/faculty-sciences.png" width="200" alt="Sorbonne Sciences light theme"> | <img src="assets/sorbonne-docs/faculty-lettres.png" width="200" alt="Sorbonne Lettres light theme"> |
+| **Dark** | <img src="assets/sorbonne-docs/faculty-univ-dark.png" width="200" alt="Sorbonne Univ dark theme"> | <img src="assets/sorbonne-docs/faculty-sante-dark.png" width="200" alt="Sorbonne Santé dark theme"> | <img src="assets/sorbonne-docs/faculty-sciences-dark.png" width="200" alt="Sorbonne Sciences dark theme"> | <img src="assets/sorbonne-docs/faculty-lettres-dark.png" width="200" alt="Sorbonne Lettres dark theme"> |
 
 - `univ`: Sorbonne Blue (University-wide)
 - `sante`: Sorbonne Red (Faculty of Health)
@@ -35,8 +35,8 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 | Mode | Blue | Red | Green | Purple |
 |:---:|:---:|:---:|:---:|:---:|
-| **Light** | <img src="assets/iplesp-docs/theme-blue.png" width="200"> | <img src="assets/iplesp-docs/theme-red.png" width="200"> | <img src="assets/iplesp-docs/theme-green.png" width="200"> | <img src="assets/iplesp-docs/theme-purple.png" width="200"> |
-| **Dark** | <img src="assets/iplesp-docs/theme-blue-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-red-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-green-dark.png" width="200"> | <img src="assets/iplesp-docs/theme-purple-dark.png" width="200"> |
+| **Light** | <img src="assets/iplesp-docs/theme-blue.png" width="200" alt="IPLESP blue light theme"> | <img src="assets/iplesp-docs/theme-red.png" width="200" alt="IPLESP red light theme"> | <img src="assets/iplesp-docs/theme-green.png" width="200" alt="IPLESP green light theme"> | <img src="assets/iplesp-docs/theme-purple.png" width="200" alt="IPLESP purple light theme"> |
+| **Dark** | <img src="assets/iplesp-docs/theme-blue-dark.png" width="200" alt="IPLESP blue dark theme"> | <img src="assets/iplesp-docs/theme-red-dark.png" width="200" alt="IPLESP red dark theme"> | <img src="assets/iplesp-docs/theme-green-dark.png" width="200" alt="IPLESP green dark theme"> | <img src="assets/iplesp-docs/theme-purple-dark.png" width="200" alt="IPLESP purple dark theme"> |
 
 *Other available colors: `yellow`, `teal`, `orange`, `slate`.*
 
@@ -177,7 +177,7 @@ Used on **standard slides** (white background).
 
 ### Slide Types
 - `#slide(title: none, subtitle: none, allow-slide-breaks: false, background: none, body)`: Standard content slide.
-  ![Slide](assets/sorbonne-docs/component-slide.png)
+  ![Standard content slide example](assets/sorbonne-docs/component-slide.png)
 - `#focus-slide(body, subtitle: none)`: Highlight slide on solid theme background.
   ![Focus Slide](assets/sorbonne-docs/component-focus-slide.png)
 - `#figure-slide(fig, title: none, caption: none, ..)`: Centered figure slide.
@@ -198,7 +198,7 @@ Used on **standard slides** (white background).
 ### Citations
 - Inline and corner citations.
   `#cite-box("smith2023", position: "bottom-right")`
-  ![Citations](assets/sorbonne-docs/component-citations.png)
+  ![Inline and corner citation examples](assets/sorbonne-docs/component-citations.png)
 
 ### Layout & Boxes
 - `#two-col(left, right, columns: (1fr, 1fr))`: Balanced columns.
@@ -208,7 +208,7 @@ Used on **standard slides** (white background).
 - `#grid-2x2(tl, tr, bl, br)`: Four-quadrant grid layout.
   ![Layout Grid-2x2](assets/sorbonne-docs/layout-grid2x2.png)
 - **Boxes**: All boxes support the `fill-mode` parameter (`"outline"`, `"fill"`, `"full"`).
-  ![Boxes](assets/sorbonne-docs/component-boxes.png)
+  ![Highlight, alert, example, algorithm and themed box examples](assets/sorbonne-docs/component-boxes.png)
   - `#highlight-box(title, body)`: Blue university-styled box for key points.
   - `#alert-box(title, body)`: Red cautionary box for warnings.
   - `#example-box(title, body)`: Green academic box for examples.
