@@ -150,22 +150,31 @@
     place(top+left, dx: 1.419cm, dy: 2.374cm,
       image("../../assets/aphp/aphp-chevron.png", width: 0.864cm, height: 0.917cm))
 
-    // Bloc titre ligne 1 (court)
+    // Blocs titre (ligne 1 courte + ligne 2 large)
+    // Si aphp-title-line2 est fourni, ligne 1 = titre, ligne 2 = title-line2
+    // Sinon, ligne 1 = vide (décoration), ligne 2 = titre complet
+    let title-line2 = conf.at("aphp-title-line2", default: none)
+    let has-line2 = title-line2 != none and title-line2 != conf.title
+
+    // Bloc 1 (court — décoration ou première ligne du titre)
     place(top+left, dx: 1.428cm, dy: 4.127cm,
       block(width: 4.779cm, height: 1.795cm, fill: aphp-blue, clip: true,
-        align(left+horizon, pad(x: 0.4em,
-          text(size: 1.8em, weight: "bold", fill: white,
-            font: conf.text-font, conf.title)))))
+        if has-line2 {
+          align(left+horizon, pad(x: 0.4em,
+            text(size: 1.8em, weight: "bold", fill: white,
+              font: conf.text-font, conf.title)))
+        }))
 
-    // Bloc titre ligne 2 (large)
-    let title-line2 = conf.at("aphp-title-line2", default: conf.title)
+    // Bloc 2 (large — titre complet ou deuxième ligne)
+    // Utiliser pad+top (sans align horizon) pour que clip:true fonctionne
+    let title-line2-content = if has-line2 { title-line2 } else { conf.title }
     let title-y2 = if cover-style == "light" { 6.582cm } else { 6.410cm }
     let title-w2 = if cover-style == "light" { 14.593cm } else { 14.601cm }
     place(top+left, dx: 1.428cm, dy: title-y2,
       block(width: title-w2, height: 1.795cm, fill: aphp-blue, clip: true,
-        align(left+horizon, pad(x: 0.4em,
-          text(size: 1.8em, weight: "bold", fill: white,
-            font: conf.text-font, title-line2)))))
+        pad(x: 0.4em, top: 0.3em,
+          text(size: 1.2em, weight: "bold", fill: white,
+            font: conf.text-font, title-line2-content))))
 
     // Sous-titre
     let subtitle-y = if cover-style == "light" { 9.628cm } else { 8.800cm }
@@ -190,7 +199,9 @@
 }
 
 // ─── Slide de transition de section (Layouts 3 et 4) ──────────────────────
-// Appelé via conf.render-transition-func avec signature (h, is-annex)
+// Appelé via conf.render-transition-func avec signature (h, is-annex).
+// nav.render-transition crée déjà le slide (empty-slide) ; content-wrapper
+// retourne uniquement le CONTENU (pas un nouveau slide).
 #let aphp-render-transition(h, is-annex) = context {
   let conf = config-state.get()
   nav.render-transition(h,
@@ -199,27 +210,22 @@
     content-wrapper: (roadmap, h, active) => {
       // Récupérer le numéro de section / chapitre
       let level-nums = counter(heading).at(h.location())
-      let section-level = conf.mapping.at("section", default: 1)
       let part-level = conf.mapping.at("part", default: none)
       let is-part = part-level != none and h.level == part-level
 
       let chap-num = if is-part {
         numbering(conf.part-numbering-format, ..level-nums)
       } else {
-        let idx = if part-level != none { 0 } else { 0 }
-        str(level-nums.at(idx, default: 0))
+        str(level-nums.at(0, default: 0))
       }
 
-      empty-slide(fill: white, count: false, {
+      // Retourner le contenu page-absolue (empty-slide a margin=0pt)
+      {
         // Lignes verticales divisées
         aphp-line-split()
 
         // Cœur
         aphp-heart()
-
-        // Double chevron dans le gap (y=6.930)
-        place(top+left, dx: 1.722cm, dy: 6.930cm,
-          image("../../assets/aphp/aphp-chevron.png", width: 0.864cm, height: 0.917cm))
 
         // Bloc numéro de chapitre (fond #2C256B, x=1.224, y=3.257, w=4.810, h=6.054)
         place(top+left, dx: 1.224cm, dy: 3.257cm,
@@ -228,36 +234,30 @@
               text(size: 5em, weight: "bold", fill: white,
                 font: conf.text-font, chap-num))))
 
+        // Double chevron dans le gap (y=6.930) — placé APRÈS le bloc numéro
+        // pour apparaître dessus (z-order)
+        place(top+left, dx: 1.722cm, dy: 6.930cm,
+          image("../../assets/aphp/aphp-chevron.png", width: 0.864cm, height: 0.917cm))
+
         // Titre de section — ligne 1 (x=1.732, y=9.314, w=4.448, h=1.795)
+        // Bloc court = décoration vide (fond bleu)
         place(top+left, dx: 1.732cm, dy: 9.314cm,
-          block(width: 4.448cm, height: 1.795cm, fill: aphp-blue, clip: true,
-            align(left+horizon, pad(x: 0.4em,
-              text(size: 1.8em, weight: "bold", fill: white,
-                font: conf.text-font, h.body)))))
+          block(width: 4.448cm, height: 1.795cm, fill: aphp-blue))
 
         // Titre de section — ligne 2 (x=1.732, y=11.664, w=9.358, h=1.795)
+        // Bloc large = titre de la section
         place(top+left, dx: 1.732cm, dy: 11.664cm,
           block(width: 9.358cm, height: 1.795cm, fill: aphp-blue, clip: true,
             align(left+horizon, pad(x: 0.4em,
-              text(size: 1.8em, weight: "bold", fill: white,
+              text(size: 1.2em, weight: "bold", fill: white,
                 font: conf.text-font, h.body)))))
 
-        // Zone de contenu (texte ou image) — droite
-        // x=12.136, y=2.963, w=19.998, h=13.595
-        let transition-body = active
-        place(top+left, dx: 12.136cm, dy: 2.963cm,
-          block(width: 19.998cm, height: 13.595cm,
-            align(top+left, pad(x: 1em, y: 0.5em, {
-              set text(size: 1em, fill: aphp-text, font: conf.text-font)
-              transition-body
-            }))))
-
         // Numéro de slide
-        aphp-slide-number()
+        context aphp-slide-number()
 
         // Logos
         aphp-logos(conf)
-      })
+      }
     }
   )
 }
@@ -279,11 +279,11 @@
     place(top+left, dx: 3.131cm, dy: 1.066cm,
       image("../../assets/aphp/aphp-heart.png", width: 0.995cm, height: 0.995cm))
 
-    // Contenu central
+    // Contenu central (zone droite de la slide)
     place(top+left, dx: 5.932cm, dy: 0pt,
-      block(width: 27.929cm, height: 100%,
+      block(width: 25.0cm, height: 100%,
         align(center+horizon, stack(spacing: 1.5em,
-          text(size: 2.5em, weight: "bold", fill: white, title),
+          text(size: 2.2em, weight: "bold", fill: white, title),
           if subtitle != none {
             text(size: 1.5em, style: "italic", fill: white.transparentize(20%), subtitle)
           },
@@ -384,7 +384,7 @@
     code-font:    code-font,
     primary-color:    final-primary,
     marker-color:     final-primary,
-    transition-fill:  final-primary,
+    transition-fill:  white,  // section slides ont fond blanc
     alert-color:      final-alert,
     logo-transition:  none,
     logo-slide:       none,
@@ -436,7 +436,7 @@
     // Paramètres APHP spécifiques (transmis via conf)
     aphp-cover-style:    cover-style,
     aphp-classification: classification,
-    aphp-title-line2:    if title-line2 != none { title-line2 } else { title },
+    aphp-title-line2:    title-line2,  // none → bloc 1 vide, bloc 2 = titre complet
     aphp-logo-left:      if type(logo-left)  == str { image(logo-left)  } else { logo-left  },
     aphp-logo-right:     if type(logo-right) == str { image(logo-right) } else { logo-right },
     // Pas de transition roadmap standard (géré par render-transition-func)
