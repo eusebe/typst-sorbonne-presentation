@@ -2,7 +2,7 @@
 # Script de compilation pour typst-sorbonne-presentation
 # Doit être exécuté depuis la racine du projet ou via le script principal
 
-echo "🎨 Compiling Sorbonne & IPLESP themes..."
+echo "🎨 Compiling Sorbonne, IPLESP & APHP themes..."
 
 # On s'assure d'être dans le bon dossier si on l'exécute directement
 cd "$(dirname "$0")"
@@ -75,19 +75,32 @@ for theme in sorbonne iplesp; do
     done
 done
 
-# 2. Tests (en Sorbonne et IPLESP)
+# 2. Tests (en Sorbonne et IPLESP, hors tests dédiés APHP)
 echo "--- Compiling Tests ---"
 for test_file in $TEST_DIR/*.typ; do
     base=$(basename "$test_file" .typ)
+    # Skip APHP-specific tests (compiled separately below)
+    [[ "$base" == *aphp* ]] && continue
     echo "  → $base"
-    
+
     out_sorbonne="$TEST_DIR/$base-sorbonne.pdf"
     typst compile --root .. "$test_file" --input theme=sorbonne "$out_sorbonne"
     generate_pdfpc "$test_file" "$out_sorbonne"
-    
+
     out_iplesp="$TEST_DIR/$base-iplesp.pdf"
     typst compile --root .. "$test_file" --input theme=iplesp "$out_iplesp"
     generate_pdfpc "$test_file" "$out_iplesp"
 done
 
-echo "✅ Sorbonne/IPLESP compilation done."
+# 3. APHP tests (template dédié, pas de sélection par --input theme=)
+echo "--- Compiling APHP Tests ---"
+for test_file in $TEST_DIR/*aphp*.typ; do
+    [ -f "$test_file" ] || continue
+    base=$(basename "$test_file" .typ)
+    echo "  → $base"
+    out_aphp="$TEST_DIR/$base.pdf"
+    typst compile --root .. "$test_file" "$out_aphp"
+    generate_pdfpc "$test_file" "$out_aphp"
+done
+
+echo "✅ Sorbonne/IPLESP/APHP compilation done."
