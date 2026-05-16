@@ -937,7 +937,7 @@
 
   set page(
     paper: "presentation-" + conf.aspect-ratio, 
-    margin: (top: conf.at("margin-top", default: 4.5em), bottom: 3.0em, x: 0pt), 
+    margin: (top: conf.at("margin-top", default: 4.5em), bottom: conf.at("margin-bottom", default: 3.0em), left: conf.at("margin-left", default: 0pt), right: conf.at("margin-right", default: 0pt)),
     header: none, 
     footer: none,
     fill: if conf.dark-mode { conf.at("dark-bg", default: rgb("#21232c")) } else { white },
