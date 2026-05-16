@@ -241,18 +241,19 @@
   let fg-color = if config.dark-mode { white } else { config.text-color }
   set text(font: config.text-font, size: config.text-size, fill: fg-color)
   
+  let body-inset-x = config.at("body-inset-x", default: 2.5em)
   if not breakable {
     grid(
       columns: 100%,
       rows: 1fr,
-      inset: (x: 2.5em, top: 0.5em, bottom: 0pt),
+      inset: (x: body-inset-x, top: 0.5em, bottom: 0pt),
       {
         metadata((t: "ContentSlide"))
         body
       }
     )
   } else {
-    block(width: 100%, breakable: true, inset: (x: 2.5em, top: 0.5em, bottom: 0pt), {
+    block(width: 100%, breakable: true, inset: (x: body-inset-x, top: 0.5em, bottom: 0pt), {
       metadata((t: "ContentSlide"))
       body
     })
