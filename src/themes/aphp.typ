@@ -79,24 +79,42 @@
     line(angle: 90deg, length: 7.202cm * sy, stroke: 0.75pt + aphp-blue))
 }
 
-// Double rail (layout 5 : contenu — ligne extérieure bleue + ligne intérieure blanche)
-// PPTX : externe x=3.630 y_haut=2.325 l=6.202 / y_bas=10.307 l=5.822
-//        interne x=4.134 y_haut=2.924 l=5.601 / y_bas=10.307 l=5.021
-#let aphp-line-double-rail() = context {
+// Ligne unique avec label de section horizontal dans le gap (layout 5 : contenu)
+// PPTX : x=3.630, segment haut y=2.325 l=6.202, segment bas y=10.307 l=5.822
+// Gap de y=8.527 à y=10.307 (1.780cm) — label horizontal centré sur la ligne
+#let aphp-line-with-label(conf) = context {
   let sx = page.width  / aphp-pptx-w
   let sy = page.height / aphp-pptx-h
-  // Ligne extérieure bleue — segment haut
+  // Segment haut
   place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
     line(angle: 90deg, length: 6.202cm * sy, stroke: 0.75pt + aphp-blue))
-  // Ligne extérieure bleue — segment bas
+  // Segment bas
   place(top+left, dx: 3.630cm * sx, dy: 10.307cm * sy,
     line(angle: 90deg, length: 5.822cm * sy, stroke: 0.75pt + aphp-blue))
-  // Ligne intérieure blanche — segment haut
-  place(top+left, dx: 4.134cm * sx, dy: 2.924cm * sy,
-    line(angle: 90deg, length: 5.601cm * sy, stroke: 0.75pt + white))
-  // Ligne intérieure blanche — segment bas
-  place(top+left, dx: 4.134cm * sx, dy: 10.307cm * sy,
-    line(angle: 90deg, length: 5.021cm * sy, stroke: 0.75pt + white))
+
+  // Label horizontal dans le gap
+  let section-level = conf.mapping.at("section", default: 1)
+  let subsection-level = conf.mapping.at("subsection", default: none)
+  let section-headings = query(selector(heading.where(level: section-level)).before(here()))
+  let section-name = if section-headings.len() > 0 { section-headings.last().body } else { none }
+  let subsection-name = if subsection-level != none {
+    let sub-hs = query(selector(heading.where(level: subsection-level)).before(here()))
+    if sub-hs.len() > 0 { sub-hs.last().body } else { none }
+  } else { none }
+
+  if section-name != none {
+    let label-content = if subsection-name != none {
+      stack(spacing: 0.2em, section-name, subsection-name)
+    } else {
+      section-name
+    }
+    // Conteneur centré sur la ligne (x=3.630 ≈ milieu de 2.130–5.210), dans le gap
+    place(top+left, dx: 2.130cm * sx, dy: 8.527cm * sy,
+      block(width: 3.080cm * sx, height: 1.780cm * sy, clip: true,
+        align(center+horizon,
+          text(size: 6pt, fill: aphp-blue, font: conf.text-font,
+            weight: "regular", label-content))))
+  }
 }
 
 // ─── Header contenu (Layout 5) ─────────────────────────────────────────────
@@ -107,26 +125,8 @@
   if slide-meta == none { return none }
   let resolved-title = slide-meta.resolved-title
 
-  // Titre de section courant (pour le label vertical)
-  let section-level = conf.mapping.at("section", default: 1)
-  let section-headings = query(selector(heading.where(level: section-level)).before(here()))
-  let section-name = if section-headings.len() > 0 { section-headings.last().body } else { none }
-
-  // Label de section vertical (fond navy, texte blanc 9pt, pivoté -90°)
-  // PPTX : x=2.130 y=2.924 (3.080×13.003)
-  if section-name != none {
-    place(top+left, dx: 2.130cm * sx, dy: 2.924cm * sy,
-      block(width: 3.080cm * sx, height: 13.003cm * sy, fill: aphp-navy, clip: true,
-        align(center+horizon,
-          rotate(-90deg, reflow: true,
-            box(width: 13.003cm * sy,
-              align(center,
-                text(size: 9pt, fill: white, font: conf.text-font,
-                  weight: "regular", upper(section-name))))))))
-  }
-
-  // Double rail
-  aphp-line-double-rail()
+  // Ligne unique avec label de section horizontal dans le gap
+  aphp-line-with-label(conf)
 
   // Cœur
   aphp-heart()
@@ -188,24 +188,23 @@
     // Si aphp-title-line2 est fourni, ligne 1 = titre, ligne 2 = title-line2
     // Sinon, ligne 1 = vide (décoration), ligne 2 = titre complet
 
-    // Bloc 1 (court — décoration ou première ligne du titre)
-    // PPTX : x=1.428 y=4.128 (4.779×1.795)
-    place(top+left, dx: 1.428cm * sx, dy: 4.128cm * sy,
-      block(width: 4.779cm * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
-        if has-line2 {
-          align(left+horizon, pad(x: 0.4em,
+    // Bloc 1 auto-sized — première ligne du titre (uniquement si title-line2 fourni)
+    // PPTX : x=1.428 y=4.128
+    if has-line2 {
+      place(top+left, dx: 1.428cm * sx, dy: 4.128cm * sy,
+        box(fill: aphp-blue,
+          pad(x: 0.4em, y: 0.3em,
             text(size: 1.8em, weight: "bold", fill: white,
-              font: conf.text-font, conf.title)))
-        }))
+              font: conf.text-font, conf.title))))
+    }
 
-    // Bloc 2 (large — titre complet ou deuxième ligne)
-    // PPTX full : x=1.428 y=6.412 (14.602×1.795) ; light : y=6.583 w=14.594
+    // Bloc 2 auto-sized — titre complet ou deuxième ligne
+    // PPTX full : x=1.428 y=6.412 ; light : y=6.583
     let title-line2-content = if has-line2 { title-line2 } else { conf.title }
     let title-y2-pptx = if cover-style == "light" { 6.583cm } else { 6.412cm }
-    let title-w2-pptx = if cover-style == "light" { 14.594cm } else { 14.602cm }
     place(top+left, dx: 1.428cm * sx, dy: title-y2-pptx * sy,
-      block(width: title-w2-pptx * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
-        pad(x: 0.4em, top: 0.3em,
+      box(fill: aphp-blue,
+        pad(x: 0.4em, y: 0.3em,
           text(size: 1.2em, weight: "bold", fill: white,
             font: conf.text-font, title-line2-content))))
 
@@ -221,12 +220,12 @@
       )
     }
 
-    // Date (hauteur auto pour tolérer les dates longues en 4:3)
-    // PPTX : x=2.211 y=16.560 (2.908×0.629)
+    // Date auto-sized — largeur s'adapte au contenu pour toujours tenir sur une ligne
+    // PPTX : x=2.211 y=16.560
     place(top+left, dx: 2.211cm * sx, dy: 16.560cm * sy,
-      block(width: 2.908cm * sx, fill: aphp-blue,
-        align(center, pad(y: 0.1em,
-          text(size: 0.5em, fill: white, font: conf.text-font, conf.date)))))
+      box(fill: aphp-blue,
+        pad(x: 0.5em, y: 0.1em,
+          text(size: 0.5em, fill: white, font: conf.text-font, conf.date))))
 
     // Logos
     aphp-logos(conf)
@@ -282,13 +281,13 @@
         place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
           block(width: 4.449cm * sx, height: 1.795cm * sy, fill: aphp-blue))
 
-        // Titre de section — ligne 2 : bloc large = titre
-        // PPTX : x=1.732 y=11.665 (9.358×1.795)
+        // Titre de section — ligne 2 : auto-sized au texte
+        // PPTX : x=1.732 y=11.665
         place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
-          block(width: 9.358cm * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
-            align(left+horizon, pad(x: 0.4em,
+          box(fill: aphp-blue,
+            pad(x: 0.4em, y: 0.3em,
               text(size: 1.2em, weight: "bold", fill: white,
-                font: conf.text-font, h.body)))))
+                font: conf.text-font, h.body))))
 
         // Numéro de slide
         aphp-slide-number()
