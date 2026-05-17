@@ -55,7 +55,7 @@ for theme in sorbonne iplesp; do
             [ "$dark" == "true" ] && suffix="$suffix-dark"
             [ "$handout" == "true" ] && suffix="$suffix-handout"
             echo "  → $theme$suffix"
-            
+
             # Demo principale
             output_pdf="$EXAMPLES_DIR/demo-$theme$suffix.pdf"
             typst compile --root .. "$EXAMPLES_DIR/demo.typ" --input theme=$theme --input dark=$dark --input handout=$handout "$output_pdf"
@@ -74,6 +74,19 @@ for theme in sorbonne iplesp; do
         generate_pdfpc "$EXAMPLES_DIR/demo-mapping-3levels.typ" "$output_3l"
     done
 done
+
+# Demo APHP via demo.typ (16:9 — pas de dark mode ni handout natifs pour ce thème)
+echo "  → aphp (demo.typ, 16-9)"
+typst compile --root .. "$EXAMPLES_DIR/demo.typ" --input theme=aphp "$EXAMPLES_DIR/demo-aphp.pdf"
+generate_pdfpc "$EXAMPLES_DIR/demo.typ" "$EXAMPLES_DIR/demo-aphp.pdf"
+
+# Demo APHP dédiée (demo-aphp.typ — 16:9 et 4:3)
+echo "  → aphp-16-9 (demo-aphp.typ)"
+typst compile --root .. "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-16-9.pdf"
+generate_pdfpc "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-16-9.pdf"
+echo "  → aphp-4-3 (demo-aphp.typ)"
+typst compile --root .. --input ratio=4-3 "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
+generate_pdfpc "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
 
 # 2. Tests (en Sorbonne et IPLESP, hors tests dédiés APHP)
 echo "--- Compiling Tests ---"

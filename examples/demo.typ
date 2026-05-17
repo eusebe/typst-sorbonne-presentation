@@ -12,6 +12,12 @@
     dark-mode: is-dark,
     handout: handout-mode,
   )
+} else if theme-choice == "aphp" {
+  aphp-template.with(
+    title: [AP-HP / Sorbonne Université : Guide complet],
+    aspect-ratio: "16-9",
+    handout: handout-mode,
+  )
 } else {
   sorbonne-template.with(
     title: [(Unofficial) Sorbonne Template: Complete Guide],
