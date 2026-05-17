@@ -7,76 +7,102 @@
 #let aphp-gold  = rgb("#FFC000")  // double chevron >>
 #let aphp-text  = rgb("#153D8A")  // texte courant (identique à navy)
 
+// Espace de référence PPTX 16:9 (toutes les coordonnées ci-dessous sont dans cet espace).
+// Les fonctions de dessin calculent sx = page.width/aphp-pptx-w et sy = page.height/aphp-pptx-h
+// via context, ce qui les rend correctes pour tous les ratios (16:9, 4:3, etc.).
+#let aphp-pptx-w = 33.867cm
+#let aphp-pptx-h = 19.05cm
+
 // ─── Éléments communs ──────────────────────────────────────────────────────
 
 // Logos bas-gauche et bas-droit (communs à toutes les slides)
-#let aphp-logos(conf) = {
+// Coordonnées PPTX : bas-gauche x=0.953 y=17.630 (3.463×0.863), bas-droit x=27.735 y=17.343 (5.997×1.693)
+#let aphp-logos(conf) = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
   let logo-left = if conf.at("aphp-logo-left", default: none) != none {
     conf.at("aphp-logo-left")
   } else {
-    image("../../assets/aphp/aphp-sorbonne.gif", width: 3.463cm, height: 0.863cm)
+    image("../../assets/aphp/aphp-sorbonne.gif", width: 3.463cm * sx, height: 0.863cm * sx)
   }
   let logo-right = if conf.at("aphp-logo-right", default: none) != none {
     conf.at("aphp-logo-right")
   } else {
-    image("../../assets/aphp/aphp-logo-full.png", width: 5.997cm, height: 1.693cm)
+    image("../../assets/aphp/aphp-logo-full.png", width: 5.997cm * sx, height: 1.693cm * sx)
   }
-  place(top+left, dx: 0.953cm, dy: 17.630cm, logo-left)
-  place(top+left, dx: 27.735cm, dy: 17.343cm, logo-right)
+  place(top+left, dx: 0.953cm * sx, dy: 17.630cm * sy, logo-left)
+  place(top+left, dx: 27.735cm * sx, dy: 17.343cm * sy, logo-right)
 }
 
 // Icône cœur AP-HP (haut de la ligne verticale)
-#let aphp-heart() = {
-  place(top+left, dx: 3.131cm, dy: 1.066cm,
-    image("../../assets/aphp/aphp-heart.png", width: 0.995cm, height: 0.995cm))
+// Coordonnées PPTX : x=3.132 y=1.066 (0.995×0.995)
+#let aphp-heart() = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
+  place(top+left, dx: 3.132cm * sx, dy: 1.066cm * sy,
+    image("../../assets/aphp/aphp-heart.png", width: 0.995cm * sx, height: 0.995cm * sx))
 }
 
 // Numéro de slide (rectangle bleu au bas de la sidebar)
+// Coordonnées PPTX : x=2.994 y=16.560 (1.270×0.466)
 #let aphp-slide-number() = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
   let n = logical-slide-counter.get().at(0)
-  place(top+left, dx: 2.994cm, dy: 16.560cm,
-    block(width: 1.270cm, height: 0.466cm, fill: aphp-blue, clip: true,
+  place(top+left, dx: 2.994cm * sx, dy: 16.560cm * sy,
+    block(width: 1.270cm * sx, height: 0.466cm * sy, fill: aphp-blue, clip: true,
       align(center+horizon,
         text(size: 7pt, weight: "bold", fill: white, str(n)))))
 }
 
 // ─── Lignes verticales ─────────────────────────────────────────────────────
 
-// Ligne simple (layouts 1 & 2 : couverture)
-#let aphp-line-single() = {
-  // x=3.629, y=2.324 → longueur 13.802cm
-  place(top+left, dx: 3.629cm, dy: 2.324cm,
-    line(angle: 90deg, length: 13.802cm, stroke: 0.75pt + aphp-blue))
+// Ligne simple (layouts 1 & 2 : couverture, fin)
+// PPTX : x=3.630 y=2.325 longueur=13.800
+#let aphp-line-single(color: aphp-blue) = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
+  place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
+    line(angle: 90deg, length: 13.800cm * sy, stroke: 0.75pt + color))
 }
 
 // Ligne divisée (layout 3 & 4 : section — gap pour le bloc numéro + chevron)
-#let aphp-line-split() = {
-  // Segment haut : y=2.324 → 5.324 (longueur 3.0cm)
-  place(top+left, dx: 3.629cm, dy: 2.324cm,
-    line(angle: 90deg, length: 3.0cm, stroke: 0.75pt + aphp-blue))
-  // Segment bas : y=8.925 → 16.126 (longueur 7.201cm)
-  place(top+left, dx: 3.629cm, dy: 8.925cm,
-    line(angle: 90deg, length: 7.201cm, stroke: 0.75pt + aphp-blue))
+// PPTX : x=3.630, segment haut y=2.325 l=3.001, segment bas y=8.927 l=7.202
+#let aphp-line-split() = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
+  // Segment haut
+  place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
+    line(angle: 90deg, length: 3.001cm * sy, stroke: 0.75pt + aphp-blue))
+  // Segment bas
+  place(top+left, dx: 3.630cm * sx, dy: 8.927cm * sy,
+    line(angle: 90deg, length: 7.202cm * sy, stroke: 0.75pt + aphp-blue))
 }
 
 // Double rail (layout 5 : contenu — ligne extérieure bleue + ligne intérieure blanche)
-#let aphp-line-double-rail() = {
-  // Ligne extérieure bleue — segment haut : y=2.324 → 8.525
-  place(top+left, dx: 3.629cm, dy: 2.324cm,
-    line(angle: 90deg, length: 6.201cm, stroke: 0.75pt + aphp-blue))
-  // Ligne extérieure bleue — segment bas : y=10.305 → 16.126
-  place(top+left, dx: 3.629cm, dy: 10.305cm,
-    line(angle: 90deg, length: 5.821cm, stroke: 0.75pt + aphp-blue))
-  // Ligne intérieure blanche — segment haut : y=2.924 → 8.525
-  place(top+left, dx: 4.133cm, dy: 2.924cm,
-    line(angle: 90deg, length: 5.601cm, stroke: 0.75pt + white))
-  // Ligne intérieure blanche — segment bas : y=10.305 → 15.326
-  place(top+left, dx: 4.133cm, dy: 10.305cm,
-    line(angle: 90deg, length: 5.021cm, stroke: 0.75pt + white))
+// PPTX : externe x=3.630 y_haut=2.325 l=6.202 / y_bas=10.307 l=5.822
+//        interne x=4.134 y_haut=2.924 l=5.601 / y_bas=10.307 l=5.021
+#let aphp-line-double-rail() = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
+  // Ligne extérieure bleue — segment haut
+  place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
+    line(angle: 90deg, length: 6.202cm * sy, stroke: 0.75pt + aphp-blue))
+  // Ligne extérieure bleue — segment bas
+  place(top+left, dx: 3.630cm * sx, dy: 10.307cm * sy,
+    line(angle: 90deg, length: 5.822cm * sy, stroke: 0.75pt + aphp-blue))
+  // Ligne intérieure blanche — segment haut
+  place(top+left, dx: 4.134cm * sx, dy: 2.924cm * sy,
+    line(angle: 90deg, length: 5.601cm * sy, stroke: 0.75pt + white))
+  // Ligne intérieure blanche — segment bas
+  place(top+left, dx: 4.134cm * sx, dy: 10.307cm * sy,
+    line(angle: 90deg, length: 5.021cm * sy, stroke: 0.75pt + white))
 }
 
 // ─── Header contenu (Layout 5) ─────────────────────────────────────────────
 #let aphp-header(conf) = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
   let slide-meta = resolve-current-slide-meta()
   if slide-meta == none { return none }
   let resolved-title = slide-meta.resolved-title
@@ -86,14 +112,14 @@
   let section-headings = query(selector(heading.where(level: section-level)).before(here()))
   let section-name = if section-headings.len() > 0 { section-headings.last().body } else { none }
 
-  // Label de section vertical (fond #153D8A, texte blanc 9pt, pivoté -90°)
-  // x=2.130, y=2.924, w=3.079, h=13.001
+  // Label de section vertical (fond navy, texte blanc 9pt, pivoté -90°)
+  // PPTX : x=2.130 y=2.924 (3.080×13.003)
   if section-name != none {
-    place(top+left, dx: 2.130cm, dy: 2.924cm,
-      block(width: 3.079cm, height: 13.001cm, fill: aphp-navy, clip: true,
+    place(top+left, dx: 2.130cm * sx, dy: 2.924cm * sy,
+      block(width: 3.080cm * sx, height: 13.003cm * sy, fill: aphp-navy, clip: true,
         align(center+horizon,
           rotate(-90deg, reflow: true,
-            box(width: 13.001cm,
+            box(width: 13.003cm * sy,
               align(center,
                 text(size: 9pt, fill: white, font: conf.text-font,
                   weight: "regular", upper(section-name))))))))
@@ -105,10 +131,11 @@
   // Cœur
   aphp-heart()
 
-  // Titre de la slide (headline) : x=5.932, y=1.411, w=25.803, h=1.301
+  // Titre de la slide (headline)
+  // PPTX : x=5.934 y=1.411 (25.806×1.302)
   if resolved-title != none {
-    place(top+left, dx: 5.932cm, dy: 1.411cm,
-      block(width: 25.803cm, height: 1.301cm,
+    place(top+left, dx: 5.934cm * sx, dy: 1.411cm * sy,
+      block(width: 25.806cm * sx, height: 1.302cm * sy,
         align(left+horizon,
           text(size: 1.4em, weight: "regular", fill: aphp-text, resolved-title))))
   }
@@ -121,23 +148,29 @@
 }
 
 // ─── Slide de titre (Layouts 1 et 2) ──────────────────────────────────────
-#let aphp-title-slide(conf) = {
+#let aphp-title-slide(conf) = context {
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
   let cover-style = conf.at("aphp-cover-style", default: "full")
   let classification = conf.at("aphp-classification", default: none)
+  let title-line2 = conf.at("aphp-title-line2", default: none)
+  let has-line2 = title-line2 != none and title-line2 != conf.title
 
   empty-slide(fill: white, count: false, {
     // Banderole de classification (layout 2 uniquement)
+    // PPTX : x=0 y=0 hauteur=1.124
     if cover-style == "light" and classification != none {
       place(top+left, dx: 0pt, dy: 0pt,
-        block(width: 100%, height: 1.270cm, fill: aphp-blue,
+        block(width: 100%, height: 1.124cm * sy, fill: aphp-blue,
           align(left+horizon, pad(x: 1em,
             text(size: 0.45em, fill: white, classification)))))
     }
 
     // Grand panneau marine (layout 1 "full" uniquement)
+    // PPTX : x=5.934 y=1.124 (27.929×15.903)
     if cover-style == "full" {
-      place(top+left, dx: 5.932cm, dy: 1.124cm,
-        block(width: 27.929cm, height: 15.902cm, fill: aphp-navy))
+      place(top+left, dx: 5.934cm * sx, dy: 1.124cm * sy,
+        block(width: 27.929cm * sx, height: 15.903cm * sy, fill: aphp-navy))
     }
 
     // Ligne verticale simple
@@ -147,18 +180,18 @@
     aphp-heart()
 
     // Double chevron doré
-    place(top+left, dx: 1.419cm, dy: 2.374cm,
-      image("../../assets/aphp/aphp-chevron.png", width: 0.864cm, height: 0.917cm))
+    // PPTX : x=1.419 y=2.375 (0.865×0.917)
+    place(top+left, dx: 1.419cm * sx, dy: 2.375cm * sy,
+      image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
     // Blocs titre (ligne 1 courte + ligne 2 large)
     // Si aphp-title-line2 est fourni, ligne 1 = titre, ligne 2 = title-line2
     // Sinon, ligne 1 = vide (décoration), ligne 2 = titre complet
-    let title-line2 = conf.at("aphp-title-line2", default: none)
-    let has-line2 = title-line2 != none and title-line2 != conf.title
 
     // Bloc 1 (court — décoration ou première ligne du titre)
-    place(top+left, dx: 1.428cm, dy: 4.127cm,
-      block(width: 4.779cm, height: 1.795cm, fill: aphp-blue, clip: true,
+    // PPTX : x=1.428 y=4.128 (4.779×1.795)
+    place(top+left, dx: 1.428cm * sx, dy: 4.128cm * sy,
+      block(width: 4.779cm * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
         if has-line2 {
           align(left+horizon, pad(x: 0.4em,
             text(size: 1.8em, weight: "bold", fill: white,
@@ -166,32 +199,34 @@
         }))
 
     // Bloc 2 (large — titre complet ou deuxième ligne)
-    // Utiliser pad+top (sans align horizon) pour que clip:true fonctionne
+    // PPTX full : x=1.428 y=6.412 (14.602×1.795) ; light : y=6.583 w=14.594
     let title-line2-content = if has-line2 { title-line2 } else { conf.title }
-    let title-y2 = if cover-style == "light" { 6.582cm } else { 6.410cm }
-    let title-w2 = if cover-style == "light" { 14.593cm } else { 14.601cm }
-    place(top+left, dx: 1.428cm, dy: title-y2,
-      block(width: title-w2, height: 1.795cm, fill: aphp-blue, clip: true,
+    let title-y2-pptx = if cover-style == "light" { 6.583cm } else { 6.412cm }
+    let title-w2-pptx = if cover-style == "light" { 14.594cm } else { 14.602cm }
+    place(top+left, dx: 1.428cm * sx, dy: title-y2-pptx * sy,
+      block(width: title-w2-pptx * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
         pad(x: 0.4em, top: 0.3em,
           text(size: 1.2em, weight: "bold", fill: white,
             font: conf.text-font, title-line2-content))))
 
     // Sous-titre
-    let subtitle-y = if cover-style == "light" { 9.628cm } else { 8.800cm }
+    // PPTX full : x=9.428 y=8.801 (20.936×2.600) ; light : y=9.629
+    let subtitle-y-pptx = if cover-style == "light" { 9.629cm } else { 8.801cm }
     let subtitle-fill = if cover-style == "light" { aphp-navy } else { none }
     if conf.subtitle != none {
-      place(top+left, dx: 9.428cm, dy: subtitle-y,
-        block(width: 20.936cm, height: 2.600cm, fill: subtitle-fill, clip: true,
+      place(top+left, dx: 9.428cm * sx, dy: subtitle-y-pptx * sy,
+        block(width: 20.936cm * sx, height: 2.600cm * sy, fill: subtitle-fill, clip: true,
           align(left+horizon, pad(x: 0.5em,
             text(size: 1.4em, fill: white, font: conf.text-font, conf.subtitle))))
       )
     }
 
-    // Date
-    place(top+left, dx: 2.210cm, dy: 16.560cm,
-      block(width: 2.908cm, height: 0.628cm, fill: aphp-blue,
-        align(center+horizon,
-          text(size: 0.5em, fill: white, font: conf.text-font, conf.date))))
+    // Date (hauteur auto pour tolérer les dates longues en 4:3)
+    // PPTX : x=2.211 y=16.560 (2.908×0.629)
+    place(top+left, dx: 2.211cm * sx, dy: 16.560cm * sy,
+      block(width: 2.908cm * sx, fill: aphp-blue,
+        align(center, pad(y: 0.1em,
+          text(size: 0.5em, fill: white, font: conf.text-font, conf.date)))))
 
     // Logos
     aphp-logos(conf)
@@ -204,6 +239,8 @@
 // retourne uniquement le CONTENU (pas un nouveau slide).
 #let aphp-render-transition(h, is-annex) = context {
   let conf = config-state.get()
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
   nav.render-transition(h,
     top-padding: 0pt,
     use-short-title: false,
@@ -227,33 +264,34 @@
         // Cœur
         aphp-heart()
 
-        // Bloc numéro de chapitre (fond #2C256B, x=1.224, y=3.257, w=4.810, h=6.054)
-        place(top+left, dx: 1.224cm, dy: 3.257cm,
-          block(width: 4.810cm, height: 6.054cm, fill: aphp-dark, clip: true,
+        // Bloc numéro de chapitre (fond #2C256B)
+        // PPTX : x=1.224 y=3.258 (4.810×6.055)
+        place(top+left, dx: 1.224cm * sx, dy: 3.258cm * sy,
+          block(width: 4.810cm * sx, height: 6.055cm * sy, fill: aphp-dark, clip: true,
             align(center+horizon,
               text(size: 5em, weight: "bold", fill: white,
                 font: conf.text-font, chap-num))))
 
-        // Double chevron dans le gap (y=6.930) — placé APRÈS le bloc numéro
-        // pour apparaître dessus (z-order)
-        place(top+left, dx: 1.722cm, dy: 6.930cm,
-          image("../../assets/aphp/aphp-chevron.png", width: 0.864cm, height: 0.917cm))
+        // Double chevron dans le gap
+        // PPTX : x=1.722 y=6.932 (0.865×0.917)
+        place(top+left, dx: 1.722cm * sx, dy: 6.932cm * sy,
+          image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
-        // Titre de section — ligne 1 (x=1.732, y=9.314, w=4.448, h=1.795)
-        // Bloc court = décoration vide (fond bleu)
-        place(top+left, dx: 1.732cm, dy: 9.314cm,
-          block(width: 4.448cm, height: 1.795cm, fill: aphp-blue))
+        // Titre de section — ligne 1 : bloc court (décoration vide)
+        // PPTX : x=1.732 y=9.314 (4.449×1.795)
+        place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
+          block(width: 4.449cm * sx, height: 1.795cm * sy, fill: aphp-blue))
 
-        // Titre de section — ligne 2 (x=1.732, y=11.664, w=9.358, h=1.795)
-        // Bloc large = titre de la section
-        place(top+left, dx: 1.732cm, dy: 11.664cm,
-          block(width: 9.358cm, height: 1.795cm, fill: aphp-blue, clip: true,
+        // Titre de section — ligne 2 : bloc large = titre
+        // PPTX : x=1.732 y=11.665 (9.358×1.795)
+        place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
+          block(width: 9.358cm * sx, height: 1.795cm * sy, fill: aphp-blue, clip: true,
             align(left+horizon, pad(x: 0.4em,
               text(size: 1.2em, weight: "bold", fill: white,
                 font: conf.text-font, h.body)))))
 
         // Numéro de slide
-        context aphp-slide-number()
+        aphp-slide-number()
 
         // Logos
         aphp-logos(conf)
@@ -269,19 +307,20 @@
   contact: none,
 ) = context {
   let conf = config-state.get()
+  let sx = page.width  / aphp-pptx-w
+  let sy = page.height / aphp-pptx-h
 
   empty-slide(fill: aphp-navy, {
     // Ligne verticale simple (blanche sur fond marine)
-    place(top+left, dx: 3.629cm, dy: 2.324cm,
-      line(angle: 90deg, length: 13.802cm, stroke: 0.75pt + white.transparentize(30%)))
+    aphp-line-single(color: white.transparentize(30%))
 
-    // Cœur (version blanche si disponible, sinon normale)
-    place(top+left, dx: 3.131cm, dy: 1.066cm,
-      image("../../assets/aphp/aphp-heart.png", width: 0.995cm, height: 0.995cm))
+    // Cœur
+    aphp-heart()
 
     // Contenu central (zone droite de la slide)
-    place(top+left, dx: 5.932cm, dy: 0pt,
-      block(width: 25.0cm, height: 100%,
+    // PPTX : x=5.934 y=0 (25.086×100%)
+    place(top+left, dx: 5.934cm * sx, dy: 0pt,
+      block(width: 25.086cm * sx, height: 100%,
         align(center+horizon, stack(spacing: 1.5em,
           text(size: 2.2em, weight: "bold", fill: white, title),
           if subtitle != none {
@@ -354,6 +393,15 @@
   let final-primary = if primary-color != none { primary-color } else { aphp-blue }
   let final-alert   = if alert-color   != none { alert-color   } else { aphp-gold }
 
+  // Dimensions de la page Typst selon le ratio (pour calculer les marges)
+  let (page-w, page-h) = if aspect-ratio == "4-3" {
+    (28.0cm, 21.0cm)
+  } else {
+    (29.7cm, 16.7cm)
+  }
+  let aphp-sx = page-w / aphp-pptx-w
+  let aphp-sy = page-h / aphp-pptx-h
+
   let resolved-max-length = if type(max-length) == dictionary {
     let new-dict = (:)
     for (key, val) in max-length {
@@ -384,7 +432,7 @@
     code-font:    code-font,
     primary-color:    final-primary,
     marker-color:     final-primary,
-    transition-fill:  white,  // section slides ont fond blanc
+    transition-fill:  white,
     alert-color:      final-alert,
     logo-transition:  none,
     logo-slide:       none,
@@ -415,20 +463,20 @@
     use-short-title: use-short-title,
     dark-mode:     dark-mode,
     handout:       handout,
-    // Disposition APHP : sidebar gauche de 5.932cm
-    margin-top:    3.823cm,   // corps démarre à y=3.823cm (sous le headline)
-    margin-left:   5.932cm,   // zone sidebar (0 → 5.932cm)
-    margin-right:  4.405cm,   // marge droite PPTX (corps se termine à x=29.462cm)
-    margin-bottom: 1.864cm,   // zone footer
-    body-inset-x:  0pt,       // margin-left seul contrôle le départ horizontal
+    // Marges APHP — proportionnelles aux dimensions de la page (coordonnées PPTX × sx/sy)
+    margin-top:    3.824cm * aphp-sy,
+    margin-left:   5.934cm * aphp-sx,   // largeur de la sidebar
+    margin-right:  4.406cm * aphp-sx,
+    margin-bottom: 1.864cm * aphp-sy,
+    body-inset-x:  0pt,
     // Header custom APHP (dessine toute la sidebar en foreground)
     header-func:        aphp-header,
-    footer-func:        none,   // aphp-header gère aussi logos et numéro
+    footer-func:        none,
     // Slides spéciaux
     title-slide-func:   aphp-title-slide,
     ending-slide-func:  aphp-ending-slide,
     render-transition-func: aphp-render-transition,
-    // Focus slide (utilise base-focus-slide avec couleur primaire)
+    // Focus slide
     focus-layout:   "centered",
     focus-bg-light: final-primary,
     focus-bg-dark:  final-primary.darken(40%),
@@ -436,7 +484,7 @@
     // Paramètres APHP spécifiques (transmis via conf)
     aphp-cover-style:    cover-style,
     aphp-classification: classification,
-    aphp-title-line2:    title-line2,  // none → bloc 1 vide, bloc 2 = titre complet
+    aphp-title-line2:    title-line2,
     aphp-logo-left:      if type(logo-left)  == str { image(logo-left)  } else { logo-left  },
     aphp-logo-right:     if type(logo-right) == str { image(logo-right) } else { logo-right },
     // Pas de transition roadmap standard (géré par render-transition-func)
