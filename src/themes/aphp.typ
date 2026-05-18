@@ -96,18 +96,34 @@
   let section-level = conf.mapping.at("section", default: 1)
   let subsection-level = conf.mapping.at("subsection", default: none)
   let section-headings = query(selector(heading.where(level: section-level)).before(here()))
-  let section-name = if section-headings.len() > 0 { section-headings.last().body } else { none }
-  let subsection-name = if subsection-level != none {
+  let section-h = if section-headings.len() > 0 { section-headings.last() } else { none }
+  let subsection-h = if subsection-level != none {
     let sub-hs = query(selector(heading.where(level: subsection-level)).before(here()))
-    if sub-hs.len() > 0 { sub-hs.last().body } else { none }
+    if sub-hs.len() > 0 { sub-hs.last() } else { none }
   } else { none }
 
-  if section-name != none {
-    let label-content = if subsection-name != none {
-      stack(spacing: 0.2em, section-name, subsection-name)
+  if section-h != none {
+    // Section en gras — numérotée si show-header-numbering
+    let section-nums = counter(heading).at(section-h.location())
+    let section-display = if conf.show-header-numbering {
+      [*#str(section-nums.at(0, default: 0)). #section-h.body*]
     } else {
-      section-name
+      [*#section-h.body*]
     }
+
+    // Sous-section en régulier — numérotée avec numbering-format si show-header-numbering
+    let label-content = if subsection-h != none {
+      let sub-nums = counter(heading).at(subsection-h.location())
+      let sub-display = if conf.show-header-numbering {
+        [#{numbering(conf.numbering-format, ..sub-nums)} #subsection-h.body]
+      } else {
+        subsection-h.body
+      }
+      stack(spacing: 0.2em, section-display, sub-display)
+    } else {
+      section-display
+    }
+
     // Conteneur centré sur la ligne (x=3.630 ≈ milieu de 2.130–5.210), dans le gap
     place(top+left, dx: 2.130cm * sx, dy: 8.527cm * sy,
       block(width: 3.080cm * sx, height: 1.780cm * sy, clip: true,
@@ -300,13 +316,24 @@
         place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
           block(width: 4.449cm * sx, height: 1.795cm * sy, fill: aphp-blue))
 
-        // Titre de section — ligne 2 : auto-sized au texte
+        // Titre de section — ligne 2 : auto-sized au texte, numéroté si show-header-numbering
+        // Pour les sections (niveau 1) : "1. Titre" ; pour les sous-sections : "1.1 Titre"
         // PPTX : x=1.732 y=11.665
+        let section-level-t = conf.mapping.at("section", default: 1)
+        let heading-display = if conf.show-header-numbering {
+          if h.level == section-level-t {
+            [#str(level-nums.at(0, default: 0)). #h.body]
+          } else {
+            [#{numbering(conf.numbering-format, ..level-nums)} #h.body]
+          }
+        } else {
+          h.body
+        }
         place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
           box(fill: aphp-blue,
             pad(x: 0.4em, y: 0.3em,
               text(size: 1.2em, weight: "bold", fill: white,
-                font: conf.text-font, h.body))))
+                font: conf.text-font, heading-display))))
 
         // Numéro de slide
         aphp-slide-number()
