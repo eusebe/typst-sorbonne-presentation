@@ -490,7 +490,7 @@
   progress-bar-height: 2pt,
   equation-definitions-width: 85%,
   transition-roadmap-width: 60%,
-  slide-break-suffix: [ (suite)],
+  slide-break-suffix: [ (cont.)],
   footer-author: false,
   footer-title: false,
   max-length: none,
