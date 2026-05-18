@@ -194,18 +194,18 @@
       place(top+left, dx: 1.428cm * sx, dy: 4.128cm * sy,
         box(fill: aphp-blue,
           pad(x: 0.4em, y: 0.3em,
-            text(size: 1.8em, weight: "bold", fill: white,
+            text(size: 1.4em, weight: "bold", fill: white,
               font: conf.text-font, conf.title))))
     }
 
-    // Bloc 2 auto-sized — titre complet ou deuxième ligne
+    // Bloc 2 auto-sized — titre complet ou deuxième ligne (même taille que bloc 1)
     // PPTX full : x=1.428 y=6.412 ; light : y=6.583
     let title-line2-content = if has-line2 { title-line2 } else { conf.title }
     let title-y2-pptx = if cover-style == "light" { 6.583cm } else { 6.412cm }
     place(top+left, dx: 1.428cm * sx, dy: title-y2-pptx * sy,
       box(fill: aphp-blue,
         pad(x: 0.4em, y: 0.3em,
-          text(size: 1.2em, weight: "bold", fill: white,
+          text(size: 1.4em, weight: "bold", fill: white,
             font: conf.text-font, title-line2-content))))
 
     // Sous-titre
@@ -218,6 +218,25 @@
           align(left+horizon, pad(x: 0.5em,
             text(size: 1.4em, fill: white, font: conf.text-font, conf.subtitle))))
       )
+    }
+
+    // Auteur et affiliation — sous le sous-titre, alignés sur la même zone droite
+    let author-text-fill = if cover-style == "light" { aphp-navy } else { white }
+    if conf.author != none or conf.affiliation != none {
+      let author-y-pptx = subtitle-y-pptx + 3.1cm
+      place(top+left, dx: 9.428cm * sx, dy: author-y-pptx * sy,
+        block(width: 20.936cm * sx,
+          pad(x: 0.5em,
+            stack(dir: ttb, spacing: 0.35em,
+              ..if conf.author != none {
+                (text(size: 1.1em, weight: "bold", fill: author-text-fill,
+                  font: conf.text-font, conf.author),)
+              } else { () },
+              ..if conf.affiliation != none {
+                (text(size: 0.9em, fill: author-text-fill,
+                  font: conf.text-font, conf.affiliation),)
+              } else { () }
+            ))))
     }
 
     // Date auto-sized — largeur s'adapte au contenu pour toujours tenir sur une ligne
