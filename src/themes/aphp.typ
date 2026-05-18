@@ -66,17 +66,17 @@
     line(angle: 90deg, length: 13.800cm * sy, stroke: 0.75pt + color))
 }
 
-// Ligne divisée (layout 3 & 4 : section — gap pour le bloc numéro + chevron)
-// PPTX : x=3.630, segment haut y=2.325 l=3.001, segment bas y=8.927 l=7.202
+// Ligne divisée (transition) — grand gap pour le numéro de chapitre (fond blanc, chiffre bleu foncé)
+// PPTX : x=3.630, segment haut y=2.325 l=0.975 → y=3.300, segment bas y=11.200 l=5.363 → y=16.563
 #let aphp-line-split() = context {
   let sx = page.width  / aphp-pptx-w
   let sy = page.height / aphp-pptx-h
-  // Segment haut
+  // Segment haut (court — au-dessus de la zone numéro)
   place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
-    line(angle: 90deg, length: 3.001cm * sy, stroke: 0.75pt + aphp-blue))
-  // Segment bas
-  place(top+left, dx: 3.630cm * sx, dy: 8.927cm * sy,
-    line(angle: 90deg, length: 7.202cm * sy, stroke: 0.75pt + aphp-blue))
+    line(angle: 90deg, length: 0.975cm * sy, stroke: 0.75pt + aphp-blue))
+  // Segment bas (sous la zone numéro, jusqu'aux logos)
+  place(top+left, dx: 3.630cm * sx, dy: 11.200cm * sy,
+    line(angle: 90deg, length: 5.363cm * sy, stroke: 0.75pt + aphp-blue))
 }
 
 // Ligne unique avec label de section horizontal dans le gap (layout 5 : contenu)
@@ -292,71 +292,67 @@
 
       // Retourner le contenu page-absolue (empty-slide a margin=0pt)
       {
-        // Lignes verticales divisées
+        // Lignes divisées — grand gap pour la zone numéro
         aphp-line-split()
 
-        // Cœur
+        // Cœur AP-HP
         aphp-heart()
 
-        // Bloc numéro de chapitre (fond #2C256B)
-        // PPTX : x=1.224 y=3.258 (4.810×6.055)
-        place(top+left, dx: 1.224cm * sx, dy: 3.258cm * sy,
-          block(width: 4.810cm * sx, height: 6.055cm * sy, fill: aphp-dark, clip: true,
-            align(center+horizon,
-              text(size: 5em, weight: "bold", fill: white,
-                font: conf.text-font, chap-num))))
+        // Grand numéro — texte bleu foncé sur fond blanc (pas de rectangle rempli)
+        // PPTX : x=2.000 y=3.500
+        place(top+left, dx: 2.000cm * sx, dy: 3.500cm * sy,
+          text(size: 9em, weight: "bold", fill: aphp-dark,
+            font: conf.text-font, chap-num))
 
-        // Double chevron dans le gap
-        // PPTX : x=1.722 y=6.932 (0.865×0.917)
-        place(top+left, dx: 1.722cm * sx, dy: 6.932cm * sy,
+        // Chevron doré — à gauche du numéro, centré verticalement avec lui
+        // PPTX : x=0.800 y=7.200
+        place(top+left, dx: 0.800cm * sx, dy: 7.200cm * sy,
           image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
-        // Blocs titre — logique à deux niveaux :
-        //   transition de section   → bloc 1 = titre section, bloc 2 absent
-        //   transition de sous-sect → bloc 1 = titre section parente, bloc 2 = titre sous-section
+        // Logique des blocs titre — cohérente pour part / section / sous-section :
+        //   part / section      → bloc 1 = titre du heading courant, bloc 2 absent
+        //   sous-section        → bloc 1 = titre de la section parente, bloc 2 = titre sous-section
         let section-level-t = conf.mapping.at("section", default: 1)
         let is-section-t = h.level == section-level-t
 
-        // Section parente (uniquement pour les transitions de sous-section)
-        let parent-section-h = if not is-section-t {
+        // Heading pour bloc 1 : h lui-même (part ou section) ou section parente (sous-section)
+        let section-h-b1 = if is-part or is-section-t {
+          h
+        } else {
           let sec-hs = query(selector(heading.where(level: section-level-t)).before(h.location()))
           if sec-hs.len() > 0 { sec-hs.last() } else { none }
-        } else { none }
+        }
 
-        // Contenu bloc 1 : titre de la section (h lui-même, ou la section parente)
-        let section-h-b1 = if is-section-t { h } else { parent-section-h }
+        // Contenu bloc 1
         let bloc1-content = if section-h-b1 != none {
-          let sec-nums = counter(heading).at(section-h-b1.location())
-          if conf.show-header-numbering {
-            [#str(sec-nums.at(0, default: 0)). #section-h-b1.body]
-          } else {
-            section-h-b1.body
-          }
+          let nums1 = counter(heading).at(section-h-b1.location())
+          let prefix = if is-part { chap-num } else { str(nums1.at(0, default: 0)) }
+          if conf.show-header-numbering { [#prefix. #section-h-b1.body] } else { section-h-b1.body }
         } else { none }
 
-        // Contenu bloc 2 : titre de la sous-section (absent pour les transitions de section)
-        let bloc2-content = if not is-section-t {
+        // Contenu bloc 2 (absent pour parts et sections)
+        let bloc2-content = if not is-part and not is-section-t {
           if conf.show-header-numbering {
             [#{numbering(conf.numbering-format, ..level-nums)} #h.body]
-          } else {
-            h.body
-          }
+          } else { h.body }
         } else { none }
 
-        // Bloc 1 — auto-sized, PPTX : x=1.732 y=9.314
+        // Bloc 1 — pleine largeur, titre de section/partie
+        // PPTX : x=0.800 y=11.200 ; largeur = slide - marge gauche - marge droite
         if bloc1-content != none {
-          place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
-            box(fill: aphp-blue,
-              pad(x: 0.4em, y: 0.3em,
+          place(top+left, dx: 0.800cm * sx, dy: 11.200cm * sy,
+            block(width: (aphp-pptx-w - 1.300cm) * sx, fill: aphp-blue,
+              pad(x: 0.5em, y: 0.3em,
                 text(size: 1.2em, weight: "bold", fill: white,
                   font: conf.text-font, bloc1-content))))
         }
 
-        // Bloc 2 — auto-sized, absent si transition de section, PPTX : x=1.732 y=11.665
+        // Bloc 2 — auto-sized (plus court), titre de sous-section
+        // PPTX : x=0.800 y=12.900 (gap réduit ~0.3cm avec bloc 1)
         if bloc2-content != none {
-          place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
+          place(top+left, dx: 0.800cm * sx, dy: 12.900cm * sy,
             box(fill: aphp-blue,
-              pad(x: 0.4em, y: 0.3em,
+              pad(x: 0.5em, y: 0.3em,
                 text(size: 1.2em, weight: "bold", fill: white,
                   font: conf.text-font, bloc2-content))))
         }
