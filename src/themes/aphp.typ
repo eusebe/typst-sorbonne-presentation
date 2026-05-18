@@ -580,6 +580,7 @@
     margin-right:  2.132cm * aphp-sx,
     margin-bottom: 1.864cm * aphp-sy,
     body-inset-x:  0pt,
+    cite-box-bottom-dy: -1.5em,
     // Header custom APHP (dessine toute la sidebar en foreground)
     header-func:        aphp-header,
     footer-func:        none,

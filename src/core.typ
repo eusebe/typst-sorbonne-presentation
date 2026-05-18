@@ -501,7 +501,7 @@
     else { bottom + right }
   
   let dx = if "right" in position { 1em } else { -1em }
-  let dy = if "top" in position { -0.3em } else { 0.3em }
+  let dy = if "top" in position { -0.3em } else { conf.at("cite-box-bottom-dy", default: 0.3em) }
 
   let keys = if type(bib-key) == array { bib-key } else if bib-key != none { (bib-key,) } else { () }
   let labels = keys.map(k => if type(k) == str { label(k) } else { k })
