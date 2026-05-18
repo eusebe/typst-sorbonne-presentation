@@ -311,29 +311,55 @@
         place(top+left, dx: 1.722cm * sx, dy: 6.932cm * sy,
           image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
-        // Titre de section — ligne 1 : bloc court (décoration vide)
-        // PPTX : x=1.732 y=9.314 (4.449×1.795)
-        place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
-          block(width: 4.449cm * sx, height: 1.795cm * sy, fill: aphp-blue))
-
-        // Titre de section — ligne 2 : auto-sized au texte, numéroté si show-header-numbering
-        // Pour les sections (niveau 1) : "1. Titre" ; pour les sous-sections : "1.1 Titre"
-        // PPTX : x=1.732 y=11.665
+        // Blocs titre — logique à deux niveaux :
+        //   transition de section   → bloc 1 = titre section, bloc 2 absent
+        //   transition de sous-sect → bloc 1 = titre section parente, bloc 2 = titre sous-section
         let section-level-t = conf.mapping.at("section", default: 1)
-        let heading-display = if conf.show-header-numbering {
-          if h.level == section-level-t {
-            [#str(level-nums.at(0, default: 0)). #h.body]
+        let is-section-t = h.level == section-level-t
+
+        // Section parente (uniquement pour les transitions de sous-section)
+        let parent-section-h = if not is-section-t {
+          let sec-hs = query(selector(heading.where(level: section-level-t)).before(h.location()))
+          if sec-hs.len() > 0 { sec-hs.last() } else { none }
+        } else { none }
+
+        // Contenu bloc 1 : titre de la section (h lui-même, ou la section parente)
+        let section-h-b1 = if is-section-t { h } else { parent-section-h }
+        let bloc1-content = if section-h-b1 != none {
+          let sec-nums = counter(heading).at(section-h-b1.location())
+          if conf.show-header-numbering {
+            [#str(sec-nums.at(0, default: 0)). #section-h-b1.body]
           } else {
-            [#{numbering(conf.numbering-format, ..level-nums)} #h.body]
+            section-h-b1.body
           }
-        } else {
-          h.body
+        } else { none }
+
+        // Contenu bloc 2 : titre de la sous-section (absent pour les transitions de section)
+        let bloc2-content = if not is-section-t {
+          if conf.show-header-numbering {
+            [#{numbering(conf.numbering-format, ..level-nums)} #h.body]
+          } else {
+            h.body
+          }
+        } else { none }
+
+        // Bloc 1 — auto-sized, PPTX : x=1.732 y=9.314
+        if bloc1-content != none {
+          place(top+left, dx: 1.732cm * sx, dy: 9.314cm * sy,
+            box(fill: aphp-blue,
+              pad(x: 0.4em, y: 0.3em,
+                text(size: 1.2em, weight: "bold", fill: white,
+                  font: conf.text-font, bloc1-content))))
         }
-        place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
-          box(fill: aphp-blue,
-            pad(x: 0.4em, y: 0.3em,
-              text(size: 1.2em, weight: "bold", fill: white,
-                font: conf.text-font, heading-display))))
+
+        // Bloc 2 — auto-sized, absent si transition de section, PPTX : x=1.732 y=11.665
+        if bloc2-content != none {
+          place(top+left, dx: 1.732cm * sx, dy: 11.665cm * sy,
+            box(fill: aphp-blue,
+              pad(x: 0.4em, y: 0.3em,
+                text(size: 1.2em, weight: "bold", fill: white,
+                  font: conf.text-font, bloc2-content))))
+        }
 
         // Numéro de slide
         aphp-slide-number()
