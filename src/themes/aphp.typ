@@ -281,7 +281,10 @@
       // Retourner le contenu page-absolue (empty-slide a margin=0pt)
       {
         // Mesure du numéro pour calculer dynamiquement le gap de la ligne
-        let num-content = text(size: 7em, weight: "bold", fill: aphp-dark,
+        // Taille absolue (7 × text-size) pour éviter que la résolution de `em`
+        // dépende du contexte typographique du heading courant (niveau 2 vs 3)
+        let num-font-size = 7 * conf.text-size
+        let num-content = text(size: num-font-size, weight: "bold", fill: aphp-dark,
           font: conf.text-font, chap-num)
         let num-h = measure(num-content).height
         let num-dy  = 3.500cm * sy

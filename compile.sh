@@ -88,6 +88,14 @@ echo "  → aphp-4-3 (demo-aphp.typ)"
 typst compile --root .. --input ratio=4-3 "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
 generate_pdfpc "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
 
+# Mappings APHP (pas de dark mode pour ce thème)
+echo "  → aphp (demo-mapping-2levels.typ)"
+typst compile --root .. "$EXAMPLES_DIR/demo-mapping-2levels.typ" --input theme=aphp "$EXAMPLES_DIR/demo-mapping-2levels-aphp.pdf"
+generate_pdfpc "$EXAMPLES_DIR/demo-mapping-2levels.typ" "$EXAMPLES_DIR/demo-mapping-2levels-aphp.pdf"
+echo "  → aphp (demo-mapping-3levels.typ)"
+typst compile --root .. "$EXAMPLES_DIR/demo-mapping-3levels.typ" --input theme=aphp "$EXAMPLES_DIR/demo-mapping-3levels-aphp.pdf"
+generate_pdfpc "$EXAMPLES_DIR/demo-mapping-3levels.typ" "$EXAMPLES_DIR/demo-mapping-3levels-aphp.pdf"
+
 # 2. Tests (en Sorbonne et IPLESP, hors tests dédiés APHP)
 echo "--- Compiling Tests ---"
 for test_file in $TEST_DIR/*.typ; do
