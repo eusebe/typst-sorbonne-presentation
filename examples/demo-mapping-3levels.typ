@@ -9,6 +9,11 @@
     theme: "blue",
     dark-mode: is-dark,
   )
+} else if theme-choice == "aphp" {
+  aphp-template.with(
+    title: [Complex Mapping Guide],
+    aspect-ratio: "16-9",
+  )
 } else {
   sorbonne-template.with(
     title: [Complex Mapping Guide],
