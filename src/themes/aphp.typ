@@ -374,6 +374,11 @@
 }
 
 // ─── Slide de fin ──────────────────────────────────────────────────────────
+// Reprend le layout de la diapositive de titre : fond blanc + panneau marine
+// à droite (en mode "full"), ligne bleue, chevron, blocs bleus.
+// - title    → bloc bleu gauche  (ex : "Merci de votre attention !")
+// - subtitle → zone droite haute (ex : "Questions ?")
+// - contact  → zone droite basse (ex : nom, email)
 #let aphp-ending-slide(
   title: [Merci de votre attention !],
   subtitle: [Questions ?],
@@ -382,31 +387,58 @@
   let conf = config-state.get()
   let sx = page.width  / aphp-pptx-w
   let sy = page.height / aphp-pptx-h
+  let cover-style = conf.at("aphp-cover-style", default: "full")
 
-  empty-slide(fill: aphp-navy, {
-    // Ligne verticale simple (blanche sur fond marine)
-    aphp-line-single(color: white.transparentize(30%))
+  empty-slide(fill: white, {
+    // Grand panneau marine à droite (identique à la diapositive de titre)
+    if cover-style == "full" {
+      place(top+left, dx: 5.934cm * sx, dy: 1.124cm * sy,
+        block(width: 27.929cm * sx, height: 15.903cm * sy, fill: aphp-navy))
+    }
+
+    // Ligne verticale simple
+    aphp-line-single()
 
     // Cœur
     aphp-heart()
 
-    // Contenu central (zone droite de la slide)
-    // PPTX : x=5.934 y=0 (25.086×100%)
-    place(top+left, dx: 5.934cm * sx, dy: 0pt,
-      block(width: 25.086cm * sx, height: 100%,
-        align(center+horizon, stack(spacing: 1.5em,
-          text(size: 2.2em, weight: "bold", fill: white, title),
-          if subtitle != none {
-            text(size: 1.5em, style: "italic", fill: white.transparentize(20%), subtitle)
-          },
-          if contact != none and contact != () {
-            v(1em)
-            set text(size: 1em, fill: white.transparentize(10%))
-            if type(contact) == array { contact.join([#h(2em)]) } else { contact }
-          }
-        ))))
+    // Double chevron doré
+    place(top+left, dx: 1.419cm * sx, dy: 2.375cm * sy,
+      image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
-    // Logos (versions sur fond sombre — les images PNG/GIF ont fond transparent)
+    // Bloc titre auto-sized (position du titre seul de la diapositive de titre)
+    // PPTX full : x=1.428 y=6.412 ; light : y=6.583
+    let title-y-pptx = if cover-style == "light" { 6.583cm } else { 6.412cm }
+    place(top+left, dx: 1.428cm * sx, dy: title-y-pptx * sy,
+      box(fill: aphp-blue,
+        pad(x: 0.4em, y: 0.3em,
+          text(size: 1.4em, weight: "bold", fill: white,
+            font: conf.text-font, title))))
+
+    // Sous-titre — zone droite (identique à la diapositive de titre)
+    // PPTX full : x=9.428 y=8.801 ; light : y=9.629
+    let subtitle-y-pptx = if cover-style == "light" { 9.629cm } else { 8.801cm }
+    let subtitle-fill = if cover-style == "light" { aphp-navy } else { none }
+    if subtitle != none {
+      place(top+left, dx: 9.428cm * sx, dy: subtitle-y-pptx * sy,
+        block(width: 20.936cm * sx, height: 2.600cm * sy, fill: subtitle-fill, clip: true,
+          align(left+horizon, pad(x: 0.5em,
+            text(size: 1.4em, fill: white, font: conf.text-font, subtitle)))))
+    }
+
+    // Contact — zone auteur/affiliation (même position que dans la diapositive de titre)
+    let contact-fill = if cover-style == "light" { aphp-navy } else { white }
+    if contact != none and contact != () {
+      let contact-y-pptx = subtitle-y-pptx + 3.1cm
+      place(top+left, dx: 9.428cm * sx, dy: contact-y-pptx * sy,
+        block(width: 20.936cm * sx,
+          pad(x: 0.5em, {
+            set text(size: 1.0em, fill: contact-fill, font: conf.text-font)
+            if type(contact) == array { contact.join(linebreak()) } else { contact }
+          })))
+    }
+
+    // Logos
     aphp-logos(conf)
   })
 }
