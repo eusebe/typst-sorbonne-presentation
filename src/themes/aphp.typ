@@ -577,7 +577,7 @@
     // Marges APHP — proportionnelles aux dimensions de la page (coordonnées PPTX × sx/sy)
     margin-top:    3.824cm * aphp-sy,
     margin-left:   5.934cm * aphp-sx,   // largeur de la sidebar
-    margin-right:  4.406cm * aphp-sx,
+    margin-right:  2.132cm * aphp-sx,
     margin-bottom: 1.864cm * aphp-sy,
     body-inset-x:  0pt,
     // Header custom APHP (dessine toute la sidebar en foreground)
