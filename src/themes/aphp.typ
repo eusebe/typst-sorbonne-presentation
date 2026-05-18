@@ -128,6 +128,12 @@
   let slide-meta = resolve-current-slide-meta()
   if slide-meta == none { return none }
   let resolved-title = slide-meta.resolved-title
+  let is-continuation = slide-meta.is-continuation
+  let title-display = if is-continuation and resolved-title != none {
+    resolved-title + text(size: 0.8em, weight: "regular", fill: aphp-blue, conf.slide-break-suffix)
+  } else {
+    resolved-title
+  }
 
   // Ligne unique avec label de section horizontal dans le gap
   aphp-line-with-label(conf)
@@ -137,11 +143,11 @@
 
   // Titre de la slide (headline)
   // PPTX : x=5.934 y=1.411 (25.806×1.302)
-  if resolved-title != none {
+  if title-display != none {
     place(top+left, dx: 5.934cm * sx, dy: 1.411cm * sy,
       block(width: 25.806cm * sx, height: 1.302cm * sy,
         align(left+horizon,
-          text(size: 1.4em, weight: "regular", fill: aphp-text, resolved-title))))
+          text(size: 1.4em, weight: "regular", fill: aphp-text, title-display))))
   }
 
   // Numéro de slide
