@@ -66,18 +66,6 @@
     line(angle: 90deg, length: 13.800cm * sy, stroke: 0.75pt + color))
 }
 
-// Ligne divisée (transition) — grand gap pour le numéro de chapitre (fond blanc, chiffre bleu foncé)
-// PPTX : x=3.630, segment haut y=2.325 l=0.975 → y=3.300, segment bas y=11.200 l=5.363 → y=16.563
-#let aphp-line-split() = context {
-  let sx = page.width  / aphp-pptx-w
-  let sy = page.height / aphp-pptx-h
-  // Segment haut (court — au-dessus de la zone numéro)
-  place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
-    line(angle: 90deg, length: 0.975cm * sy, stroke: 0.75pt + aphp-blue))
-  // Segment bas (sous la zone numéro, jusqu'aux logos)
-  place(top+left, dx: 3.630cm * sx, dy: 11.200cm * sy,
-    line(angle: 90deg, length: 5.363cm * sy, stroke: 0.75pt + aphp-blue))
-}
 
 // Ligne unique avec label de section horizontal dans le gap (layout 5 : contenu)
 // PPTX : x=3.630, segment haut y=2.325 l=6.202, segment bas y=10.307 l=5.822
@@ -292,21 +280,35 @@
 
       // Retourner le contenu page-absolue (empty-slide a margin=0pt)
       {
-        // Lignes divisées — grand gap pour la zone numéro
-        aphp-line-split()
+        // Mesure du numéro pour calculer dynamiquement le gap de la ligne
+        let num-content = text(size: 7em, weight: "bold", fill: aphp-dark,
+          font: conf.text-font, chap-num)
+        let num-h = measure(num-content).height
+        let num-dy  = 3.500cm * sy
+        let gap-pad = 0.250cm * sy
+
+        // Ligne divisée — gap calculé sur la hauteur réelle du numéro
+        let seg-top-len = num-dy - gap-pad - 2.325cm * sy
+        if seg-top-len > 0pt {
+          place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
+            line(angle: 90deg, length: seg-top-len, stroke: 0.75pt + aphp-blue))
+        }
+        let seg-bot-dy  = num-dy + num-h + gap-pad
+        let seg-bot-len = 16.563cm * sy - seg-bot-dy
+        if seg-bot-len > 0pt {
+          place(top+left, dx: 3.630cm * sx, dy: seg-bot-dy,
+            line(angle: 90deg, length: seg-bot-len, stroke: 0.75pt + aphp-blue))
+        }
 
         // Cœur AP-HP
         aphp-heart()
 
-        // Grand numéro — texte bleu foncé sur fond blanc (pas de rectangle rempli)
-        // PPTX : x=2.000 y=3.500
-        place(top+left, dx: 2.000cm * sx, dy: 3.500cm * sy,
-          text(size: 9em, weight: "bold", fill: aphp-dark,
-            font: conf.text-font, chap-num))
+        // Grand numéro — texte bleu foncé sur fond blanc
+        place(top+left, dx: 2.000cm * sx, dy: num-dy, num-content)
 
-        // Chevron doré — à gauche du numéro, centré verticalement avec lui
-        // PPTX : x=0.800 y=7.200
-        place(top+left, dx: 0.800cm * sx, dy: 7.200cm * sy,
+        // Chevron doré — centré verticalement sur le numéro
+        place(top+left, dx: 0.800cm * sx,
+          dy: num-dy + num-h / 2 - 0.459cm * sy,
           image("../../assets/aphp/aphp-chevron.png", width: 0.865cm * sx, height: 0.917cm * sx))
 
         // Logique des blocs titre — cohérente pour part / section / sous-section :
@@ -337,20 +339,21 @@
           } else { h.body }
         } else { none }
 
-        // Bloc 1 — pleine largeur, titre de section/partie
-        // PPTX : x=0.800 y=11.200 ; largeur = slide - marge gauche - marge droite
+        // Bloc 1 — auto-sized (comme bloc 2), titre de section/partie
+        // Position : juste après le numéro (y dynamique + décalage fixe)
+        let bloc1-dy = num-dy + num-h + 0.600cm * sy
         if bloc1-content != none {
-          place(top+left, dx: 0.800cm * sx, dy: 11.200cm * sy,
-            block(width: (aphp-pptx-w - 1.300cm) * sx, fill: aphp-blue,
+          place(top+left, dx: 0.800cm * sx, dy: bloc1-dy,
+            box(fill: aphp-blue,
               pad(x: 0.5em, y: 0.3em,
                 text(size: 1.2em, weight: "bold", fill: white,
                   font: conf.text-font, bloc1-content))))
         }
 
-        // Bloc 2 — auto-sized (plus court), titre de sous-section
-        // PPTX : x=0.800 y=12.900 (gap réduit ~0.3cm avec bloc 1)
+        // Bloc 2 — auto-sized, titre de sous-section (gap réduit ~0.3cm avec bloc 1)
+        let bloc2-dy = bloc1-dy + 1.700cm * sy
         if bloc2-content != none {
-          place(top+left, dx: 0.800cm * sx, dy: 12.900cm * sy,
+          place(top+left, dx: 0.800cm * sx, dy: bloc2-dy,
             box(fill: aphp-blue,
               pad(x: 0.5em, y: 0.3em,
                 text(size: 1.2em, weight: "bold", fill: white,
