@@ -166,7 +166,7 @@
   let title-line2 = conf.at("aphp-title-line2", default: none)
   let has-line2 = title-line2 != none and title-line2 != conf.title
 
-  empty-slide(fill: white, count: false, {
+  empty-slide(fill: conf.at("title-bg-light", default: white), count: false, {
     // Banderole de classification (layout 2 uniquement)
     // PPTX : x=0 y=0 hauteur=1.124
     if cover-style == "light" and classification != none {
@@ -593,6 +593,9 @@
     focus-bg-light: final-primary,
     focus-bg-dark:  final-primary.darken(40%),
     focus-text-color: white,
+    // Cohérence API avec sorbonne/iplesp
+    title-bg-light: white,
+    title-bg-dark:  white,
     // Paramètres APHP spécifiques (transmis via conf)
     aphp-cover-style:    cover-style,
     aphp-classification: classification,
