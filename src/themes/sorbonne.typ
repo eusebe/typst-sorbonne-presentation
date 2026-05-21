@@ -123,6 +123,7 @@
   handout: false,
   math-font: "Fira Math",
   code-font: ("Fira Code", "DejaVu Sans Mono"),
+  footer-func: base-footer,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -224,6 +225,7 @@
     dark-mode: dark-mode,
     handout: handout,
     header-func: sorbonne-header,
+    footer-func: footer-func,
     // Title and Ending slides
     title-slide-func: sorbonne-title-slide,
     ending-slide-func: sorbonne-ending-slide,

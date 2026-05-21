@@ -172,6 +172,7 @@
   handout: false,
   math-font: "Noto Sans Math",
   code-font: ("Fira Code", "DejaVu Sans Mono"),
+  footer-func: base-footer,
   body
 ) = {
   let (def-primary, def-alert) = if theme == "red" {
@@ -276,6 +277,7 @@
     use-short-title: use-short-title,
     dark-mode: dark-mode,
     handout: handout,
+    footer-func: footer-func,
     // Customization for IPLESP
     margin-top: 5.5em,
     header-inset-top: 0.2em,
