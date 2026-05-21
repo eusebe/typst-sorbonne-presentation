@@ -1,8 +1,12 @@
-#import "@preview/sorbonne-presentation:0.4.0": *
+#import "@preview/sorbonne-presentation:0.5.0": *
 
 // --- Theme Configuration ---
-// Note: 'template' is an alias for 'sorbonne-template'. 
-// You can also use 'iplesp-template' for the IPLESP theme.
+// Choose one of the three available templates:
+//   sorbonne-template  — Sorbonne University (faculty: "univ"/"sante"/"sciences"/"lettres")
+//   iplesp-template    — IPLESP (theme: "blue"/"red"/"green"/"teal"/"purple"/"orange"/"slate")
+//   aphp-template      — AP-HP (cover-style: "full"/"light")
+//
+// 'template' is kept as an alias for 'sorbonne-template'.
 
 #show: template.with(
   title: [Presentation Title],
@@ -19,8 +23,8 @@
 = Introduction
 
 #slide(title: "Welcome")[
-  This is a sample presentation using the Unified Sorbonne/IPLESP theme.
-  
+  This is a sample presentation using the Sorbonne / IPLESP / AP-HP theme.
+
   - Respects institutional visual identities.
   - Built on top of `presentate` and `navigator` packages.
   - Supports Dark Mode (`dark-mode: true` in configuration).

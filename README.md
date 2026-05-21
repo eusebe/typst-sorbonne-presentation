@@ -1,15 +1,15 @@
-# Unified Academic Presentation Themes (Sorbonne & IPLESP)
+# Unified Academic Presentation Themes (Sorbonne, IPLESP & AP-HP)
 
-A non-official structured presentation template for Typst, providing two institutional themes: [**Sorbonne University**](https://www.sorbonne-universite.fr/) and [**IPLESP**](https://www.iplesp.fr/). Built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
+A non-official structured presentation template for Typst, providing three institutional themes: [**Sorbonne University**](https://www.sorbonne-universite.fr/), [**IPLESP**](https://www.iplesp.fr/), and [**AP-HP**](https://www.aphp.fr/). Built on top of the [presentate](https://typst.app/universe/package/presentate) and [navigator](https://typst.app/universe/package/navigator) packages.
 
 ---
 
 ## Overview
 
-This package offers customizable, academic-ready slide decks with a shared core engine. Whether you are presenting for a Sorbonne Faculty or the IPLESP institute, you benefit from the same powerful features:
+This package offers customizable, academic-ready slide decks with a shared core engine. All three themes benefit from the same powerful features:
 
-- **Institutional Identities**: Pre-configured colors and logos for both institutions.
-- **Dark Mode**: Full support for dark-themed slides via the `dark-mode` parameter.
+- **Institutional Identities**: Pre-configured colors and logos for Sorbonne University, IPLESP, and AP-HP.
+- **Dark Mode**: Full support for dark-themed slides via the `dark-mode` parameter (Sorbonne & IPLESP).
 - **Smart Navigation**: Automatic breadcrumbs, transition slides with roadmaps, and flexible hierarchy mapping.
 - **Dynamic Content**: Seamless integration of `pause`, `uncover`, and `only` for step-by-step reveals.
 
@@ -42,11 +42,24 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ---
 
+## AP-HP Theme
+
+The AP-HP theme (`aphp-template`) reproduces the official AP-HP institutional PowerPoint layout in Typst. All elements — sidebar, logos, heart icon, slide number — are positioned using PPTX coordinate mapping, ensuring pixel-accurate fidelity at both 16:9 and 4:3 aspect ratios.
+
+Two cover styles are available via the `cover-style` parameter:
+
+- **`"full"`** (default): Large navy panel on the right half of the title slide. The title appears as one or two blue blocks on the white left area.
+- **`"light"`**: White background throughout. An optional classification banner (e.g. `"C1 — Internal"`) appears at the very top.
+
+The ending slide (`#aphp-ending-slide`) shares the same layout as the title slide and is the only way to produce the AP-HP closing screen.
+
+---
+
 ## Quick Start
 
 ### For Sorbonne University
 ```typ
-#import "@preview/sorbonne-presentation:0.4.0": sorbonne-template, slide
+#import "@preview/sorbonne-presentation:0.5.0": sorbonne-template, slide
 
 #show: sorbonne-template.with(
   title: [Academic Discovery],
@@ -64,7 +77,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ### For IPLESP
 ```typ
-#import "@preview/sorbonne-presentation:0.4.0": iplesp-template, slide
+#import "@preview/sorbonne-presentation:0.5.0": iplesp-template, slide
 
 #show: iplesp-template.with(
   title: [Epidemiological Study],
@@ -78,25 +91,60 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 ]
 ```
 
+### For AP-HP
+```typ
+#import "@preview/sorbonne-presentation:0.5.0": aphp-template, slide, aphp-ending-slide
+
+#show: aphp-template.with(
+  title: [Résultats de l'étude],
+  title-line2: [Service d'épidémiologie],
+  author: [Dr. Marie Dupont],
+  affiliation: [AP-HP · Sorbonne Université],
+  date: [Janvier 2026],
+)
+
+= Introduction
+#slide[
+  - Contexte et objectifs
+  - Population étudiée
+]
+
+#aphp-ending-slide(
+  title: [Merci de votre attention],
+  subtitle: [Questions ?],
+  contact: ("marie.dupont@aphp.fr",),
+)
+```
+
 ---
 
 ## Documentation & Demo
 
-The [**`examples/demo.typ`**](examples/demo.typ) file serves as both a comprehensive feature gallery and a technical manual. Since it supports multiple themes and dark mode, you must compile it using the `--input` flag:
+The [**`examples/demo.typ`**](examples/demo.typ) file is a comprehensive feature gallery and technical manual. The [**`examples/demo-4-3.typ`**](examples/demo-4-3.typ) file shows a simple 4:3 layout for all three themes.
+
+Both files use the `--input` flag to switch between themes:
 
 ```bash
-# Compile for Sorbonne (Light)
+# Full feature demo — Sorbonne (Light)
 typst compile examples/demo.typ --input theme=sorbonne
 
-# Compile for IPLESP (Dark)
+# Full feature demo — IPLESP (Dark)
 typst compile examples/demo.typ --input theme=iplesp --input dark=true
 
-# Compile Handout version (static slides + notes)
+# Full feature demo — AP-HP
+typst compile examples/demo.typ --input theme=aphp
+
+# 4:3 layout demo — all three themes
+typst compile examples/demo-4-3.typ --input theme=sorbonne
+typst compile examples/demo-4-3.typ --input theme=iplesp
+typst compile examples/demo-4-3.typ --input theme=aphp
+
+# Handout version (static slides + notes)
 typst compile examples/demo.typ --input handout=true
 ```
 
-Available inputs:
-- `theme`: `"sorbonne"` (default) or `"iplesp"`.
+Available inputs for `demo.typ`:
+- `theme`: `"sorbonne"` (default), `"iplesp"`, or `"aphp"`.
 - `dark`: `"true"` or `"false"` (default).
 - `handout`: `"true"` or `"false"` (default).
 
@@ -105,6 +153,13 @@ Available inputs:
 ## Logo Customization
 
 You can easily replace the institutional logos with your own by using the following parameters.
+
+### AP-HP Logo Slots
+The AP-HP theme places two institutional logos at the bottom of every slide (including the title and ending slides). Both can be replaced:
+- **`logo-left`**: Replaces the bottom-left logo (default: AP-HP / Sorbonne Université).
+- **`logo-right`**: Replaces the bottom-right logo (default: AP-HP full logo).
+
+Accepts a file path (string), any Typst content, or `none` (restores the default).
 
 ### IPLESP Logo Slots
 The IPLESP theme features a three-logo bar in the header. You can customize each slot individually:
@@ -162,12 +217,25 @@ Used on **standard slides** (white background).
   - `faculty`: `"univ"`, `"sante"`, `"sciences"`, `"lettres"`.
   - `text-font`: Default `"Fira Sans"`.
   - `math-font`: Default `"Fira Math"`.
+  - `margin-top`: Header height / top page margin. Default `4.5em`.
+  - `footer-func`: Custom footer function. Default `base-footer`. Pass `none` to disable.
 - **IPLESP (`iplesp-template`)**:
   - `theme`: `"blue"`, `"red"`, `"yellow"`, `"green"`, `"teal"`, `"purple"`, `"orange"`, `"slate"`.
   - `text-font`: Default `"Lato"`.
   - `math-font`: Default `"Noto Sans Math"`.
   - `logo-left`, `logo-center`, `logo-right`: Individual logo slots for the header bar.
   - `logo-left-transition`, `logo-center-transition`, `logo-right-transition`: Monochrome versions for dark backgrounds.
+  - `footer-func`: Custom footer function. Default `base-footer`. Pass `none` to disable.
+- **AP-HP (`aphp-template`)**:
+  - `cover-style`: `"full"` (default, navy right panel) or `"light"` (white background).
+  - `classification`: Content shown in a banner at the top in `"light"` mode (e.g. `[C1 — Internal]`). Default `none`.
+  - `title-line2`: Optional second title line on the cover slide. When provided, the main `title` appears in a first block and `title-line2` in a second. Default `none`.
+  - `logo-left`: Override for the bottom-left logo. Default `none` (uses AP-HP / Sorbonne Université logo).
+  - `logo-right`: Override for the bottom-right logo. Default `none` (uses AP-HP full logo).
+  - `title-bg-light`: Background color of the title slide. Default `white`.
+  - `title-bg-dark`: Background color of the title slide in dark mode. Default `white`.
+  - `text-font`: Default `("Open Sans", "Lato", "Fira Sans")`.
+  - `math-font`: Default `"Noto Sans Math"`.
 
 ---
 
@@ -245,6 +313,21 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 - **Inspiration**: Layout features were inspired by the [calmly-touying](https://typst.app/universe/package/calmly-touying) theme.
 
 ## Changelog
+
+### v0.5.0
+
+- **New theme: AP-HP** (`aphp-template`): Institutional theme for AP-HP (Assistance Publique – Hôpitaux de Paris) presentations. Layout is reproduced from the official PPTX template using coordinate-based positioning, and works at both 16:9 and 4:3 aspect ratios.
+  - `cover-style: "full"` (default) — navy right panel with title in blue blocks.
+  - `cover-style: "light"` — white background with optional classification banner (`classification` parameter).
+  - `title-line2` — optional second line on the title cover.
+  - `logo-left` / `logo-right` — bottom logo overrides (accept path, content, or `none`).
+  - `title-bg-light` / `title-bg-dark` — title slide background color (default `white`).
+  - `#aphp-ending-slide(title:, subtitle:, contact:)` — dedicated closing slide matching the cover layout.
+- **New demo `examples/demo-4-3.typ`**: Simple 4:3 showcase for all three themes, compiled via `--input theme=sorbonne/iplesp/aphp`.
+- **Config key homogenization** across the three themes:
+  - `footer-func` exposed in `sorbonne-template` and `iplesp-template` (default: `base-footer`; pass `none` to disable).
+  - `margin-top` exposed in `sorbonne-template` (default: `4.5em`).
+  - `title-bg-light` / `title-bg-dark` added to APHP conf and exposed as user-facing parameters.
 
 ### v0.4.0
 
