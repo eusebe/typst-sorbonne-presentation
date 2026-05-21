@@ -67,58 +67,55 @@
 }
 
 
-// Ligne unique avec label de section horizontal dans le gap (layout 5 : contenu)
-// PPTX : x=3.630, segment haut y=2.325 l=6.202, segment bas y=10.307 l=5.822
-// Gap de y=8.527 à y=10.307 (1.780cm) — label horizontal centré sur la ligne
+// Ligne unique avec label de navigation dans le gap (layout 5 : contenu)
+// PPTX : x=3.630, ligne de y=2.325 à y=16.125 (longueur 13.800cm)
+// Gap fixe (2.5cm PPTX) centré à y≈9.4cm — pas de measure() pour éviter
+// les avertissements "layout did not converge" dans le foreground de page.
 #let aphp-line-with-label(conf) = context {
   let sx = page.width  / aphp-pptx-w
   let sy = page.height / aphp-pptx-h
-  // Segment haut
-  place(top+left, dx: 3.630cm * sx, dy: 2.325cm * sy,
-    line(angle: 90deg, length: 6.202cm * sy, stroke: 0.75pt + aphp-blue))
-  // Segment bas
-  place(top+left, dx: 3.630cm * sx, dy: 10.307cm * sy,
-    line(angle: 90deg, length: 5.822cm * sy, stroke: 0.75pt + aphp-blue))
 
-  // Label horizontal dans le gap
-  let section-level = conf.mapping.at("section", default: 1)
-  let subsection-level = conf.mapping.at("subsection", default: none)
-  let section-headings = query(selector(heading.where(level: section-level)).before(here()))
-  let section-h = if section-headings.len() > 0 { section-headings.last() } else { none }
-  let subsection-h = if subsection-level != none {
-    let sub-hs = query(selector(heading.where(level: subsection-level)).before(here()))
-    if sub-hs.len() > 0 { sub-hs.last() } else { none }
-  } else { none }
+  let line-start-y = 2.325cm * sy
+  let line-length  = 13.800cm * sy
+  let line-end-y   = line-start-y + line-length
+  let gap-center-y = 9.417cm * sy  // centre : (8.527+10.307)/2 PPTX
+  let gap-half     = 1.25cm * sy   // demi-hauteur fixe (≈ 2.5cm PPTX, ≥ 5 lignes à 9pt)
 
-  if section-h != none {
-    // Section en gras — numérotée si show-header-numbering
-    let section-nums = counter(heading).at(section-h.location())
-    let section-display = if conf.show-header-numbering {
-      [*#str(section-nums.at(0, default: 0)). #section-h.body*]
-    } else {
-      [*#section-h.body*]
-    }
-
-    // Sous-section en régulier — numérotée avec numbering-format si show-header-numbering
-    let label-content = if subsection-h != none {
-      let sub-nums = counter(heading).at(subsection-h.location())
-      let sub-display = if conf.show-header-numbering {
-        [#{numbering(conf.numbering-format, ..sub-nums)} #subsection-h.body]
-      } else {
-        subsection-h.body
-      }
-      stack(spacing: 0.2em, section-display, sub-display)
-    } else {
-      section-display
-    }
-
-    // Conteneur centré sur la ligne (x=3.630 ≈ milieu de 2.130–5.210), dans le gap
-    place(top+left, dx: 2.130cm * sx, dy: 8.527cm * sy,
-      block(width: 3.080cm * sx, height: 1.780cm * sy, clip: true,
-        align(center+horizon,
-          text(size: 6pt, fill: aphp-blue, font: conf.text-font,
-            weight: "regular", label-content))))
+  // Styles par niveau : part/section en gras, subsection en régulier
+  let level-modes  = (:)
+  let text-styles  = (:)
+  for (role, lvl) in conf.mapping {
+    level-modes.insert("level-" + str(lvl) + "-mode", "current")
+    let w = if role == "subsection" { "regular" } else { "bold" }
+    text-styles.insert("level-" + str(lvl), (
+      active:    (weight: w, fill: aphp-blue),
+      completed: (weight: w, fill: aphp-blue),
+      inactive:  (weight: w, fill: aphp-blue),
+    ))
   }
+
+  let label-w   = 3.080cm * sx
+  let label-raw = text(size: 9pt, font: conf.text-font,
+    nav.progressive-outline(
+      ..level-modes,
+      layout: "vertical",
+      clickable: false,
+      max-length: conf.max-length,
+      text-styles: text-styles,
+    ))
+
+  let gap-top-y = gap-center-y - gap-half
+  let gap-bot-y = gap-center-y + gap-half
+
+  // Segment haut
+  place(top+left, dx: 3.630cm * sx, dy: line-start-y,
+    line(angle: 90deg, length: gap-top-y - line-start-y, stroke: 0.75pt + aphp-blue))
+  // Segment bas
+  place(top+left, dx: 3.630cm * sx, dy: gap-bot-y,
+    line(angle: 90deg, length: line-end-y - gap-bot-y, stroke: 0.75pt + aphp-blue))
+  // Label centré verticalement et horizontalement dans le gap
+  place(top+left, dx: 2.130cm * sx, dy: gap-top-y,
+    block(width: label-w, height: 2 * gap-half, align(center + horizon, label-raw)))
 }
 
 // ─── Header contenu (Layout 5) ─────────────────────────────────────────────
@@ -277,11 +274,14 @@
       let level-nums = counter(heading).at(h.location())
       let part-level = conf.mapping.at("part", default: none)
       let is-part = part-level != none and h.level == part-level
+      // Quand un niveau "part" existe, les numéros section/sous-section commencent
+      // à l'index 1 du compteur (index 0 = numéro de partie).
+      let start-idx = if conf.mapping.keys().contains("part") { 1 } else { 0 }
 
       let chap-num = if is-part {
         numbering(conf.part-numbering-format, ..level-nums)
       } else {
-        str(level-nums.at(0, default: 0))
+        str(level-nums.at(start-idx, default: 0))
       }
 
       // Retourner le contenu page-absolue (empty-slide a margin=0pt)
@@ -292,9 +292,13 @@
         let num-font-size = 7 * conf.text-size
         let num-content = text(size: num-font-size, weight: "bold", fill: aphp-dark,
           font: conf.text-font, chap-num)
-        let num-h = measure(num-content).height
+        let num-size = measure(num-content)
+        let num-h = num-size.height
+        let num-w = num-size.width
         let num-dy  = 3.500cm * sy
         let gap-pad = 0.250cm * sy
+        // Centré horizontalement sur la ligne verticale
+        let num-dx  = 3.630cm * sx - num-w / 2
 
         // Ligne divisée — gap calculé sur la hauteur réelle du numéro
         let seg-top-len = num-dy - gap-pad - 2.325cm * sy
@@ -312,8 +316,8 @@
         // Cœur AP-HP
         aphp-heart()
 
-        // Grand numéro — texte bleu foncé sur fond blanc
-        place(top+left, dx: 2.000cm * sx, dy: num-dy, num-content)
+        // Grand numéro — centré sur la ligne verticale
+        place(top+left, dx: num-dx, dy: num-dy, num-content)
 
         // Chevron doré — centré verticalement sur le numéro
         place(top+left, dx: 0.800cm * sx,
@@ -337,14 +341,14 @@
         // Contenu bloc 1
         let bloc1-content = if section-h-b1 != none {
           let nums1 = counter(heading).at(section-h-b1.location())
-          let prefix = if is-part { chap-num } else { str(nums1.at(0, default: 0)) }
+          let prefix = if is-part { chap-num } else { str(nums1.at(start-idx, default: 0)) }
           if conf.show-header-numbering { [#prefix. #section-h-b1.body] } else { section-h-b1.body }
         } else { none }
 
         // Contenu bloc 2 (absent pour parts et sections)
         let bloc2-content = if not is-part and not is-section-t {
           if conf.show-header-numbering {
-            [#{numbering(conf.numbering-format, ..level-nums)} #h.body]
+            [#{numbering(conf.numbering-format, ..level-nums.slice(start-idx))} #h.body]
           } else { h.body }
         } else { none }
 
