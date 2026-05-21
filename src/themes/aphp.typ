@@ -469,6 +469,8 @@
   title-line2: none,               // 2e ligne de titre (optionnel, défaut = title)
   logo-left: none,                 // surcharge logo bas-gauche
   logo-right: none,                // surcharge logo bas-droit
+  title-bg-light: white,           // fond diapo de titre (mode clair)
+  title-bg-dark: white,            // fond diapo de titre (mode sombre — non utilisé actuellement)
   // Options standard
   show-header-numbering: true,
   numbering-format: "1.1",
@@ -594,8 +596,8 @@
     focus-bg-dark:  final-primary.darken(40%),
     focus-text-color: white,
     // Cohérence API avec sorbonne/iplesp
-    title-bg-light: white,
-    title-bg-dark:  white,
+    title-bg-light: title-bg-light,
+    title-bg-dark:  title-bg-dark,
     // Paramètres APHP spécifiques (transmis via conf)
     aphp-cover-style:    cover-style,
     aphp-classification: classification,

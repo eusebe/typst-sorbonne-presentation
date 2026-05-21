@@ -80,14 +80,6 @@ echo "  → aphp (demo.typ, 16-9)"
 typst compile --root .. "$EXAMPLES_DIR/demo.typ" --input theme=aphp "$EXAMPLES_DIR/demo-aphp.pdf"
 generate_pdfpc "$EXAMPLES_DIR/demo.typ" "$EXAMPLES_DIR/demo-aphp.pdf"
 
-# Demo APHP dédiée (demo-aphp.typ — 16:9 et 4:3)
-echo "  → aphp-16-9 (demo-aphp.typ)"
-typst compile --root .. "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-16-9.pdf"
-generate_pdfpc "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-16-9.pdf"
-echo "  → aphp-4-3 (demo-aphp.typ)"
-typst compile --root .. --input ratio=4-3 "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
-generate_pdfpc "$EXAMPLES_DIR/demo-aphp.typ" "$EXAMPLES_DIR/demo-aphp-4-3.pdf"
-
 # Mappings APHP (pas de dark mode pour ce thème)
 echo "  → aphp (demo-mapping-2levels.typ)"
 typst compile --root .. "$EXAMPLES_DIR/demo-mapping-2levels.typ" --input theme=aphp "$EXAMPLES_DIR/demo-mapping-2levels-aphp.pdf"
@@ -96,7 +88,16 @@ echo "  → aphp (demo-mapping-3levels.typ)"
 typst compile --root .. "$EXAMPLES_DIR/demo-mapping-3levels.typ" --input theme=aphp "$EXAMPLES_DIR/demo-mapping-3levels-aphp.pdf"
 generate_pdfpc "$EXAMPLES_DIR/demo-mapping-3levels.typ" "$EXAMPLES_DIR/demo-mapping-3levels-aphp.pdf"
 
-# 2. Tests (en Sorbonne et IPLESP, hors tests dédiés APHP)
+# 2. Démos 4:3 (les 3 thèmes)
+echo "--- Compiling 4:3 Demos ---"
+for theme in sorbonne iplesp aphp; do
+    echo "  → 4-3-$theme"
+    output_4_3="$EXAMPLES_DIR/demo-4-3-$theme.pdf"
+    typst compile --root .. "$EXAMPLES_DIR/demo-4-3.typ" --input theme=$theme "$output_4_3"
+    generate_pdfpc "$EXAMPLES_DIR/demo-4-3.typ" "$output_4_3"
+done
+
+# 3. Tests (en Sorbonne et IPLESP, hors tests dédiés APHP)
 echo "--- Compiling Tests ---"
 for test_file in $TEST_DIR/*.typ; do
     base=$(basename "$test_file" .typ)
@@ -113,7 +114,7 @@ for test_file in $TEST_DIR/*.typ; do
     generate_pdfpc "$test_file" "$out_iplesp"
 done
 
-# 3. APHP tests (template dédié, pas de sélection par --input theme=)
+# 4. APHP tests (template dédié, pas de sélection par --input theme=)
 echo "--- Compiling APHP Tests ---"
 for test_file in $TEST_DIR/*aphp*.typ; do
     [ -f "$test_file" ] || continue
