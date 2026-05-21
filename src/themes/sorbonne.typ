@@ -123,6 +123,7 @@
   handout: false,
   math-font: "Fira Math",
   code-font: ("Fira Code", "DejaVu Sans Mono"),
+  margin-top: 4.5em,
   footer-func: base-footer,
   body
 ) = {
@@ -224,6 +225,7 @@
     use-short-title: use-short-title,
     dark-mode: dark-mode,
     handout: handout,
+    margin-top: margin-top,
     header-func: sorbonne-header,
     footer-func: footer-func,
     // Title and Ending slides
