@@ -95,6 +95,7 @@
   }
 
   let label-w   = 3.080cm * sx
+  let sidebar-align = conf.at("aphp-sidebar-align", default: left)
   let label-raw = text(size: 9pt, font: conf.text-font,
     nav.progressive-outline(
       ..level-modes,
@@ -102,6 +103,7 @@
       clickable: false,
       max-length: conf.max-length,
       text-styles: text-styles,
+      item-align: sidebar-align,
     ))
 
   let gap-top-y = gap-center-y - gap-half
@@ -475,6 +477,7 @@
   logo-right: none,                // surcharge logo bas-droit
   title-bg-light: white,           // fond diapo de titre (mode clair)
   title-bg-dark: white,            // fond diapo de titre (mode sombre — non utilisé actuellement)
+  sidebar-align: center,           // alignement du fil d'ariane : left | center | right
   // Options standard
   show-header-numbering: true,
   numbering-format: "1.1",
@@ -608,6 +611,7 @@
     aphp-title-line2:    title-line2,
     aphp-logo-left:      if type(logo-left)  == str { image(logo-left)  } else { logo-left  },
     aphp-logo-right:     if type(logo-right) == str { image(logo-right) } else { logo-right },
+    aphp-sidebar-align:  sidebar-align,
     // Pas de transition roadmap standard (géré par render-transition-func)
     transition-text-color:   white,
     transition-active-color: white,
