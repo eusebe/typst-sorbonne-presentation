@@ -234,6 +234,7 @@ Used on **standard slides** (white background).
   - `logo-right`: Override for the bottom-right logo. Default `none` (uses AP-HP full logo).
   - `title-bg-light`: Background color of the title slide. Default `white`.
   - `title-bg-dark`: Background color of the title slide in dark mode. Default `white`.
+  - `sidebar-align`: Horizontal alignment of section/subsection titles in the left sidebar. `left`, `center` (default), or `right`. When set to `center` or `right`, level indents are automatically removed so all titles align consistently.
   - `text-font`: Default `("Open Sans", "Lato", "Fira Sans")`.
   - `math-font`: Default `"Noto Sans Math"`.
 
@@ -323,6 +324,7 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
   - `logo-left` / `logo-right` — bottom logo overrides (accept path, content, or `none`).
   - `title-bg-light` / `title-bg-dark` — title slide background color (default `white`).
   - `#aphp-ending-slide(title:, subtitle:, contact:)` — dedicated closing slide matching the cover layout.
+  - `sidebar-align` — horizontal alignment of section/subsection titles in the left sidebar (`left`, `center` (default), `right`).
 - **New demo `examples/demo-4-3.typ`**: Simple 4:3 showcase for all three themes, compiled via `--input theme=sorbonne/iplesp/aphp`.
 - **Config key homogenization** across the three themes:
   - `footer-func` exposed in `sorbonne-template` and `iplesp-template` (default: `base-footer`; pass `none` to disable).
