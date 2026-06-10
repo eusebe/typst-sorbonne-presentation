@@ -48,6 +48,10 @@ The AP-HP theme (`aphp-template`) reproduces the official AP-HP institutional Po
 
 Two cover styles are available via the `cover-style` parameter:
 
+| Full (default) | Light |
+|:---:|:---:|
+| <img src="assets/aphp-docs/cover-style-full.png" width="200" alt="AP-HP full cover style"> | <img src="assets/aphp-docs/cover-style-light.png" width="200" alt="AP-HP light cover style"> |
+
 - **`"full"`** (default): Large navy panel on the right half of the title slide. The title appears as one or two blue blocks on the white left area.
 - **`"light"`**: White background throughout. An optional classification banner (e.g. `"C1 — Internal"`) appears at the very top.
 

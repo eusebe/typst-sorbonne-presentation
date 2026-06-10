@@ -4,6 +4,7 @@
 SOURCE="tests/generate_assets.typ"
 SORBONNE_OUT="assets/sorbonne-docs"
 IPLESP_OUT="assets/iplesp-docs"
+APHP_OUT="assets/aphp-docs"
 ROOT_DIR="."
 PPI=72
 
@@ -11,6 +12,7 @@ echo "🎨 Generating assets for Unified themes documentation..."
 
 mkdir -p "$SORBONNE_OUT"
 mkdir -p "$IPLESP_OUT"
+mkdir -p "$APHP_OUT"
 
 # 1. Sorbonne Faculty Presets (Page 1: Title Slide)
 FACULTIES=("univ" "sante" "sciences" "lettres")
@@ -28,7 +30,14 @@ for t in "${THEMES[@]}"; do
     typst compile "$SOURCE" "$IPLESP_OUT/theme-$t-dark.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=iplesp --input component="theme-$t-dark"
 done
 
-# 3. Components (Page 2: Content Slide)
+# 3. AP-HP Cover Style Presets (Page 1: Title Slide)
+COVER_STYLES=("full" "light")
+for s in "${COVER_STYLES[@]}"; do
+    echo "  → AP-HP: cover-style-$s"
+    typst compile "$SOURCE" "$APHP_OUT/cover-style-$s.png" --format png --pages 1 --ppi "$PPI" --root "$ROOT_DIR" --input theme=aphp --input component="cover-style-$s"
+done
+
+# 4. Components (Page 2: Content Slide)
 COMPS=("slide" "focus-slide" "figure-slide" "equation-slide" "acknowledgement-slide" "ending-slide" "helper-text" "layout-2col" "layout-3col" "layout-grid2x2" "boxes" "citations")
 for c in "${COMPS[@]}"; do
     echo "  → Component: $c"

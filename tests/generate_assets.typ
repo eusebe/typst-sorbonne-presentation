@@ -10,6 +10,12 @@
     theme: if comp.starts-with("theme-") { comp.split("-").at(1) } else { "blue" },
     dark-mode: comp.contains("-dark"),
   )
+} else if theme-choice == "aphp" {
+  aphp-template.with(
+    cover-style: if comp == "cover-style-light" { "light" } else { "full" },
+    title-line2: if comp == "cover-style-full" { [Department / Service] } else { none },
+    classification: if comp == "cover-style-light" { [C1 — Internal] } else { none },
+  )
 } else {
   sorbonne-template.with(
     faculty: if comp.starts-with("faculty-") { comp.split("-").at(1) } else { "sante" },
@@ -20,6 +26,8 @@
 #show: template-func.with(
   title: [Gallery Preview],
   author: [John Doe],
+  affiliation: [Laboratory / Department],
+  date: [January 2026],
 )
 
 // Main content logic
