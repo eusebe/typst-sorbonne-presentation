@@ -1,6 +1,6 @@
 // Test minimal : progressive-outline dans un contexte de state (compteur de slides)
 
-#import "@preview/navigator:0.1.5" as nav
+#import "@preview/navigator:0.1.6" as nav
 
 #let slide-counter = counter("slide")
 

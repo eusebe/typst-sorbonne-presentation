@@ -1,4 +1,4 @@
-#import "@preview/presentate:0.2.5" as p
+#import "@preview/presentate:0.2.6" as p
 #import p.store: states
 #import "@preview/navigator:0.1.6" as nav
 

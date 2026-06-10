@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-#import "@preview/pergamon:0.7.2": *
+#import "@preview/pergamon:0.8.0": *
 
 #let theme-choice = sys.inputs.at("theme", default: "sorbonne")
 

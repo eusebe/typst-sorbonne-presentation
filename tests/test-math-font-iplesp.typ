@@ -1,4 +1,4 @@
-#import "@preview/physica:0.9.7": *
+#import "@preview/physica:0.9.8": *
 #import "../lib.typ": *
 
 #let m-font = sys.inputs.at("math-font", default: "Noto Sans Math")
