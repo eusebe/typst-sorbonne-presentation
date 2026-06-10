@@ -36,7 +36,7 @@
   This verifies that the override is applied globally, not only on the first slide.
 ]
 
-#aphp-ending-slide(
+#ending-slide(
   title: [End of Test],
   subtitle: [Custom logos should appear here too],
   contact: none,

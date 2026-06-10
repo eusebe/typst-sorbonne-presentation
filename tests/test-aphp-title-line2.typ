@@ -30,7 +30,7 @@
   See test-aphp-cover-light-line2.typ for that variant.
 ]
 
-#aphp-ending-slide(
+#ending-slide(
   title: [Thank you],
   subtitle: [Questions?],
   contact: ("jean.martin@aphp.fr",),

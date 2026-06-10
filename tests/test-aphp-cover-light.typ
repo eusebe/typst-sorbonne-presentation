@@ -39,7 +39,7 @@
   )
 ]
 
-#aphp-ending-slide(
+#ending-slide(
   title: [Thank you],
   subtitle: [Questions?],
   contact: ("marie.dupont@aphp.fr",),

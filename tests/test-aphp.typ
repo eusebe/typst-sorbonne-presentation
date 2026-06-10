@@ -75,7 +75,7 @@
   Les analyses de sensibilité confirment la robustesse des résultats.
 ]
 
-#aphp-ending-slide(
+#ending-slide(
   title: [Merci de votre attention !],
   subtitle: [Questions ?],
   contact: ("marie.dupont@aphp.fr",),

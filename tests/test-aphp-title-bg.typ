@@ -23,7 +23,7 @@
   The standard footer and slide decorations are unaffected by this parameter.
 ]
 
-#aphp-ending-slide(
+#ending-slide(
   title: [End of Test],
   subtitle: none,
   contact: none,

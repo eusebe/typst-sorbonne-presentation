@@ -44,7 +44,7 @@ The IPLESP theme provides multiple color variants via the `theme` parameter. It 
 
 ## AP-HP Theme
 
-The AP-HP theme (`aphp-template`) reproduces the official AP-HP institutional PowerPoint layout in Typst. All elements — sidebar, logos, heart icon, slide number — are positioned using PPTX coordinate mapping, ensuring pixel-accurate fidelity at both 16:9 and 4:3 aspect ratios.
+The AP-HP theme (`aphp-template`) reproduces the official AP-HP institutional PowerPoint layout in Typst. 
 
 Two cover styles are available via the `cover-style` parameter:
 
@@ -53,9 +53,7 @@ Two cover styles are available via the `cover-style` parameter:
 | <img src="assets/aphp-docs/cover-style-full.png" width="200" alt="AP-HP full cover style"> | <img src="assets/aphp-docs/cover-style-light.png" width="200" alt="AP-HP light cover style"> |
 
 - **`"full"`** (default): Large navy panel on the right half of the title slide. The title appears as one or two blue blocks on the white left area.
-- **`"light"`**: White background throughout. An optional classification banner (e.g. `"C1 — Internal"`) appears at the very top.
-
-The ending slide (`#aphp-ending-slide`) shares the same layout as the title slide and is the only way to produce the AP-HP closing screen.
+- **`"light"`**: White background throughout. An optional classification banner (e.g. `"Internal"`) appears at the very top.
 
 ---
 
@@ -97,7 +95,7 @@ The ending slide (`#aphp-ending-slide`) shares the same layout as the title slid
 
 ### For AP-HP
 ```typ
-#import "@preview/sorbonne-presentation:0.5.0": aphp-template, slide, aphp-ending-slide
+#import "@preview/sorbonne-presentation:0.5.0": aphp-template, slide
 
 #show: aphp-template.with(
   title: [Résultats de l'étude],
@@ -112,12 +110,6 @@ The ending slide (`#aphp-ending-slide`) shares the same layout as the title slid
   - Contexte et objectifs
   - Population étudiée
 ]
-
-#aphp-ending-slide(
-  title: [Merci de votre attention],
-  subtitle: [Questions ?],
-  contact: ("marie.dupont@aphp.fr",),
-)
 ```
 
 ---
@@ -159,7 +151,7 @@ Available inputs for `demo.typ`:
 You can easily replace the institutional logos with your own by using the following parameters.
 
 ### AP-HP Logo Slots
-The AP-HP theme places two institutional logos at the bottom of every slide (including the title and ending slides). Both can be replaced:
+The AP-HP theme places two institutional logos at the bottom of every slide. Both can be replaced:
 - **`logo-left`**: Replaces the bottom-left logo (default: AP-HP / Sorbonne Université).
 - **`logo-right`**: Replaces the bottom-right logo (default: AP-HP full logo).
 
@@ -321,13 +313,12 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 
 ### v0.5.0
 
-- **New theme: AP-HP** (`aphp-template`): Institutional theme for AP-HP (Assistance Publique – Hôpitaux de Paris) presentations. Layout is reproduced from the official PPTX template using coordinate-based positioning, and works at both 16:9 and 4:3 aspect ratios.
+- **New theme: AP-HP** (`aphp-template`): Institutional theme for AP-HP (Assistance Publique – Hôpitaux de Paris) presentations. 
   - `cover-style: "full"` (default) — navy right panel with title in blue blocks.
   - `cover-style: "light"` — white background with optional classification banner (`classification` parameter).
   - `title-line2` — optional second line on the title cover.
   - `logo-left` / `logo-right` — bottom logo overrides (accept path, content, or `none`).
   - `title-bg-light` / `title-bg-dark` — title slide background color (default `white`).
-  - `#aphp-ending-slide(title:, subtitle:, contact:)` — dedicated closing slide matching the cover layout.
   - `sidebar-align` — horizontal alignment of section/subsection titles in the left sidebar (`left`, `center` (default), `right`).
 - **New demo `examples/demo-4-3.typ`**: Simple 4:3 showcase for all three themes, compiled via `--input theme=sorbonne/iplesp/aphp`.
 - **Config key homogenization** across the three themes:
