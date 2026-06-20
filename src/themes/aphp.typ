@@ -508,6 +508,7 @@
   handout: false,
   math-font: "Noto Sans Math",
   code-font: ("Fira Code", "DejaVu Sans Mono"),
+  raw-block-style: true,
   body
 ) = {
   let final-primary = if primary-color != none { primary-color } else { aphp-blue }
@@ -620,5 +621,5 @@
     title-logo-func:         none,
   )
 
-  core-template(conf: conf, body)
+  core-template(conf: conf, raw-block-style: raw-block-style, body)
 }

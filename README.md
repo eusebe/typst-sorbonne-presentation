@@ -313,6 +313,8 @@ Multiple calls to `#note()` within the same slide will be concatenated, separate
 
 ### v0.5.0
 
+- **New parameter `raw-block-style`** (default: `true`, all three themes): Controls whether the theme wraps block code elements in a styled rectangle (gray background, border, rounded corners). Set to `false` when using an external tool such as [Calepin](https://vincentarelbundock.github.io/calepin/) that provides its own code block styling, to avoid a double rectangle around code chunks.
+
 - **New theme: AP-HP** (`aphp-template`): Institutional theme for AP-HP (Assistance Publique – Hôpitaux de Paris) presentations. 
   - `cover-style: "full"` (default) — navy right panel with title in blue blocks.
   - `cover-style: "light"` — white background with optional classification banner (`classification` parameter).

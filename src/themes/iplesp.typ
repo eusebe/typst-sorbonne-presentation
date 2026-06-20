@@ -173,6 +173,7 @@
   math-font: "Noto Sans Math",
   code-font: ("Fira Code", "DejaVu Sans Mono"),
   footer-func: base-footer,
+  raw-block-style: true,
   body
 ) = {
   let (def-primary, def-alert) = if theme == "red" {
@@ -307,5 +308,5 @@
     dark-line-color: iplesp-darktext.darken(70%),
   )
 
-  core-template(conf: conf, body)
+  core-template(conf: conf, raw-block-style: raw-block-style, body)
 }

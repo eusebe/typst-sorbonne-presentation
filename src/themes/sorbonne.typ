@@ -125,6 +125,7 @@
   code-font: ("Fira Code", "DejaVu Sans Mono"),
   margin-top: 4.5em,
   footer-func: base-footer,
+  raw-block-style: true,
   body
 ) = {
   // 1. Détermination des valeurs par défaut basées sur faculty
@@ -247,5 +248,5 @@
     focus-text-color: white,
   )
 
-  core-template(conf: conf, body)
+  core-template(conf: conf, raw-block-style: raw-block-style, body)
 }

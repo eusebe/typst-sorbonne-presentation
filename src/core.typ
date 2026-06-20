@@ -901,6 +901,7 @@
 
 #let core-template(
   conf: (:),
+  raw-block-style: true,
   body
 ) = {
   config-state.update(c => conf)
@@ -965,23 +966,25 @@
 
   set text(font: conf.text-font, size: conf.text-size, fill: if conf.dark-mode { white } else { conf.text-color })
   
-  show raw.where(block: true): it => {
-    let bg-color = if conf.dark-mode { rgb("#2d2d2d") } else { luma(245) }
-    let stroke-color = if conf.dark-mode { gray.darken(40%) } else { gray.lighten(50%) }
-    let text-color = if conf.dark-mode { white } else { conf.text-color }
+  if raw-block-style {
+    show raw.where(block: true): it => {
+      let bg-color = if conf.dark-mode { rgb("#2d2d2d") } else { luma(245) }
+      let stroke-color = if conf.dark-mode { gray.darken(40%) } else { gray.lighten(50%) }
+      let text-color = if conf.dark-mode { white } else { conf.text-color }
 
-    block(
-      width: 100%,
-      fill: bg-color,
-      inset: 10pt,
-      radius: 4pt,
-      stroke: 0.5pt + stroke-color,
-      {
-        set text(fill: text-color)
-        show block: set block(fill: none, inset: 0pt, radius: 0pt, stroke: none)
-        it
-      }
-    )
+      block(
+        width: 100%,
+        fill: bg-color,
+        inset: 10pt,
+        radius: 4pt,
+        stroke: 0.5pt + stroke-color,
+        {
+          set text(fill: text-color)
+          show block: set block(fill: none, inset: 0pt, radius: 0pt, stroke: none)
+          it
+        }
+      )
+    }
   }
 
   set list(marker: ([•], [‣], [–]).map(m => text(fill: conf.marker-color, m)))

@@ -17,9 +17,9 @@ generate_pdfpc() {
     local target_pdfpc="${target_pdf%.pdf}.pdfpc"
     
     # On vérifie si le fichier source contient des marqueurs pdfpc
-    if typst query --root .. "$source" "<pdfpc>" 2>/dev/null | grep -q "Note"; then
+    if typst eval 'query(<pdfpc>)' --in "$source" --root .. 2>/dev/null | grep -q "Note"; then
         echo "    📝 Generating speaker notes: $(basename "$target_pdfpc")"
-        typst query --root .. "$source" "<pdfpc>" | python3 -c "
+        typst eval 'query(<pdfpc>)' --in "$source" --root .. | python3 -c "
 import sys, json
 try:
     data = json.load(sys.stdin)
