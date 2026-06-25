@@ -2,9 +2,9 @@
 
 # Configuration
 SOURCE="tests/generate_assets.typ"
-SORBONNE_OUT="assets/sorbonne-docs"
-IPLESP_OUT="assets/iplesp-docs"
-APHP_OUT="assets/aphp-docs"
+SORBONNE_OUT="docs/sorbonne"
+IPLESP_OUT="docs/iplesp"
+APHP_OUT="docs/aphp"
 ROOT_DIR="."
 PPI=72
 
