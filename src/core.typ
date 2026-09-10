@@ -63,7 +63,9 @@
   let meta = marker.value
   let allow-breaks = if type(meta) == dictionary { meta.at("allow-slide-breaks", default: false) } else { false }
   let is-continuation = current-page > marker.location().page() and allow-breaks
-  let resolved-title = if type(meta) == dictionary and meta.title != none { meta.title } else { nav.resolve-slide-title(none) }
+  let resolved-title = if type(meta) == dictionary and meta.title != none { meta.title } else {
+    nav.resolve-slide-title(none)
+  }
   (meta: meta, resolved-title: resolved-title, is-continuation: is-continuation)
 }
 
@@ -78,14 +80,14 @@
 #let progress-bar-line() = context {
   let conf = config-state.get()
   if conf == none or conf.progress-bar == "none" { return none }
-  
+
   let current = logical-slide-counter.get().at(0)
   let total = get-main-slide-count()
 
   if total <= 0 or current <= 0 { return none }
-  
+
   let ratio = calc.min(1.0, current / total)
-  
+
   block(width: 100% * ratio, height: conf.at("progress-bar-height", default: 2pt), fill: conf.primary-color)
 }
 
@@ -103,7 +105,7 @@
 #let breadcrumb() = context {
   let conf = config-state.get()
   if conf == none { return none }
-  
+
   let fg-color = if conf.dark-mode {
     conf.at("dark-text-secondary", default: white.darken(20%))
   } else {
@@ -114,23 +116,46 @@
   } else {
     gray.lighten(50%)
   }
-  
-  set text(size: 0.8em, fill: fg-color)
-  
-  let mapping = conf.mapping
-  let level-modes = (:)
-  for role in ("part", "section", "subsection") {
-    let lvl = mapping.at(role, default: none)
-    if lvl != none { level-modes.insert("level-" + str(lvl) + "-mode", "current") }
-  }
 
-  nav.progressive-outline(
-    ..level-modes,
-    layout: "horizontal",
-    separator: text(fill: sep-color, "  /  "),
-    clickable: false,
-    max-length: conf.max-length,
-  )
+  set text(size: 0.8em, fill: fg-color)
+
+  let is-annex = appendix-state.get()
+  if is-annex {
+    let annex-headings = query(heading).filter(h => appendix-state.at(h.location()) and h.location().page() <= here().page())
+    if annex-headings.len() > 0 {
+      let h = annex-headings.last()
+      let fmt-num = if conf.show-header-numbering {
+        let num = counter(heading).at(h.location()).at(0)
+        numbering(conf.appendix-numbering-format, num)
+      } else {
+        none
+      }
+      let h-text = if fmt-num != none { fmt-num + " " + h.body } else { h.body }
+
+      if h.body == conf.appendix-title or h.body == conf.appendix-main-title {
+        text(weight: "bold", fill: conf.marker-color, conf.appendix-title)
+      } else {
+        text(fill: fg-color, conf.appendix-title) + text(fill: sep-color, "  /  ") + text(weight: "bold", fill: conf.marker-color, h-text)
+      }
+    } else {
+      text(weight: "bold", fill: conf.marker-color, conf.appendix-title)
+    }
+  } else {
+    let mapping = conf.mapping
+    let level-modes = (:)
+    for role in ("part", "section", "subsection") {
+      let lvl = mapping.at(role, default: none)
+      if lvl != none { level-modes.insert("level-" + str(lvl) + "-mode", "current") }
+    }
+
+    nav.progressive-outline(
+      ..level-modes,
+      layout: "horizontal",
+      separator: text(fill: sep-color, "  /  "),
+      clickable: false,
+      max-length: conf.max-length,
+    )
+  }
 }
 
 #let set-logo(logo, ..args) = {
@@ -160,17 +185,13 @@
 
   block(width: 100%, height: conf.at("margin-top", default: 4.5em), inset: (x: 2em, top: top-inset, bottom: 0.2em), {
     if conf.at("header-layout", default: "grid") == "stack" {
-      stack(dir: ttb, spacing: 0.5em,
-        logo-content,
-        title-block
-      )
+      stack(dir: ttb, spacing: 0.5em, logo-content, title-block)
     } else {
       grid(
         columns: (auto, 1fr),
         column-gutter: 1.5em,
         align: horizon,
-        logo-content,
-        title-block
+        logo-content, title-block,
       )
     }
   })
@@ -204,12 +225,21 @@
 
     let show-author = conf.footer-author
     let show-title = conf.footer-title
-    
+    let show-date = conf.footer-date
+
     let slide-num = context {
+      let is-annex = appendix-state.get()
       let current = logical-slide-counter.get().at(0)
       let total = get-main-slide-count()
       if current > 0 {
-        align(right, [#current / #total])
+        if is-annex {
+          let fmt = conf.at("appendix-slide-numbering-format", default: conf.appendix-numbering-format)
+          let current-fmt = numbering(fmt, current)
+          let total-fmt = numbering(fmt, total)
+          align(right, [#current-fmt / #total-fmt])
+        } else {
+          align(right, [#current / #total])
+        }
       }
     }
 
@@ -217,20 +247,25 @@
       grid(
         columns: (1fr, auto),
         align: (left, right),
-        breadcrumb(),
-        slide-num
+        breadcrumb(), slide-num,
       )
     } else {
       grid(
-        columns: (1fr, 1fr, 1fr),
+        columns: (2fr, auto, 0.3fr),
         align: (left, center, right),
         text(size: 0.9em, weight: "regular", {
           if show-author { conf.short-author }
           if show-author and show-title [ #h(0.5em) · #h(0.5em) ]
-          if show-title { conf.short-title }
+          if show-title {
+            let is-annex = appendix-state.get()
+            if not is-annex { conf.short-title }
+            if is-annex { conf.appendix-title }
+          }
+          if show-author and show-title [ #h(0.5em) · #h(0.5em) ]
+          if show-date { conf.date }
         }),
         breadcrumb(),
-        slide-num
+        slide-num,
       )
     }
   })
@@ -240,7 +275,7 @@
   let config = config-state.get()
   let fg-color = if config.dark-mode { white } else { config.text-color }
   set text(font: config.text-font, size: config.text-size, fill: fg-color)
-  
+
   let body-inset-x = config.at("body-inset-x", default: 2.5em)
   if not breakable {
     grid(
@@ -260,11 +295,13 @@
   }
 }
 
-#let base-focus-slide(body, subtitle: none, conf) = {
+#let base-focus-slide(body, subtitle: none, count: true, conf) = {
   let is-dark = conf.dark-mode
-  let bg-fill = if is-dark { conf.at("focus-bg-dark", default: conf.primary-color.darken(40%)) } else { conf.at("focus-bg-light", default: conf.primary-color) }
-  
-  empty-slide(fill: bg-fill, {
+  let bg-fill = if is-dark { conf.at("focus-bg-dark", default: conf.primary-color.darken(40%)) } else {
+    conf.at("focus-bg-light", default: conf.primary-color)
+  }
+
+  empty-slide(fill: bg-fill, count: count, {
     // Logo slot
     if conf.at("transition-logo-func", default: none) != none {
       (conf.transition-logo-func)(conf)
@@ -280,33 +317,32 @@
         inset: 2em,
         stroke: (left: 5pt + conf.primary-color),
         fill: box-fill,
-        align(left, stack(dir: ttb, spacing: 1em,
+        align(left, stack(
+          dir: ttb,
+          spacing: 1em,
           text(size: 2.5em, weight: "bold", fill: if is-dark { white } else { conf.primary-color }, body),
           if subtitle != none {
             text(size: 1.5em, weight: "regular", style: "italic", fill: text-color.transparentize(20%), subtitle)
-          }
-        ))
+          },
+        )),
       ))
     } else {
-      // Default centered layout (Sorbonne style)
+      // Default centered layout (Example style)
       set text(weight: "bold")
-      align(center + horizon, pad(x: 3em, stack(dir: ttb, spacing: 1em,
-        text(size: 2.5em, body),
-        if subtitle != none {
-          text(size: 1.5em, weight: "regular", style: "italic", fill: text-color.transparentize(20%), subtitle)
-        }
-      )))
+      align(center + horizon, pad(x: 3em, stack(dir: ttb, spacing: 1em, text(size: 2.5em, body), if subtitle != none {
+        text(size: 1.5em, weight: "regular", style: "italic", fill: text-color.transparentize(20%), subtitle)
+      })))
     }
   })
 }
 
-#let focus-slide(body, subtitle: none) = context {
+#let focus-slide(body, subtitle: none, count: true) = context {
   let conf = config-state.get()
   if conf.at("focus-slide-func", default: none) != none {
-    return (conf.focus-slide-func)(body, subtitle: subtitle)
+    return (conf.focus-slide-func)(body, subtitle: subtitle, count: count)
   }
-  
-  base-focus-slide(body, subtitle: subtitle, conf)
+
+  base-focus-slide(body, subtitle: subtitle, count: count, conf)
 }
 
 #let alert(body) = context {
@@ -361,11 +397,11 @@
 #let render-note-slide(conf, slide-title, body) = {
   let bg = if conf.dark-mode { conf.at("dark-bg", default: rgb("#21232c")) } else { white }
   let accent-color = conf.marker-color
-  
+
   empty-slide(fill: bg, count: false, {
     let txt-color = if conf.dark-mode { white } else { conf.text-color }
     set text(fill: txt-color)
-    
+
     block(width: 100%, inset: (x: 2.5em, top: 2em, bottom: 0.5em), {
       text(size: 0.8em, fill: accent-color, weight: "bold", smallcaps[Notes])
       if slide-title != none {
@@ -374,7 +410,7 @@
       v(-0.5em)
       line(length: 100%, stroke: 0.5pt + accent-color)
     })
-    
+
     block(width: 100%, inset: (x: 2.5em, y: 1em), {
       set text(size: 0.8em)
       set par(justify: true)
@@ -395,7 +431,7 @@
   let is-special = named.at("is-special", default: false)
   let count = named.at("count", default: true)
   let body = if pos.len() > 0 { pos.at(0) } else { none }
-  
+
   // Filtre les paramètres propres à slide() avant de transmettre le reste à p.slide().
   // Limitation de Typst : on ne peut pas capturer les named args par nom et passer
   // le reste via `..sink` simultanément. Cette liste doit rester synchronisée avec
@@ -406,7 +442,7 @@
       let _ = clean-named.remove(key)
     }
   }
-  
+
   [
     #if count { logical-slide-counter.step() }
     #p.slide(..clean-named, {
@@ -419,7 +455,12 @@
           place(top + left, dx: 0pt, dy: -m-top, block(width: 100%, height: 100% + m-top + m-bottom, background))
         }
       }
-      [#metadata((title: manual-title, subtitle: subtitle, allow-slide-breaks: allow-slide-breaks, is-special: is-special)) <uni-pres-slide-start>]
+      [#metadata((
+        title: manual-title,
+        subtitle: subtitle,
+        allow-slide-breaks: allow-slide-breaks,
+        is-special: is-special,
+      )) <uni-pres-slide-start>]
       apply-layout(breakable: allow-slide-breaks, body)
     })
     #context {
@@ -442,14 +483,21 @@
   })
 }
 
-#let figure-slide-split(fig-left, fig-right, title: none, subtitle: none, caption-left: none, caption-right: none, ..args) = {
+#let figure-slide-split(
+  fig-left,
+  fig-right,
+  title: none,
+  subtitle: none,
+  caption-left: none,
+  caption-right: none,
+  ..args,
+) = {
   slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     grid(
       columns: (1fr, 1fr),
       column-gutter: 2em,
-      figure(fig-left, caption: caption-left),
-      figure(fig-right, caption: caption-right)
+      figure(fig-left, caption: caption-left), figure(fig-right, caption: caption-right),
     )
   })
 }
@@ -460,26 +508,28 @@
   people: (),
   institutions: (),
   extra: none,
-  ..args
+  ..args,
 ) = {
   slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
     stack(
       dir: ttb,
       spacing: 1.5em,
-      
+
       if people.len() > 0 {
         align(center, grid(
           columns: (auto, auto),
           column-gutter: 2em,
           row-gutter: 1em,
-          ..people.map(p => (
-            align(right, text(weight: "bold", p.name)),
-            align(left, p.role)
-          )).flatten()
+          ..people
+            .map(p => (
+              align(right, text(weight: "bold", p.name)),
+              align(left, p.role),
+            ))
+            .flatten()
         ))
       },
-      
+
       if institutions.len() > 0 {
         v(0.5em)
         align(center, institutions.join([ #h(2em) ]))
@@ -488,18 +538,18 @@
       if extra != none {
         v(1em)
         extra
-      }
+      },
     )
   })
 }
 
 #let cite-box(bib-key, display-label: none, position: "bottom-right", form: "normal") = context {
   let conf = config-state.get()
-  
-  let align-pos = if position == "top-right" { top + right }
-    else if position == "bottom-left" { bottom + left }
-    else { bottom + right }
-  
+
+  let align-pos = if position == "top-right" { top + right } else if position == "bottom-left" { bottom + left } else {
+    bottom + right
+  }
+
   let dx = if "right" in position { 1em } else { -1em }
   let dy = if "top" in position { -0.3em } else { conf.at("cite-box-bottom-dy", default: 0.3em) }
 
@@ -507,8 +557,8 @@
   let labels = keys.map(k => if type(k) == str { label(k) } else { k })
 
   let content = if display-label != none {
-    if labels.len() > 0 { 
-      place(hide(labels.map(l => cite(l, form: form)).join())) 
+    if labels.len() > 0 {
+      place(hide(labels.map(l => cite(l, form: form)).join()))
     }
     display-label
   } else if labels.len() > 0 {
@@ -527,8 +577,8 @@
       fill: fill-color,
       stroke: 0.5pt + conf.primary-color,
       radius: 3pt,
-      inset: 0.4em, 
-      text(size: 0.65em, fill: text-color, content)
+      inset: 0.4em,
+      text(size: 0.65em, fill: text-color, content),
     ))
   }
 }
@@ -539,39 +589,39 @@
   subtitle: none,
   definitions: none,
   citation: none,
-  ..args
+  ..args,
 ) = {
   slide(title: title, subtitle: subtitle, ..args, {
     set align(center + horizon)
-    
+
     stack(
       dir: ttb,
       spacing: 2em,
-      
+
       stack(
         dir: ttb,
         spacing: 0.8em,
         block(
-          text(size: 2.5em, equation)
+          text(size: 2.5em, equation),
         ),
         if citation != none {
           let key = if type(citation) == dictionary { citation.at("bib-key", default: none) } else { citation }
           let lbl = if type(citation) == dictionary { citation.at("label", default: none) } else { none }
           let keys = if type(key) == array { key } else if key != none { (key,) } else { () }
           let labels = keys.map(k => if type(k) == str { label(k) } else { k })
-          
+
           if labels.len() > 0 { place(hide(labels.map(l => cite(l)).join())) }
-          
+
           let cite-content = if lbl != none { lbl } else { labels.map(l => cite(l)).join(", ") }
-          
+
           context {
             let conf = config-state.get()
             let sig-color = if conf.dark-mode { white.darken(20%) } else { gray.darken(20%) }
             align(right, pad(right: 15%, text(fill: sig-color, size: 0.9em, [--- #cite-content])))
           }
-        }
+        },
       ),
-      
+
       if definitions != none {
         context {
           let conf = config-state.get()
@@ -587,18 +637,20 @@
             align(left, {
               set par(leading: 0.8em)
               definitions
-            })
+            }),
           )
         }
-      }
+      },
     )
   })
 }
 
 #let base-title-slide(conf, body) = {
   let is-dark = conf.dark-mode
-  let bg-fill = if is-dark { conf.at("title-bg-dark", default: conf.primary-color.darken(40%)) } else { conf.at("title-bg-light", default: conf.primary-color) }
-  
+  let bg-fill = if is-dark { conf.at("title-bg-dark", default: conf.primary-color.darken(40%)) } else {
+    conf.at("title-bg-light", default: conf.primary-color)
+  }
+
   empty-slide(fill: bg-fill, count: false, {
     // Logo slot
     if conf.at("title-logo-func", default: none) != none {
@@ -610,9 +662,11 @@
 
 #let base-ending-slide(conf, body) = {
   let is-dark = conf.dark-mode
-  let bg-fill = if is-dark { conf.at("focus-bg-dark", default: conf.primary-color.darken(40%)) } else { conf.at("focus-bg-light", default: conf.primary-color) }
-  
-  empty-slide(fill: bg-fill, {
+  let bg-fill = if is-dark { conf.at("focus-bg-dark", default: conf.primary-color.darken(40%)) } else {
+    conf.at("focus-bg-light", default: conf.primary-color)
+  }
+
+  empty-slide(fill: bg-fill, count: false, {
     // Logo slot
     if conf.at("transition-logo-func", default: none) != none {
       (conf.transition-logo-func)(conf)
@@ -624,13 +678,13 @@
 #let ending-slide(
   title: [Thanks for watching!],
   subtitle: [Questions?],
-  contact: ("email@example.com", "github.com/username")
+  contact: ("email@example.com", "github.com/username"),
 ) = context {
   let conf = config-state.get()
   if conf.at("ending-slide-func", default: none) != none {
     return (conf.ending-slide-func)(title: title, subtitle: subtitle, contact: contact)
   }
-  
+
   base-ending-slide(conf, {
     set text(fill: white)
     align(center + horizon, pad(x: 3em, stack(
@@ -645,7 +699,7 @@
         } else {
           contact
         }
-      }
+      },
     )))
   })
 }
@@ -657,19 +711,25 @@
   let is-dark = if conf != none { conf.dark-mode } else { false }
 
   let (fill-body, stroke-box) = if fill-mode == "fill" {
-    (if is-dark { color.darken(60%) } else { color.lighten(90%) }, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
+    (
+      if is-dark { color.darken(60%) } else { color.lighten(90%) },
+      0.5pt + (if is-dark { color.lighten(20%) } else { color }),
+    )
   } else if fill-mode == "full" {
-    (if is-dark { color.darken(40%) } else { color.lighten(80%) }, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
+    (
+      if is-dark { color.darken(40%) } else { color.lighten(80%) },
+      0.5pt + (if is-dark { color.lighten(20%) } else { color }),
+    )
   } else if fill-mode == "transparent" {
     (none, none)
   } else {
     // outline
     (none, 0.5pt + (if is-dark { color.lighten(20%) } else { color }))
   }
-  
+
   // Choisit blanc ou noir selon la luminosité perçue du fond du titre.
   // Coefficients ITU-R BT.601 ; seuil à 0.75 pour garder le blanc sur les
-  // couleurs saturées (ex. jaune Sorbonne Lettres) et ne basculer au noir
+  // couleurs saturées (ex. jaune Example Lettres) et ne basculer au noir
   // que sur les fonds vraiment pâles ou blancs.
   let title-fg = if color.space() == luma {
     if color.components().first() / 100% > 0.75 { black } else { white }
@@ -691,16 +751,16 @@
           width: 100%,
           fill: color,
           inset: 0.6em,
-          text(fill: title-fg, weight: "bold", title)
+          text(fill: title-fg, weight: "bold", title),
         )
       },
       block(
         width: 100%,
         fill: fill-body,
         inset: 0.8em,
-        body
-      )
-    )
+        body,
+      ),
+    ),
   )
 }
 
@@ -728,10 +788,14 @@
         columns: (1.5em, 1fr),
         column-gutter: 0.8em,
         row-gutter: 0.5em,
-        ..it.children.enumerate().map(((i, child)) => (
-          align(right, text(fill: gray, str(i + 1) + ":")),
-          child.body
-        )).flatten()
+        ..it
+          .children
+          .enumerate()
+          .map(((i, child)) => (
+            align(right, text(fill: gray, str(i + 1) + ":")),
+            child.body,
+          ))
+          .flatten()
       )
     }
     body
@@ -747,14 +811,14 @@
 
 #let appendix() = {
   [#metadata(none) <uni-pres-appendix-before-reset>]
-  logical-slide-counter.update(0)
   appendix-state.update(true)
   counter(heading).update(0)
   [#metadata((is-special: true)) <uni-pres-appendix-marker>]
   context {
     let conf = config-state.get()
-    focus-slide(upper(conf.appendix-main-title))
+    focus-slide(upper(conf.appendix-main-title), count: false)
   }
+  logical-slide-counter.update(0)
 }
 
 #let slide-break() = colbreak(weak: true)
@@ -763,16 +827,18 @@
 
 #let base-render-transition(h, is-annex, conf) = {
   let mapping = conf.mapping
-  
+
   nav.render-transition(
     h,
     top-padding: 0pt,
     use-short-title: false,
     content-wrapper: (roadmap, h, active) => {
       let is-dark = conf.dark-mode
-      let text-color = if is-dark { conf.at("dark-text", default: white) } else { conf.at("transition-text-color", default: white) }
-      set text(fill: text-color, font: conf.text-font) 
-      
+      let text-color = if is-dark { conf.at("dark-text", default: white) } else {
+        conf.at("transition-text-color", default: white)
+      }
+      set text(fill: text-color, font: conf.text-font)
+
       // Slot pour les logos (configuré par le thème)
       if conf.at("transition-logo-func", default: none) != none {
         (conf.transition-logo-func)(conf)
@@ -785,55 +851,59 @@
       }
 
       let role = none
-      for (r, lvl) in mapping { if lvl == h.level { role = r; break } }
-      
+      for (r, lvl) in mapping {
+        if lvl == h.level {
+          role = r
+          break
+        }
+      }
+
       // --- CASE 1: PART TRANSITION (or Appendix Section if no parts) ---
       // La seconde condition gère le cas d'un mapping sans niveau "partie" (ex: section-only) :
       // dans l'annexe, les sections sont alors promues en transitions de type "partie" pour
       // garantir un rendu visuel cohérent (titre centré pleine page) à un seul niveau hiérarchique.
       if role == "part" or (is-annex and role == "section" and not mapping.keys().contains("part")) {
-         let num = if is-annex {
-           numbering(conf.appendix-numbering-format, counter(heading).at(h.location()).at(0))
-         } else {
-           numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
-         }
-         
-         let muted-text = text-color.transparentize(40%)
-         let title-text = if is-dark { white } else { conf.at("transition-title-color", default: white) }
+        let num = if is-annex {
+          numbering(conf.appendix-numbering-format, counter(heading).at(h.location()).at(0))
+        } else {
+          numbering(conf.part-numbering-format, counter(heading).at(h.location()).at(0))
+        }
 
-         if conf.at("transition-part-layout", default: "centered") == "grid" {
-           align(center + horizon, block(width: 90%, grid(
-             columns: (auto, 1fr),
-             column-gutter: 3em,
-             align: horizon,
-             stack(dir: ttb, spacing: 0.5em,
-               if conf.show-header-numbering {
-                 text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.appendix-title } else { conf.at("part-title", default: [Part]) }))
-                 text(size: 6em, weight: "bold", fill: muted-text, num)
-               }
-             ),
-             block(
-               inset: (left: 2em, y: 0.5em),
-               stroke: (left: 2pt + muted-text),
-               text(size: 2.8em, weight: "bold", fill: title-text, upper(h.body))
-             )
-           )))
-         } else {
-           align(center + horizon, stack(
+        let muted-text = text-color.transparentize(40%)
+        let title-text = if is-dark { white } else { conf.at("transition-title-color", default: white) }
+
+        if conf.at("transition-part-layout", default: "centered") == "grid" {
+          align(center + horizon, block(width: 90%, grid(
+            columns: (auto, 1fr),
+            column-gutter: 3em,
+            align: horizon,
+            stack(dir: ttb, spacing: 0.5em, if conf.show-header-numbering {
+              text(size: 1.2em, weight: "bold", fill: muted-text, smallcaps(if is-annex { conf.appendix-title } else {
+                conf.at("part-title", default: [Part])
+              }))
+              text(size: 6em, weight: "bold", fill: muted-text, num)
+            }),
+            block(
+              inset: (left: 2em, y: 0.5em),
+              stroke: (left: 2pt + muted-text),
+              text(size: 2.8em, weight: "bold", fill: title-text, upper(h.body)),
+            ),
+          )))
+        } else {
+          align(center + horizon, stack(
             spacing: 1.5em,
             if conf.show-header-numbering {
               let num-prefix = if is-annex { conf.appendix-title + " " } else { "" }
               text(size: if is-annex { 4em } else { 6em }, weight: "bold", fill: muted-text, num-prefix + num)
             },
-            text(size: 3em, weight: "bold", fill: title-text, upper(h.body))
+            text(size: 3em, weight: "bold", fill: title-text, upper(h.body)),
           ))
-         }
-      
+        }
       } else {
         // --- CASE 2: SECTION TRANSITION (with Roadmap) ---
         let part-lvl = mapping.at("part", default: none)
         let active-part = if part-lvl != none { active.at("h" + str(part-lvl), default: none) } else { none }
-        
+
         let section-lvl = mapping.at("section", default: 1)
         let section-head = active.at("h" + str(section-lvl), default: h)
         let count = counter(heading).at(section-head.location())
@@ -864,45 +934,62 @@
               block(
                 inset: (left: 2em, y: 0.5em),
                 stroke: (left: 2pt + muted-text),
-                stack(spacing: 1em,
-                  text(size: conf.at("transition-title-size", default: 2.5em), weight: "bold", fill: title-text, upper(section-head.body)),
-                  block(width: 80%, align(left, roadmap-visible))
-                )
-              )
-            )
+                stack(
+                  spacing: 1em,
+                  text(size: conf.at("transition-title-size", default: 2.5em), weight: "bold", fill: title-text, upper(
+                    section-head.body,
+                  )),
+                  block(width: 80%, align(left, roadmap-visible)),
+                ),
+              ),
+            ),
           ))
         } else {
           if active-part != none {
-            place(top + right, pad(top: 2.5em, right: 3em, text(size: 0.8em, fill: muted-text, weight: "bold", upper(active-part.body))))
+            place(top + right, pad(top: 2.5em, right: 3em, text(size: 0.8em, fill: muted-text, weight: "bold", upper(
+              active-part.body,
+            ))))
           }
           pad(x: 2em, stack(
             dir: ttb,
             v(15%),
             align(center, stack(
-              spacing: 0.8em, 
+              spacing: 0.8em,
               if conf.show-header-numbering {
                 let prefix = if is-annex { conf.appendix-title + " " } else { "" }
                 if is-annex {
-                  text(size: conf.at("transition-title-size-annex", default: 3.5em), weight: "bold", fill: title-text, prefix + fmt-num + " " + smallcaps(section-head.body))
+                  text(
+                    size: conf.at("transition-title-size-annex", default: 3.5em),
+                    weight: "bold",
+                    fill: title-text,
+                    prefix + fmt-num + " " + smallcaps(section-head.body),
+                  )
                 } else {
                   text(size: conf.at("transition-num-size", default: 6em), weight: "bold", fill: muted-text, fmt-num)
                 }
               },
-              if not is-annex { text(size: conf.at("transition-title-size", default: 2.2em), weight: "bold", fill: title-text, smallcaps(section-head.body)) },
+              if not is-annex {
+                text(
+                  size: conf.at("transition-title-size", default: 2.2em),
+                  weight: "bold",
+                  fill: title-text,
+                  smallcaps(section-head.body),
+                )
+              },
               v(1.2em),
-              block(width: conf.at("transition-roadmap-width", default: 60%), align(left, roadmap-visible))
-            ))
+              block(width: conf.at("transition-roadmap-width", default: 60%), align(left, roadmap-visible)),
+            )),
           ))
         }
       }
-    }
+    },
   )
 }
 
 #let core-template(
   conf: (:),
   raw-block-style: true,
-  body
+  body,
 ) = {
   config-state.update(c => conf)
   p.set-options(handout: conf.at("handout", default: false))
@@ -915,38 +1002,58 @@
     c.theme-colors = (primary: conf.transition-fill)
     c.use-short-title = conf.use-short-title
     c.transitions = (
-      parts: (visibility: (part: "none", section: "none", subsection: "none")),
-      sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
-      subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
-      style: (active-weight: "bold", active-color: white, inactive-opacity: 0.6, completed-opacity: 0.6),
-      marker: none,
-    ) + conf.transitions
+      (
+        parts: (visibility: (part: "none", section: "none", subsection: "none")),
+        sections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
+        subsections: (visibility: (part: "none", section: "none", subsection: "current-parent")),
+        style: (active-weight: "bold", active-color: white, inactive-opacity: 0.6, completed-opacity: 0.6),
+        marker: none,
+      )
+        + conf.transitions
+    )
     c.progressive-outline = nav.merge-dicts(
       (
         level-1-mode: "none",
         level-2-mode: "none",
         level-3-mode: "none",
         text-styles: (
-          level-1: (active: (weight: "bold", fill: conf.marker-color), completed: (weight: "bold"), inactive: (weight: "bold")),
-          level-2: (active: (weight: "regular", fill: conf.marker-color), completed: (weight: "regular"), inactive: (weight: "regular")),
-          level-3: (active: (weight: "regular", fill: conf.marker-color), completed: (weight: "regular"), inactive: (weight: "regular"))
+          level-1: (
+            active: (weight: "bold", fill: conf.marker-color),
+            completed: (weight: "bold"),
+            inactive: (weight: "bold"),
+          ),
+          level-2: (
+            active: (weight: "regular", fill: conf.marker-color),
+            completed: (weight: "regular"),
+            inactive: (weight: "regular"),
+          ),
+          level-3: (
+            active: (weight: "regular", fill: conf.marker-color),
+            completed: (weight: "regular"),
+            inactive: (weight: "regular"),
+          ),
         ),
       ),
-      base: c.at("progressive-outline", default: (:))
+      base: c.at("progressive-outline", default: (:)),
     )
     c
   })
 
   set page(
-    paper: "presentation-" + conf.aspect-ratio, 
-    margin: (top: conf.at("margin-top", default: 4.5em), bottom: conf.at("margin-bottom", default: 3.0em), left: conf.at("margin-left", default: 0pt), right: conf.at("margin-right", default: 0pt)),
-    header: none, 
+    paper: "presentation-" + conf.aspect-ratio,
+    margin: (
+      top: conf.at("margin-top", default: 4.5em),
+      bottom: conf.at("margin-bottom", default: 3.0em),
+      left: conf.at("margin-left", default: 0pt),
+      right: conf.at("margin-right", default: 0pt),
+    ),
+    header: none,
     footer: none,
     fill: if conf.dark-mode { conf.at("dark-bg", default: rgb("#21232c")) } else { white },
     foreground: context {
       let c = config-state.get()
       if c == none { return none }
-      
+
       let header-func = c.at("header-func", default: none)
       let footer-func = c.at("footer-func", default: base-footer)
 
@@ -961,11 +1068,11 @@
           place(bottom + left, line)
         }
       }
-    }
+    },
   )
 
   set text(font: conf.text-font, size: conf.text-size, fill: if conf.dark-mode { white } else { conf.text-color })
-  
+
   if raw-block-style {
     show raw.where(block: true): it => {
       let bg-color = if conf.dark-mode { rgb("#2d2d2d") } else { luma(245) }
@@ -982,14 +1089,14 @@
           set text(fill: text-color)
           show block: set block(fill: none, inset: 0pt, radius: 0pt, stroke: none)
           it
-        }
+        },
       )
     }
   }
 
   set list(marker: ([•], [‣], [–]).map(m => text(fill: conf.marker-color, m)))
-  set enum(numbering: (n) => text(fill: conf.marker-color, weight: "bold", str(n) + "."))
-  
+  set enum(numbering: n => text(fill: conf.marker-color, weight: "bold", str(n) + "."))
+
   set bibliography(style: conf.bib-style)
 
   show cite: it => context {
@@ -1004,10 +1111,10 @@
       outset: (y: 2pt),
       radius: 2pt,
       fill: fill-color,
-      text(fill: text-color, it)
+      text(fill: text-color, it),
     )
   }
-        
+
   set heading(numbering: (..nums) => context {
     if not conf.show-header-numbering { return none }
     let n = nums.pos()
@@ -1020,7 +1127,12 @@
     // in base-render-transition, so transitions are visually unaffected by this change.
 
     let role = none
-    for (r, lvl) in conf.mapping { if lvl == n.len() { role = r; break } }
+    for (r, lvl) in conf.mapping {
+      if lvl == n.len() {
+        role = r
+        break
+      }
+    }
 
     if role == "part" {
       numbering(conf.part-numbering-format, ..n)
@@ -1069,7 +1181,7 @@
 
   show heading: h => context {
     if h.level > 3 { return h }
-    
+
     let is-annex = appendix-state.get()
 
     let top-level = if conf.mapping.len() > 0 { calc.min(..conf.mapping.values()) } else { 1 }
@@ -1083,7 +1195,7 @@
 
     base-render-transition(h, is-annex, conf)
   }
-  
+
   show math.equation: it => {
     let m-font = conf.at("math-font", default: none)
     if m-font != none {
@@ -1096,3 +1208,4 @@
 
   body
 }
+

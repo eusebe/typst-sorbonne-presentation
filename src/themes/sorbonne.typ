@@ -117,6 +117,7 @@
   slide-break-suffix: [ (cont.)],
   footer-author: true,
   footer-title: true,
+  footer-date : true,
   max-length: none,
   use-short-title: false,
   dark-mode: false,
@@ -222,6 +223,7 @@
     slide-break-suffix: slide-break-suffix,
     footer-author: footer-author,
     footer-title: footer-title,
+    footer-date: footer-date,
     max-length: resolved-max-length,
     use-short-title: use-short-title,
     dark-mode: dark-mode,
@@ -235,7 +237,7 @@
     title-bg-light: final-primary,
     title-bg-dark: final-primary.darken(40%),
     title-logo-func: (c) => place(bottom + right, pad(bottom: 2em, right: 2em, set-logo(c.logo-transition, width: 6em))),
-    // Transitions defaults for Sorbonne
+    // Transitions defaults for Example
     transition-text-color: white,
     transition-active-color: white,
     transition-title-color: white,
@@ -250,3 +252,4 @@
 
   core-template(conf: conf, raw-block-style: raw-block-style, body)
 }
+
